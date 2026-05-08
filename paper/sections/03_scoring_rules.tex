@@ -1,0 +1,308 @@
+\section{Frequency-Report Scoring Rules}
+
+This section applies the setup to five count-loss rules.
+The first two rules have simple analytic identification bounds and are the primary theoretical objects in the paper.
+The remaining rules have exact inverse-region representations that are useful for computational comparison, but their sharp bounds are obtained from those representations rather than from comparably simple main-text formulas.
+
+\subsection{Primary Rules with Analytic Bounds}
+
+\subsubsection{Quadratic-Distance Frequency Scoring}
+
+The main analytical rule is quadratic-distance frequency scoring.
+It pays less when the reported count vector is far from the realized count vector in squared Euclidean distance:
+\[
+S_Q(r,\omega)=a-b\|r-\omega\|_2^2,
+\quad b>0.
+\]
+This rule is connected in spirit to quadratic scoring rules, but it is not a standard probability score.
+It is a frequency-report count-loss rule: subjects report counts, and the penalty is the squared difference between reported and realized counts.
+Write \(P_Q\) for the belief region induced by this rule.
+
+Given beliefs \(p\), the expected count vector is \(np\).
+The key forward fact is that quadratic-distance scoring asks the subject to report the feasible integer count vector closest to \(np\).
+The inverse question is therefore geometric: for which beliefs is the observed report \(r\) the closest feasible count vector to \(np\)?
+
+\begin{proposition}[Quadratic distance: reports, regions, and bounds]
+For every \(p\in\DeltaK\),
+\[
+R_{S_Q}(p)
+=
+\argmin_{s\in\OmegaN}\|s-np\|_2^2.
+\]
+For an observed report \(r\in\OmegaN\), the belief identification region is
+\[
+P_Q(r)
+=
+\left\{
+p\in\DeltaK:
+n(p_i-p_j)\le r_i-r_j+1
+\quad
+\forall i,j\text{ with }r_j>0
+\right\}.
+\]
+Let
+\[
+m(r)=|\{j:r_j>0\}|
+\]
+be the number of categories with positive reported counts.
+The sharp coordinate intervals are
+\[
+P_{Q,i}(r)=
+\begin{cases}
+\displaystyle
+\left[0,\frac{m(r)}{n(m(r)+1)}\right],
+& r_i=0,\\[1.2em]
+\displaystyle
+\left[
+\frac{r_i-1}{n}+\frac{1}{nk},
+\frac{r_i+1}{n}-\frac{1}{n\,m(r)}
+\right],
+& r_i>0.
+\end{cases}
+\]
+Projection ties are included.
+\end{proposition}
+
+The inequalities compare the observed report \(r\) with reports obtained by moving one count from a positive reported category \(j\) to another category \(i\).
+If all such one-count moves weakly increase squared distance from \(np\), then \(r\) is a closest feasible report.
+Thus \(P_Q(r)\) is a polytope in the belief simplex.
+The proof is in Appendix \ref{app:squared-proof}.
+
+\paragraph{Probability and mean bounds.}
+The coordinate bounds are closed form.
+For numerical outcomes \(x_1,\ldots,x_k\), sharp mean bounds are obtained by optimizing over the same polytope:
+\[
+\min_{p\in P_Q(r)}\sum_{i=1}^k p_i x_i
+\quad\text{and}\quad
+\max_{p\in P_Q(r)}\sum_{i=1}^k p_i x_i.
+\]
+These are linear programs.
+For coordinate probabilities, the displayed intervals give the corresponding linear-program solutions explicitly.
+This is the main practical advantage of quadratic-distance frequency scoring: the same transparent region gives both probability bounds and bounds on expected values.
+
+\paragraph{Practical interpretation.}
+Quadratic distance is mean-oriented: it links a report \(r\) to beliefs for which \(r\) is the integer projection of \(np\).
+Compared with exact matching, the payment varies smoothly with distance rather than only with exact equality.
+The main implementation cost is that direct monetary quadratic-distance payments generally require risk neutrality unless the score is implemented probabilistically, as discussed below.
+
+\subsubsection{Discrete-Metric Frequency Scoring}
+
+The second primary rule is the frequency-guessing mechanism of Schlag and Tremewan \cite{SchlagTremewanSimple}.
+It is the count-vector discrete metric:
+\[
+D_0(r,\omega)=\1\{r\ne\omega\}.
+\]
+Equivalently, a fixed prize is paid if and only if the realized count vector is exactly equal to the report:
+\[
+q_0(r,\omega)=\1\{r=\omega\}.
+\]
+Under risk neutrality, this is equivalent to the affine score
+\[
+S_0(r,\omega)=a+b\1\{r=\omega\},
+\quad b>0.
+\]
+The fixed-prize formulation is useful for implementation and risk aversion; the affine-score formulation is convenient for comparison with the distance rules.
+Write \(R_0\) and \(P_0\) for the report correspondence and belief region induced by this rule.
+
+The mechanism is simple: a subject with beliefs \(p\) maximizes the probability of an exact match,
+\[
+\Pr_p(\omega=r)
+=
+\frac{n!}{r_1!\cdots r_k!}\prod_{i=1}^k p_i^{r_i}.
+\]
+Thus the forward object is the multinomial mode set.
+The inverse object is the set of beliefs for which the observed report is one of those modes.
+
+\begin{proposition}[Discrete metric: reports, regions, and bounds]
+Let \(r\in\OmegaN\), and allow ties in the multinomial mode.
+Then \(r\) is optimal under discrete-metric frequency scoring if and only if \(r\) is a multinomial mode:
+\[
+R_0(p)
+=
+\argmax_{s\in\OmegaN}\Pr_p(\omega=s).
+\]
+The belief identification region is
+\[
+P_0(r)
+=
+\left\{
+p\in\DeltaK:
+r_jp_i\le (r_i+1)p_j
+\quad
+\forall i,j\text{ with }r_j>0
+\right\}.
+\]
+For each coordinate, the sharp identification interval is
+\[
+P_{0,i}(r)
+=
+\left[
+\frac{r_i}{n+k-1},
+\frac{r_i+1}{n+1}
+\right].
+\]
+\end{proposition}
+
+The inequalities say that no one-count transfer from a reported category \(j\) to another category \(i\) can increase the multinomial probability of the report.
+Weak inequalities include ties.
+The formula also handles boundaries: if \(r_i=0\), the lower bound is \(0\); if \(r_i=n\), the upper bound is \(1\).
+These are the frequency-guessing bounds in Schlag and Tremewan \cite[Proposition 1]{SchlagTremewanSimple}; they are restated here to make the informational-efficiency comparison self-contained.
+The proof is in Appendix \ref{app:exact-match-proof}.
+
+\paragraph{Probability and mean bounds.}
+The discrete-metric rule gives closed-form coordinate intervals.
+For linear functionals such as means, sharp bounds use the full joint region, not just the coordinate intervals:
+\[
+\min_{p\in P_0(r)}\sum_{i=1}^k p_i x_i
+\quad\text{and}\quad
+\max_{p\in P_0(r)}\sum_{i=1}^k p_i x_i.
+\]
+These are linear programs because \(P_0(r)\) is defined by linear inequalities.
+Thus discrete-metric frequency scoring is analytically convenient for individual probability bounds, while mean inference still requires using the joint mode region.
+
+\paragraph{Practical interpretation.}
+Discrete-metric frequency scoring is transparent and robust to risk aversion because it is a fixed-prize event.
+Its implementation cost is that the probability of an exact match can be small when \(n\) is large or the outcome space is rich.
+It is a prominent known rule in the comparison, not a new mechanism introduced here.
+
+\subsection{Additional Rules for Computational Comparison}
+
+The next rules broaden the design exercise.
+For each rule, the inverse region is fully specified by finite expected-loss inequalities and can therefore be used in the simulation exercise.
+What distinguishes these rules from the primary rules is not lack of identification, but the absence of a simple main-text formula for sharp coordinate and mean bounds comparable to the quadratic-distance and discrete-metric cases.
+For these rules, the computational representation is the relevant object for the design exercise.
+
+\subsubsection{Manhattan-Distance Frequency Scoring}
+
+The Manhattan-distance rule is
+\[
+S_M(r,\omega)=a-b\sum_{i=1}^k |r_i-\omega_i|,
+\quad b>0.
+\]
+It rewards total absolute count accuracy rather than squared count accuracy.
+Its inferential interpretation is median-oriented rather than mean-oriented.
+
+\paragraph{Optimal reports and belief region.}
+For category \(i\), the realized count has binomial marginal distribution
+\[
+W_i\sim\mathrm{Bin}(n,p_i).
+\]
+Let
+\[
+\ell_i(t;p_i)=\E|t-W_i|,
+\qquad
+F_i(t;n,p_i)=\Pr(W_i\le t).
+\]
+Then optimal reports solve
+\[
+R_M(p)
+=
+\argmin_{r\in\OmegaN}
+\sum_{i=1}^k \ell_i(r_i;p_i).
+\]
+The simplex constraint \(\sum_i r_i=n\) prevents the researcher from treating each coordinate independently.
+The relevant optimality condition is that no one-count transfer lowers expected Manhattan loss.
+Equivalently,
+\[
+P_M(r)
+=
+\left\{
+p\in\DeltaK:
+F_i(r_i;n,p_i)\ge F_j(r_j-1;n,p_j)
+\quad
+\forall i,j\text{ with }r_i<n,\ r_j>0
+\right\}.
+\]
+Weak inequalities include ties; there is no receiver constraint when \(r_i=n\) and no sender constraint when \(r_j=0\).
+
+\paragraph{Identification bounds.}
+For \(k=2\), write \(r=(t,n-t)\).
+Then Manhattan loss is \(2|t-W|\), with \(W\sim\mathrm{Bin}(n,p_1)\), so the report identifies the binomial-median interval
+\[
+P_{M,1}(r)
+=
+\{p_1\in[0,1]:F(t-1;n,p_1)\le 1/2\le F(t;n,p_1)\}.
+\]
+This binary case is clean.
+
+For \(k>2\), the CDF inequalities remain explicit.
+The useful computational representation is a one-dimensional threshold search.
+Specifically, \(p\in P_M(r)\) if and only if there exists \(c\in[0,1]\) such that
+\[
+F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)
+\quad\forall i,
+\]
+using \(F_i(-1;n,p_i)=0\) and \(F_i(n;n,p_i)=1\).
+For a fixed \(c\), these inequalities give coordinate boxes through inverse binomial CDFs; intersecting those boxes with \(\sum_i p_i=1\) gives the feasible beliefs at that threshold.
+The sharp coordinate and mean bounds are computed by optimizing over feasible thresholds.
+
+\paragraph{Practical interpretation.}
+Manhattan distance is useful when a median-type count prediction is substantively appropriate.
+It is also useful as a contrast: changing the distance criterion changes the inferred belief region.
+For mean-oriented belief elicitation, however, the multi-category Manhattan bounds are less transparent than the quadratic-distance bounds.
+
+\subsubsection{Hamming-Distance Frequency Scoring}
+
+The Hamming-distance rule penalizes the number of categories whose reported count differs from the realized count:
+\[
+S_H(r,\omega)=a-b\sum_{i=1}^k\1\{r_i\ne\omega_i\},
+\quad b>0.
+\]
+Its expected loss separates into binomial marginal exact-coordinate probabilities:
+\[
+\E_p\left[\sum_i \1\{r_i\ne\omega_i\}\right]
+=
+\sum_i \{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}.
+\]
+Thus the forward objective is computationally simple, even though the reported counts still have to sum to \(n\).
+
+For an observed report \(r\), define
+\[
+L_H(r;p)
+=
+\sum_i \{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}.
+\]
+The inverse region is exactly
+\[
+P_H(r)
+=
+\{p\in\DeltaK:L_H(r;p)\le L_H(s;p)\ \forall s\in\OmegaN\}.
+\]
+This finite set of expected-loss inequalities fully specifies identification.
+Unlike the primary rules, however, the region is not a simple transfer polytope or a closed coordinate interval formula.
+The bounds are therefore computed from the exact inverse-region inequalities in the design exercise.
+
+For \(k=2\), Hamming distance coincides with discrete-metric frequency scoring.
+Matching one coordinate is equivalent to matching the whole binary count vector, so the report incentives are the same.
+
+\subsubsection{Chebyshev-Distance Frequency Scoring}
+
+The Chebyshev-distance rule penalizes the largest coordinate-level count error:
+\[
+S_\infty(r,\omega)=a-b\max_i |r_i-\omega_i|,
+\quad b>0.
+\]
+For \(k=2\), with \(r=(t,n-t)\) and \(\omega=(W,n-W)\),
+\[
+\|r-\omega\|_\infty=|t-W|.
+\]
+Manhattan loss is \(2|t-W|\) in the same binary environment.
+Thus Chebyshev and Manhattan distance induce the same optimal reports when \(k=2\).
+
+For \(k>2\), the maximum couples coordinates inside each realization.
+The expected-loss comparison is therefore nonseparable.
+The inverse region is exactly
+\[
+P_\infty(r)
+=
+\left\{
+p\in\DeltaK:
+\E_p\|r-\omega\|_\infty
+\le
+\E_p\|s-\omega\|_\infty
+\quad
+\forall s\in\OmegaN
+\right\}.
+\]
+This region is finite and computationally checkable by enumerating feasible reports and evaluating expected losses.
+As with Hamming distance, the bounds used in the design exercise are computed from the exact inverse-region inequalities rather than from a simple closed main-text formula.
