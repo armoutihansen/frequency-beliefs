@@ -1,0 +1,223 @@
+\appendix
+
+\section{Proofs}
+
+\subsection{Discrete-Metric Frequency Scoring}
+\label{app:exact-match-proof}
+
+\begin{proof}[Proof of Proposition 1]
+For any report \(r\),
+\[
+\E_p[a+b\1\{r=\omega\}]
+=
+a+b\Pr_p(\omega=r),
+\]
+so expected-score maximization is equivalent to maximizing the multinomial probability mass.
+
+It remains to characterize the mode region.
+Compare \(r\) with \(r+e_i-e_j\), which is feasible when \(r_j>0\).
+If \(p_j=0\) and \(r_j>0\), then \(r\) cannot be a mode unless all probability is zero, which is impossible.
+For \(p_j>0\),
+\[
+\frac{\Pr_p(r+e_i-e_j)}{\Pr_p(r)}
+=
+\frac{r_j}{r_i+1}\frac{p_i}{p_j}.
+\]
+Thus a necessary condition for \(r\) to be a mode is
+\[
+r_jp_i\le (r_i+1)p_j
+\quad
+\forall i,j\text{ with }r_j>0.
+\]
+Conversely, if these inequalities hold, any feasible \(s\) can be reached from \(r\) by a sequence of one-count transfers from coordinates where the current vector exceeds \(s\) to coordinates where it is below \(s\).
+At each step the same ratio is at most one, because source counts weakly decrease and destination counts weakly increase along the path.
+Therefore no feasible \(s\) has larger multinomial mass than \(r\).
+
+The coordinate upper bound follows by summing
+\[
+r_jp_i\le (r_i+1)p_j
+\]
+over \(j\ne i\):
+\[
+(n-r_i)p_i\le (r_i+1)(1-p_i),
+\]
+so \(p_i\le (r_i+1)/(n+1)\).
+The lower bound follows by summing
+\[
+r_ip_j\le (r_j+1)p_i
+\]
+over \(j\ne i\):
+\[
+r_i(1-p_i)\le (n-r_i+k-1)p_i,
+\]
+so \(p_i\ge r_i/(n+k-1)\).
+
+The bounds are sharp.
+The upper endpoint is attained by
+\[
+p_i=\frac{r_i+1}{n+1},
+\quad
+p_j=\frac{r_j}{n+1}\quad(j\ne i).
+\]
+The lower endpoint, when \(r_i>0\), is attained by
+\[
+p_i=\frac{r_i}{n+k-1},
+\quad
+p_j=\frac{r_j+1}{n+k-1}\quad(j\ne i).
+\]
+When \(r_i=0\), the lower endpoint \(0\) is attained by setting \(p_i=0\) and assigning probabilities proportional to \(r_j\) on the reported support.
+When \(r_i=n\), the upper endpoint \(1\) is attained by \(p_i=1\).
+\end{proof}
+
+\subsection{Manhattan-Distance Rule}
+\label{app:manhattan-proof}
+
+The Manhattan characterization used in Section 3.2 follows from a standard exchange argument.
+Linearity of expectation gives
+\[
+\E_p\left[\sum_{i=1}^k |r_i-\omega_i|\right]
+=
+\sum_{i=1}^k \E_p|r_i-\omega_i|.
+\]
+The \(i\)-th term depends only on the binomial marginal \(W_i\sim\mathrm{Bin}(n,p_i)\).
+For
+\[
+\ell_i(t;p_i)=\E|t-W_i|,
+\]
+the marginal cost of increasing the reported count from \(t\) to \(t+1\) is
+\[
+\ell_i(t+1;p_i)-\ell_i(t;p_i)
+=
+2F_i(t;n,p_i)-1.
+\]
+Moving one reported count from \(j\) to \(i\) changes expected Manhattan loss by
+\[
+\{2F_i(r_i;n,p_i)-1\}-\{2F_j(r_j-1;n,p_j)-1\}.
+\]
+Hence no feasible one-count transfer improves the report if and only if
+\[
+F_i(r_i;n,p_i)\ge F_j(r_j-1;n,p_j)
+\quad
+\forall i,j\text{ with }r_i<n,\ r_j>0.
+\]
+Because the marginal increments are weakly increasing in the reported count, this local no-transfer condition is also sufficient for global optimality on the integer simplex.
+
+The threshold representation follows by taking \(c\) between
+\[
+\max_{j:r_j>0}F_j(r_j-1;n,p_j)
+\quad\text{and}\quad
+\min_{i:r_i<n}F_i(r_i;n,p_i).
+\]
+Inverting the resulting binomial-CDF inequalities coordinate by coordinate gives the threshold-indexed box-simplex description used for Manhattan bounds.
+
+\subsection{Quadratic-Distance Rule}
+\label{app:squared-proof}
+
+\begin{proof}[Proof of Proposition 2]
+Maximizing \(S_2\) is equivalent to minimizing \(\E_p\|r-\omega\|_2^2\).
+For fixed \(r\),
+\[
+\E_p\|r-\omega\|_2^2
+=
+\|r-\E_p[\omega]\|_2^2
++
+\sum_{i=1}^k\mathrm{Var}_p(\omega_i).
+\]
+The variance term is independent of \(r\), and \(\E_p[\omega]=np\).
+Hence optimal reports are exactly the feasible integer projections of \(np\).
+
+The full inverse projection condition is
+\[
+\|r-np\|_2^2\le \|s-np\|_2^2
+\quad
+\forall s\in\OmegaN,
+\]
+or equivalently
+\[
+2np\cdot(s-r)\le \|s\|_2^2-\|r\|_2^2.
+\]
+Taking \(s=r+e_i-e_j\), feasible when \(r_j>0\), gives
+\[
+n(p_i-p_j)\le r_i-r_j+1.
+\]
+Conversely, suppose all these one-count inequalities hold.
+For any \(s\in\OmegaN\), write \(d=s-r\).
+Pair each positive unit of \(d_i\) with a negative unit of \(d_j\).
+Summing the one-count inequalities over the paired transfers gives
+\[
+np\cdot d\le r\cdot d+M,
+\]
+where \(M=\sum_{i:d_i>0}d_i\) is the number of transferred counts.
+Because \(d\) has integer components and sums to zero,
+\[
+M\le \frac12\sum_i d_i^2.
+\]
+Therefore
+\[
+2np\cdot(s-r)
+\le
+2r\cdot(s-r)+\|s-r\|_2^2
+=
+\|s\|_2^2-\|r\|_2^2,
+\]
+which is the full projection condition.
+
+It remains to derive the coordinate bounds.
+Let \(m=m(r)=|\{j:r_j>0\}|\).
+If \(r_i>0\), summing
+\[
+n(p_u-p_i)\le r_u-r_i+1
+\]
+over all \(u\ne i\) gives
+\[
+1-p_i\le (k-1)p_i+\frac{n-kr_i+k-1}{n},
+\]
+so
+\[
+p_i\ge \frac{r_i-1}{n}+\frac{1}{nk}.
+\]
+For the upper bound, sum
+\[
+n(p_i-p_v)\le r_i-r_v+1
+\]
+over positive-report coordinates \(v\ne i\), and use nonnegativity of the zero-report coordinates:
+\[
+1-p_i\ge (m-1)p_i+\frac{n-mr_i-m+1}{n}.
+\]
+This gives
+\[
+p_i\le \frac{r_i+1}{n}-\frac{1}{nm}.
+\]
+
+If \(r_i=0\), the lower bound is \(0\).
+For the upper bound, sum
+\[
+n(p_i-p_v)\le 1-r_v
+\]
+over all \(m\) positive-report coordinates \(v\):
+\[
+1-p_i\ge mp_i+\frac{n-m}{n},
+\]
+so
+\[
+p_i\le \frac{m}{n(m+1)}.
+\]
+The endpoints are attained by making the relevant summed inequalities bind and assigning remaining probability within the categories not used in the binding constraints.
+Thus the displayed bounds are sharp.
+\end{proof}
+
+\section{Design Exercise Details}
+\label{app:design-details}
+
+The design exercise is generated by the script \texttt{scripts/design\_efficiency.py}.
+The final grid uses \(n\in\{5,10,20,50\}\), \(k\in\{2,3,5,10\}\), \(\alpha\in\{0.1,0.3,1,3,10\}\), and \(5{,}000\) draws from the symmetric Dirichlet distribution for each cell.
+For each draw and rule, the script computes an optimal report and then computes bounds for the inverse region generated by that report.
+
+Discrete-metric coordinate bounds are closed form and mean bounds are linear programs over the transfer region.
+Quadratic-distance coordinate bounds are closed form and mean bounds are linear programs over the one-count transfer polytope.
+Manhattan coordinate and mean bounds use the threshold representation in Appendix \ref{app:manhattan-proof}; the script inverts binomial CDF inequalities by generalized inverse functions and searches over a threshold grid with tolerance \(10^{-4}\).
+The Manhattan entries are therefore threshold-computed.
+
+The generated files are CSV tables under \texttt{outputs/simulation\_design/}.
+These outputs are diagnostics for experimental design.
+They are not simulations of subject behavior and do not replace the mathematical characterization of \(R_S(p)\) and \(P_S(r)\).

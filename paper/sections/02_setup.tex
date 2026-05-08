@@ -1,0 +1,134 @@
+\section{Setup}
+
+The environment is a finite belief-elicitation problem.
+There are \(k\) possible outcomes, and the subject has latent beliefs
+\[
+p=(p_1,\ldots,p_k)\in\DeltaK,
+\quad
+p_i\ge 0,
+\quad
+\sum_{i=1}^k p_i=1.
+\]
+The elicitation task asks about \(n\in\N\) independent repetitions.
+If the subject's beliefs are \(p\), the realized count vector is
+\[
+\omega=(\omega_1,\ldots,\omega_k)\sim \mathrm{Mult}(n,p).
+\]
+The set of feasible count vectors is
+\[
+\OmegaN=\left\{\omega\in\N_0^k:\sum_{i=1}^k \omega_i=n\right\},
+\]
+and the multinomial probability mass function is
+\[
+\Pr_p(\omega)
+=
+\frac{n!}{\omega_1!\cdots \omega_k!}
+\prod_{i=1}^k p_i^{\omega_i}.
+\]
+The subject reports another feasible count vector
+\[
+r=(r_1,\ldots,r_k)\in\OmegaN.
+\]
+
+\begin{definition}[Frequency-report scoring rule]
+A frequency-report scoring rule is a function
+\[
+S:\OmegaN\times\OmegaN\to\R,
+\]
+where \(S(r,\omega)\) is the score assigned to report \(r\) when the realized count vector is \(\omega\).
+The paper studies rules that reward reports close to realized counts.
+A convenient form is
+\[
+S_D(r,\omega)=a-bD(r,\omega),
+\quad b>0,
+\]
+where \(D:\OmegaN\times\OmegaN\to\R_+\) is a count-error index.
+The function \(D\) need not be a metric: squared distance is a divergence-style count loss, not a metric, because it fails the triangle inequality.
+\end{definition}
+
+The constants \(a\) and \(b\) do not matter for expected-score rankings as long as \(b>0\).
+They matter for implementation.
+If scores are paid directly as money and nonnegative payments are desired, one can choose
+\[
+a\ge b\max_{r,\omega\in\OmegaN}D(r,\omega).
+\]
+Alternatively, for probability implementation, a bounded score can be normalized into a probability \(q(r,\omega)\in[0,1]\) of receiving a fixed prize.
+Section 6 returns to this implementation issue.
+
+\begin{definition}[Optimal reports]
+Under risk neutrality, the optimal-report correspondence induced by a scoring rule \(S\) is
+\[
+R_S(p)
+=
+\argmax_{r\in\OmegaN}\E_p[S(r,\omega)].
+\]
+Because \(\OmegaN\) is finite, \(R_S(p)\) is nonempty.
+\end{definition}
+
+This is the forward incentive object.
+It answers the question: if the subject's latent beliefs are \(p\), which reports are optimal?
+The econometric object is the inverse question.
+After observing \(r\), the researcher asks which beliefs could have generated that report.
+
+\begin{definition}[Inverse belief region]
+For an observed report \(r\in\OmegaN\), the belief region induced by \(S\) is
+\[
+P_S(r)
+=
+\{p\in\DeltaK:r\in R_S(p)\}.
+\]
+Ties are included: if \(r\) is one of several optimal reports under \(p\), then \(p\in P_S(r)\).
+\end{definition}
+
+The most direct summaries of \(P_S(r)\) are coordinate-wise identification bounds:
+\[
+\underline p_{S,i}(r)
+=
+\inf_{p\in P_S(r)}p_i,
+\quad
+\overline p_{S,i}(r)
+=
+\sup_{p\in P_S(r)}p_i,
+\]
+with interval
+\[
+P_{S,i}(r)
+=
+[\underline p_{S,i}(r),\overline p_{S,i}(r)].
+\]
+When the scoring rule is clear from context, the subscript \(S\) is omitted.
+
+Many experiments require more than coordinate-by-coordinate probability bounds.
+If outcomes have numerical values \(x_1,\ldots,x_k\), the latent mean implied by beliefs \(p\) is
+\[
+\mu(p;x)=\sum_{i=1}^k p_i x_i.
+\]
+This could represent an expected outcome, an expected treatment share, a predicted group average, or another linear index of the belief distribution.
+The sharp mean bounds after observing \(r\) are
+\[
+\underline\mu_S(r;x)
+=
+\inf_{p\in P_S(r)}\sum_{i=1}^k p_i x_i,
+\quad
+\overline\mu_S(r;x)
+=
+\sup_{p\in P_S(r)}\sum_{i=1}^k p_i x_i.
+\]
+The corresponding mean interval is
+\[
+[\underline\mu_S(r;x),\overline\mu_S(r;x)].
+\]
+These bounds generally require optimizing over the full joint region \(P_S(r)\).
+Coordinate intervals alone do not generally give sharp bounds for a mean, because they ignore dependence across coordinates imposed by the simplex and the scoring rule.
+
+The design comparison later summarizes the informativeness of a rule using coordinate widths,
+\[
+\overline p_{S,i}(r)-\underline p_{S,i}(r),
+\]
+and functional widths,
+\[
+\overline\mu_S(r;x)-\underline\mu_S(r;x).
+\]
+It also reports exact-match payment probabilities when these quantities help compare implementation tradeoffs.
+
+The next section applies this setup to quadratic, discrete-metric, Manhattan, Hamming, and Chebyshev frequency-report scoring rules.

@@ -1,0 +1,35 @@
+\section{Discussion}
+
+The paper studies frequency-report scoring rules as inferential devices.
+The report \(r\) is not the belief vector.
+It is evidence about \(p\), and the scoring rule determines how informative that evidence is.
+The relevant chain is therefore
+\[
+S
+\rightarrow
+R_S(p)
+\rightarrow
+P_S(r)
+\rightarrow
+\text{bounds on beliefs and functionals}.
+\]
+
+The results suggest three practical recommendations.
+First, use discrete-metric frequency scoring when the priority is transparency and fixed-prize robustness.
+It has closed-form coordinate bounds and is robust to risk aversion, but exact-match payment probabilities can be low away from concentrated reports.
+
+Second, use quadratic-distance frequency scoring when the priority is transparent belief and mean inference.
+It produces a projection rule, a linear belief region, closed-form coordinate bounds, and linear-program bounds for any linear functional.
+The design exercise shows that quadratic distance is especially attractive for worst-coordinate uncertainty and for mean-oriented targets in sparse-belief environments.
+
+Third, use Manhattan distance when median-type frequency reports are substantively desired or when it is useful as a comparison rule.
+Its binary case is clean, and its multi-category inverse region is explicit, but the coordinate and mean bounds require threshold computation rather than a simple closed form.
+
+The paper should not be read as a general theory of all discrete scoring rules.
+Hamming and Chebyshev distance are discussed as additional computable rules, but the primary analytic-bound results are the quadratic-distance and discrete-metric cases.
+The intended contribution is narrower: a finite-sample design guide for researchers who want to interpret observed frequency reports as bounds on latent beliefs and target functionals.
+
+Important open questions remain.
+The design exercise should be refined before empirical use, especially with alternative outcome vectors, a final choice of paper tables or figures, and robustness checks for tie-breaking conventions.
+The cognitive advantage of frequency reports and distance payments should also be tested experimentally rather than assumed.
+Those extensions are separate from the main theoretical point: different frequency-report scoring rules induce different inverse belief regions, and those regions determine the informational efficiency of the mechanism.

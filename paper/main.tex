@@ -1,0 +1,54 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1.15in]{geometry}
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage[hidelinks]{hyperref}
+
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator*{\argmin}{arg\,min}
+\newcommand{\E}{\mathbb{E}}
+\newcommand{\R}{\mathbb{R}}
+\newcommand{\N}{\mathbb{N}}
+\newcommand{\1}{\mathbf{1}}
+\newcommand{\DeltaK}{\Delta^k}
+\newcommand{\OmegaN}{\Omega}
+
+\newtheorem{theorem}{Theorem}
+\newtheorem{proposition}{Proposition}
+\newtheorem{lemma}{Lemma}
+\newtheorem{corollary}{Corollary}
+\newtheorem{remark}{Remark}
+\theoremstyle{definition}
+\newtheorem{definition}{Definition}
+\theoremstyle{plain}
+
+\title{The Informational Efficiency of Frequency-Report Scoring Rules}
+\author{Jesper Armouti-Hansen}
+\date{\today}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+In a multinomial frequency-report environment, the subject has latent beliefs \(p\), but the researcher observes only an incentivized count report \(r\).
+This paper studies what can be inferred from that report.
+Each scoring rule induces an optimal-report correspondence and therefore an inverse belief region: the set of beliefs under which the observed report would have been optimal.
+The paper evaluates the informational efficiency of such mechanisms through coordinate widths, functional widths, implementation cost, and robustness to risk aversion.
+The main analytical result is that quadratic-distance frequency scoring gives a transparent projection rule, a linear belief region, closed-form coordinate bounds, and linear-program bounds for means.
+Discrete-metric frequency scoring is used as the known fixed-prize rule with analytic bounds, Manhattan distance is included as a structured comparison rule, and Hamming and Chebyshev distance are discussed as secondary computable rules.
+The contribution is a finite-sample design guide for turning frequency reports into belief and mean bounds.
+\end{abstract}
+
+\input{sections/01_introduction}
+\input{sections/02_setup}
+\input{sections/03_scoring_rules}
+\input{sections/06_design_comparison}
+\input{sections/06_risk_attitudes}
+\input{sections/07_discussion}
+\input{sections/08_appendix}
+
+\bibliographystyle{plain}
+\bibliography{references}
+
+\end{document}
