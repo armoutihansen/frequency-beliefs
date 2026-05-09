@@ -74,3 +74,47 @@ Main summary:
 - direct-monetary risk-aversion counterexamples.
 
 These checks are finite computational checks, not substitutes for final mathematical proof verification.
+
+## Updated Direction: Four-Rule Comparison
+
+The project is being reframed from a primarily quadratic/discrete/Manhattan comparison into a four-rule design comparison.
+
+The four headline rules are now:
+
+1. Quadratic-distance frequency scoring.
+2. Discrete-metric / exact-match frequency scoring.
+3. Manhattan-distance frequency scoring.
+4. Hamming-distance frequency scoring.
+
+Chebyshev distance remains secondary for now.
+
+The reason for promoting Hamming is conceptual consistency: Manhattan currently has a prominent role despite the lack of clean closed-form multi-category analytical bounds. Since Hamming faces a similar analytical difficulty, it should be investigated and compared on equal footing rather than relegated to a minor role by default.
+
+## Updated Analytical Objective
+
+For Manhattan and Hamming, the project should try hard to derive analytical or semi-analytical inverse-region and bound characterizations.
+
+Possible outcomes:
+
+1. closed-form bounds are derived;
+2. semi-analytical characterizations are derived;
+3. finite optimization formulations are provided;
+4. threshold/computational bounds are used;
+5. impossibility or intractability is explained carefully.
+
+The paper should be explicit about which outcome applies.
+
+## Updated Simulation Objective
+
+The simulation exercise should become an extensive horse race among the four headline rules.
+
+The purpose is not to find a universal winner, but to determine which rule performs best under which conditions, varying:
+
+- \(n\);
+- \(k\);
+- latent belief structure \(p\);
+- inferential objective.
+
+The simulation should emphasize informational-efficiency metrics such as coordinate-width, worst-coordinate-width, mean-bound width, rank distributions, and regret relative to the best rule in each design cell.
+
+The existing winning-probability/payment-probability component should be deprioritized or removed from the main paper because exact-correct-report payment probability is only directly relevant to the discrete-metric / frequency-guessing rule.
