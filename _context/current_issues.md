@@ -39,3 +39,30 @@ Important sources include:
 - Armantier--Treich for risk-aversion concerns;
 - Hogarth for probability-assessment motivation;
 - Savage, Selten, and Gneiting--Raftery for scoring-rule background.
+
+## Four-Rule Comparison Issues
+
+The project now aims to compare quadratic, discrete metric, Manhattan, and Hamming rules as headline rules.
+
+Open issues:
+
+- Hamming-distance inverse regions and bounds need serious analytical investigation.
+- Manhattan-distance multi-category bounds also need renewed analytical investigation.
+- If closed-form bounds are unavailable for Manhattan or Hamming, the paper needs a principled computational-bound approach.
+- The simulation code must be revised to include Hamming in the headline horse race.
+- The paper must avoid giving Manhattan a more prominent role than Hamming merely because it was implemented earlier.
+- Chebyshev should remain secondary unless it is deliberately added to the main comparison.
+
+## Simulation Metric Issues
+
+The current winning-probability/payment-probability component is not central to the revised paper.
+
+Reason:
+
+- Exact-correct-report payment probability is naturally relevant to the discrete-metric / frequency-guessing rule.
+- It is not a symmetric informational-efficiency metric for quadratic, Manhattan, or Hamming rules unless comparable payment implementations are specified.
+
+Action:
+
+- Remove payment probability from the main horse-race metrics, or move it to a short implementation discussion for the discrete-metric rule.
+- Focus the simulation on inverse-region widths, mean-bound widths, ranking, and regret metrics.

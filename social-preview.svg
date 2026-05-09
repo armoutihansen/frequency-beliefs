@@ -1,0 +1,86 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="640" viewBox="0 0 1280 640">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f7f4ef"/>
+      <stop offset="1" stop-color="#e9eef0"/>
+    </linearGradient>
+    <filter id="shadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="8" stdDeviation="12" flood-color="#18323a" flood-opacity="0.13"/>
+    </filter>
+  </defs>
+
+  <rect width="1280" height="640" fill="url(#bg)"/>
+
+  <g opacity="0.28" stroke="#8aa0a7" stroke-width="1">
+    <path d="M0 512 C210 438 328 548 521 488 S905 407 1280 472" fill="none"/>
+    <path d="M0 548 C251 482 377 580 574 528 S936 459 1280 521" fill="none"/>
+  </g>
+
+  <g transform="translate(770 122)" filter="url(#shadow)">
+    <rect x="0" y="0" width="360" height="330" rx="18" fill="#ffffff" opacity="0.92"/>
+    <path d="M180 48 L50 272 L310 272 Z" fill="#f4f7f7" stroke="#24424a" stroke-width="3"/>
+    <path d="M180 91 L87 252 L273 252 Z" fill="none" stroke="#87a3aa" stroke-width="2"/>
+    <circle cx="180" cy="146" r="7" fill="#bc4b51"/>
+    <circle cx="126" cy="214" r="7" fill="#2a6f77"/>
+    <circle cx="241" cy="231" r="7" fill="#c59b45"/>
+    <path d="M180 146 L126 214 L241 231 Z" fill="#2a6f77" opacity="0.10" stroke="#2a6f77" stroke-width="2"/>
+    <text x="180" y="305" text-anchor="middle" font-family="Inter, Helvetica, Arial, sans-serif" font-size="18" fill="#24424a">inverse belief region</text>
+  </g>
+
+  <g transform="translate(100 118)">
+    <text font-family="Inter, Helvetica, Arial, sans-serif" font-size="58" font-weight="800" fill="#18323a">
+      Frequency-Report
+    </text>
+    <text y="72" font-family="Inter, Helvetica, Arial, sans-serif" font-size="58" font-weight="800" fill="#18323a">
+      Scoring Rules
+    </text>
+    <text y="126" font-family="Inter, Helvetica, Arial, sans-serif" font-size="26" fill="#53686f">
+      Belief and mean bounds from discrete reports
+    </text>
+  </g>
+
+  <g transform="translate(103 318)" font-family="Inter, Helvetica, Arial, sans-serif">
+    <g filter="url(#shadow)">
+      <rect x="0" y="0" width="188" height="72" rx="12" fill="#ffffff"/>
+      <text x="94" y="44" text-anchor="middle" font-size="21" font-weight="700" fill="#24424a">scoring rule</text>
+    </g>
+    <path d="M205 36 H254" stroke="#53686f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M254 36 l-11 -8 v16 Z" fill="#53686f"/>
+
+    <g transform="translate(272 0)" filter="url(#shadow)">
+      <rect x="0" y="0" width="188" height="72" rx="12" fill="#ffffff"/>
+      <text x="94" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#24424a">optimal</text>
+      <text x="94" y="55" text-anchor="middle" font-size="19" font-weight="700" fill="#24424a">report</text>
+    </g>
+    <path d="M477 36 H526" stroke="#53686f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M526 36 l-11 -8 v16 Z" fill="#53686f"/>
+
+    <g transform="translate(544 0)" filter="url(#shadow)">
+      <rect x="0" y="0" width="188" height="72" rx="12" fill="#ffffff"/>
+      <text x="94" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#24424a">belief</text>
+      <text x="94" y="55" text-anchor="middle" font-size="19" font-weight="700" fill="#24424a">region</text>
+    </g>
+    <path d="M749 36 H798" stroke="#53686f" stroke-width="3" stroke-linecap="round"/>
+    <path d="M798 36 l-11 -8 v16 Z" fill="#53686f"/>
+
+    <g transform="translate(816 0)" filter="url(#shadow)">
+      <rect x="0" y="0" width="188" height="72" rx="12" fill="#ffffff"/>
+      <text x="94" y="32" text-anchor="middle" font-size="19" font-weight="700" fill="#24424a">usable</text>
+      <text x="94" y="55" text-anchor="middle" font-size="19" font-weight="700" fill="#24424a">bounds</text>
+    </g>
+  </g>
+
+  <g transform="translate(104 496)" font-family="Inter, Helvetica, Arial, sans-serif">
+    <rect x="0" y="0" width="380" height="64" rx="12" fill="#18323a"/>
+    <text x="26" y="40" font-size="22" font-weight="700" fill="#ffffff">p, r, omega</text>
+    <text x="164" y="40" font-size="22" fill="#b7c5c9">finite-sample identification</text>
+  </g>
+
+  <g transform="translate(1010 512)">
+    <rect x="0" y="-62" width="24" height="62" rx="5" fill="#bc4b51"/>
+    <rect x="38" y="-98" width="24" height="98" rx="5" fill="#2a6f77"/>
+    <rect x="76" y="-42" width="24" height="42" rx="5" fill="#c59b45"/>
+    <rect x="114" y="-77" width="24" height="77" rx="5" fill="#24424a"/>
+    <path d="M-14 0 H164" stroke="#53686f" stroke-width="3" stroke-linecap="round"/>
+  </g>
+</svg>
