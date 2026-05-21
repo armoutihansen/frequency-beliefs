@@ -1,120 +1,144 @@
 # Current Status
 
-Date: 2026-05-08
+Date: 2026-05-21
 
 ## Project Thesis
 
-The project is currently framed as a methodological note on the informational efficiency of frequency-report scoring rules.
-A subject has latent multinomial beliefs \(p\), reports a count vector \(r\), and the researcher uses the scoring rule to infer the inverse belief region
+As of the 2026-05-21 direction decision, the project is a methodological paper
+that recasts incentivized frequency-report belief elicitation as a partial-
+identification problem. A subject has latent multinomial beliefs \(p\) and
+reports a count vector \(r\); each scoring rule \(S\) induces a mechanism-induced
+identified set
 \[
-P_S(r)=\{p:r\in R_S(p)\}.
+\Theta_S(r)=P_S(r)=\{p:r\in R_S(p)\},
 \]
-The practical output is a set of finite-sample bounds for latent probabilities and linear functionals such as means.
+the set of beliefs that rationalize \(r\) as an optimal report. The paper
+compares four rules by the sharpness of the identified sets they induce. The
+practical output is a set of finite-sample bounds for latent probabilities and
+linear functionals such as means.
+
+See `CONTEXT.md` (glossary), `docs/adr/0001` and `docs/adr/0002` (hard-to-reverse
+decisions), and `_context/exploration/direction_memos.md` (adopted-direction
+memo). The legacy term "inverse belief region" is being retired in favor of
+"identified set".
 
 ## Active Manuscript
 
-The manuscript is in `paper/`.
-It is stabilized for now, but it is not submission ready.
-The current title is:
+The manuscript is in `paper/` and compiles cleanly. As of 2026-05-21 it has been
+through the full step-4 revision (see `_context/next_steps.md`). Title:
 
 > The Informational Efficiency of Frequency-Report Scoring Rules
 
-Current structure:
+Current structure (risk aversion is now a subsection of the discussion, not a
+standalone section; `06_risk_attitudes.tex` was removed):
 
 1. Introduction
 2. Setup
-3. Frequency-report scoring rules
-4. Informational efficiency exercise
-5. Risk aversion
-6. Discussion
-7. Appendix
+3. Frequency-Report Scoring Rules
+4. Informational Efficiency Exercise
+5. Discussion (includes the risk-aversion / binary-lottery subsection and a
+   worked example)
+6. Appendix (proofs; design-exercise details)
 
 ## Active Rules
 
-The main rules in the paper are:
+The four headline rules sit on an analytical-to-computational spectrum (ADR-0001):
 
-- Quadratic-distance frequency scoring: main analytical contribution.
-- Discrete-metric frequency scoring: known Schlag--Tremewan exact-match rule with analytic bounds.
-- Manhattan-distance frequency scoring: structured comparison rule with threshold-computed bounds.
+- Quadratic-distance: closed-form identified set and coordinate bounds; the
+  analytical centerpiece.
+- Discrete-metric: closed-form coordinate bounds; the known Schlag--Tremewan
+  exact-match rule.
+- Manhattan-distance: exact identified set (single-transfer optimality proven
+  sufficient and audited), sharp coordinate bounds via a one-dimensional
+  threshold root-find — semi-analytical, not closed form.
+- Hamming-distance: analytical-only — k=2 closed form, the single-transfer
+  non-sufficiency obstruction, the modal-box inner / single-transfer outer
+  sandwich. Excluded from the simulation (intractable at scale).
 
-Hamming and Chebyshev distance are discussed as secondary computable rules, but they are not part of the headline simulation results.
+Chebyshev distance has been cut to a single acknowledging sentence.
 
 ## Current Evidence
 
-The final design exercise has been run with:
+The revised design exercise was run with:
 
 ```bash
 uv run python scripts/design_efficiency.py --final --draws 5000
 ```
 
-The outputs are in `outputs/simulation_design/`.
-The final grid uses:
+Outputs are in `outputs/design_exercise/`; the prior committed run remains in
+`outputs/simulation_design/`. The grid is \(n\in\{5,10,20,50\}\),
+\(k\in\{2,3,5,10\}\), \(\alpha\in\{0.1,0.3,1,3,10\}\), 5,000 Dirichlet draws per
+cell; the horse race is three rules (quadratic, discrete-metric, Manhattan).
 
-- \(n\in\{5,10,20,50\}\);
-- \(k\in\{2,3,5,10\}\);
-- \(\alpha\in\{0.1,0.3,1,3,10\}\);
-- 5,000 Dirichlet belief draws per cell.
+Main findings:
 
-Main summary:
-
-- Discrete metric has the highest average coordinate-width win share, about `0.620`.
-- Quadratic distance has the highest worst-coordinate-width win share, about `0.607`.
-- Quadratic distance is strongest for mean-oriented inference in sparse-belief cells, especially low \(\alpha\), larger \(n\), and larger \(k\).
-- Manhattan distance is useful as a structured comparison rule, but the final simulation does not support presenting it as dominant.
-- Exact-match payment probabilities can become very small as \(n\), \(k\), and belief balance increase.
+- Discrete-metric has the highest average-coordinate-width win share (~0.62).
+- Quadratic distance has the highest worst-coordinate-width win share (~0.61)
+  and leads on worst-coordinate regret.
+- Manhattan rarely wins outright but has the lowest mean cell-best regret for
+  average-coordinate and mean inference — the low-regret "safe" rule.
+- No universal ranking; the best rule depends on the inferential objective.
 
 ## Verification Status
 
-`scripts/verify_regions.py` passed the implemented finite checks for:
+- `scripts/verify_regions.py` passes the implemented finite checks (discrete,
+  quadratic, Manhattan exchange/threshold logic, binary cases, risk-aversion
+  counterexamples).
+- The 2026-05-21 analytical-bounds-search and a `theory-auditor` pass verified
+  the Manhattan single-transfer-sufficiency proof and coordinate-bound theorem
+  as sound; the Hamming non-sufficiency obstruction was confirmed by exact
+  rational arithmetic.
+- Outstanding: the step-5 proof audit of the quadratic closed-form bounds and
+  the discrete-metric attribution, plus re-verification of the Manhattan proof
+  in its final appendix wording. This audit is the final proof-verification gate.
 
-- discrete-metric mode and interval formulas;
-- quadratic-distance projection, inverse region, and coordinate bounds;
-- Manhattan-distance exchange and threshold logic;
-- binary special cases;
-- direct-monetary risk-aversion counterexamples.
+## Direction Decision (2026-05-21)
 
-These checks are finite computational checks, not substitutes for final mathematical proof verification.
+A `grill-with-docs` session resolved the project direction. Summary of the
+decisions; full detail in `CONTEXT.md`, the two ADRs, and
+`_context/exploration/direction_memos.md`.
 
-## Updated Direction: Four-Rule Comparison
+- **Spine.** Partial-identification reframing. Each scoring rule induces a
+  mechanism-induced identified set; the quadratic rule is the worked centerpiece.
+- **Venue tier.** General-interest economics journal with a methods section.
+  Partial-ID framing carries the introduction and discussion; the body stays
+  light on partial-ID machinery.
+- **Headline rules.** Four — quadratic, discrete-metric, Manhattan, Hamming —
+  framed as two with closed-form bounds and two characterized computationally
+  (ADR-0001). Chebyshev stays secondary.
+- **Payment frame.** Risk neutrality is the maintained body assumption; the
+  binary-lottery extension is argued in the discussion to carry the analysis to
+  risk-averse EU subjects (ADR-0002). No payment-probability or risk-aversion
+  branch in the simulation.
+- **Simulation.** Three-rule comparison (quadratic, discrete-metric, Manhattan)
+  on two headline metrics — average coordinate width and the ordered-category-
+  mean bound — displayed as cell-best regret. Hamming is excluded from the
+  simulation horse race (ADR-0001, second amendment): its sharp bounds are
+  computationally intractable at the design grid's scale. Not a
+  payment-probability horse race.
+- **Scope.** Pure methodological paper; no empirical illustration. A stipulated
+  worked example in the discussion substitutes.
+- **Contribution.** Three claims: partial-ID framing (N1), four-rule contextual
+  comparison (N2), closed-form quadratic theorem (N3). Headline = framing +
+  contextual comparison.
 
-The project is being reframed from a primarily quadratic/discrete/Manhattan comparison into a four-rule design comparison.
+## Analytical Objective — Resolved
 
-The four headline rules are now:
+The time-boxed `analytical-bounds-search` (2026-05-21) is complete; memo at
+`_context/exploration/bounds_search_manhattan_hamming.md`. Outcome: Manhattan is
+semi-analytical with sharp coordinate bounds (single-transfer sufficiency proven
+and audited); Hamming is computational for k>2, with a proven closed-form
+modal-box inner bound and the non-sufficiency obstruction documented. ADR-0001
+was amended to the four-way analytical-to-computational spectrum. No computed
+bound is described as closed form.
 
-1. Quadratic-distance frequency scoring.
-2. Discrete-metric / exact-match frequency scoring.
-3. Manhattan-distance frequency scoring.
-4. Hamming-distance frequency scoring.
+## Simulation Objective
 
-Chebyshev distance remains secondary for now.
-
-The reason for promoting Hamming is conceptual consistency: Manhattan currently has a prominent role despite the lack of clean closed-form multi-category analytical bounds. Since Hamming faces a similar analytical difficulty, it should be investigated and compared on equal footing rather than relegated to a minor role by default.
-
-## Updated Analytical Objective
-
-For Manhattan and Hamming, the project should try hard to derive analytical or semi-analytical inverse-region and bound characterizations.
-
-Possible outcomes:
-
-1. closed-form bounds are derived;
-2. semi-analytical characterizations are derived;
-3. finite optimization formulations are provided;
-4. threshold/computational bounds are used;
-5. impossibility or intractability is explained carefully.
-
-The paper should be explicit about which outcome applies.
-
-## Updated Simulation Objective
-
-The simulation exercise should become an extensive horse race among the four headline rules.
-
-The purpose is not to find a universal winner, but to determine which rule performs best under which conditions, varying:
-
-- \(n\);
-- \(k\);
-- latent belief structure \(p\);
-- inferential objective.
-
-The simulation should emphasize informational-efficiency metrics such as coordinate-width, worst-coordinate-width, mean-bound width, rank distributions, and regret relative to the best rule in each design cell.
-
-The existing winning-probability/payment-probability component should be deprioritized or removed from the main paper because exact-correct-report payment probability is only directly relevant to the discrete-metric / frequency-guessing rule.
+The simulation is a three-rule comparison (quadratic, discrete-metric,
+Manhattan) of identified-set sharpness, not a universal-winner search. It varies
+\(n\), \(k\), latent belief structure \(p\), and the inferential objective, and
+reports average coordinate width and the ordered-category-mean bound, displayed
+as cell-best regret with a win-share summary. Hamming is excluded because its
+sharp bounds are computationally intractable at the design grid's scale
+(ADR-0001, second amendment). Payment probability is at most a
+discrete-metric-only implementation diagnostic, not a comparison metric.

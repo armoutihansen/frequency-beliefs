@@ -52,8 +52,7 @@ If scores are paid directly as money and nonnegative payments are desired, one c
 \[
 a\ge b\max_{r,\omega\in\OmegaN}D(r,\omega).
 \]
-Alternatively, for probability implementation, a bounded score can be normalized into a probability \(q(r,\omega)\in[0,1]\) of receiving a fixed prize.
-Section 6 returns to this implementation issue.
+How the score is implemented as a payment affects robustness to the subject's risk attitude; the paper's discussion of risk aversion and implementation takes up this question separately.
 
 \begin{definition}[Optimal reports]
 Under risk neutrality, the optimal-report correspondence induced by a scoring rule \(S\) is
@@ -65,13 +64,15 @@ R_S(p)
 Because \(\OmegaN\) is finite, \(R_S(p)\) is nonempty.
 \end{definition}
 
+Risk neutrality is the maintained assumption throughout the body of the paper; the discussion of risk aversion and implementation separately shows how the analysis extends to risk-averse expected-utility subjects.
+
 This is the forward incentive object.
 It answers the question: if the subject's latent beliefs are \(p\), which reports are optimal?
 The econometric object is the inverse question.
 After observing \(r\), the researcher asks which beliefs could have generated that report.
 
-\begin{definition}[Inverse belief region]
-For an observed report \(r\in\OmegaN\), the belief region induced by \(S\) is
+\begin{definition}[Identified set]
+For an observed report \(r\in\OmegaN\), the identified set induced by \(S\) is
 \[
 P_S(r)
 =
@@ -79,6 +80,8 @@ P_S(r)
 \]
 Ties are included: if \(r\) is one of several optimal reports under \(p\), then \(p\in P_S(r)\).
 \end{definition}
+
+We call \(P_S(r)\) the \emph{mechanism-induced identified set}: the identifying restriction is the optimal-report condition \(r\in R_S(p)\) imposed by the scoring-rule mechanism, not a sampling distribution over repeated observations. By construction \(P_S(r)\) is exactly the set of beliefs consistent with that restriction.
 
 The most direct summaries of \(P_S(r)\) are coordinate-wise identification bounds:
 \[
@@ -129,6 +132,6 @@ and functional widths,
 \[
 \overline\mu_S(r;x)-\underline\mu_S(r;x).
 \]
-It also reports exact-match payment probabilities when these quantities help compare implementation tradeoffs.
+Exact-match payment probability is reported only for the discrete-metric rule, as an implementation diagnostic of that fixed-prize mechanism; it is not a cross-rule comparison metric.
 
-The next section applies this setup to quadratic, discrete-metric, Manhattan, Hamming, and Chebyshev frequency-report scoring rules.
+The next section applies this setup to the four headline rules: quadratic-distance, discrete-metric, Manhattan, and Hamming.

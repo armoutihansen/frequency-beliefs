@@ -1,4 +1,4 @@
-# Revise a specified paper section.
+Revise a specified paper section.
 
 Required input:
 - target section;

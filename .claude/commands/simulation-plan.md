@@ -1,4 +1,4 @@
-# Review or update the simulation/design-efficiency plan.
+Review or update the simulation/design-efficiency plan.
 
 Steps:
 

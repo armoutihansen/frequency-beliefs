@@ -1,4 +1,4 @@
-# Run a citation and literature-risk pass.
+Run a citation and literature-risk pass.
 
 Steps:
 

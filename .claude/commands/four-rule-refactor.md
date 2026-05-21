@@ -1,4 +1,4 @@
-# Refactor the project conceptually toward a four-rule comparison.
+Refactor the project conceptually toward a four-rule comparison.
 
 The four headline rules are:
 

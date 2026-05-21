@@ -1,4 +1,4 @@
-# Review and verify the computational components.
+Review and verify the computational components.
 
 Steps:
 

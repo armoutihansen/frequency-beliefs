@@ -1,4 +1,4 @@
-# Audit a proposed project direction before it is adopted.
+Audit a proposed project direction before it is adopted.
 
 Steps:
 
