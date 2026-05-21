@@ -24,7 +24,7 @@
 \theoremstyle{plain}
 
 \title{The Informational Efficiency of Frequency-Report Scoring Rules}
-\author{Jesper Armouti-Hansen}
+\author{Jesper Armouti-Hansen\thanks{Email: jesper@armoutihansnen.xyz}}
 \date{\today}
 
 \begin{document}
@@ -37,17 +37,20 @@ We compare frequency-report scoring rules by how sharply that report identifies 
 The inference is recast as a partial-identification problem: each scoring rule maps the report to an identified set of beliefs---those under which the report would have been optimal---from which coordinate and mean bounds follow.
 The main analytical result is that quadratic-distance frequency scoring gives a transparent projection rule, a linear identified set, closed-form coordinate bounds, and linear-program bounds for means.
 Discrete-metric scoring is the known fixed-prize rule with closed-form bounds, and Manhattan distance has an exact identified set with sharp semi-analytical bounds.
-A design comparison over these three rules finds no universal ranking: the most informative rule depends on the inferential objective and the design regime.
+No rule is universally most informative. Which one yields the tightest bounds turns on how concentrated the subject's beliefs are: quadratic-distance scoring when beliefs are concentrated on a few categories, discrete-metric scoring when they are balanced across them, with a crossover between the regimes that is established analytically for the closed-form rules and quantified by a design comparison. Manhattan distance is rarely the tightest, but its bounds barely move across regimes, making it the robust choice when the belief regime cannot be anticipated.
 \end{abstract}
+\newpage
 
 \input{sections/01_introduction}
 \input{sections/02_setup}
 \input{sections/03_scoring_rules}
 \input{sections/06_design_comparison}
 \input{sections/07_discussion}
-\input{sections/08_appendix}
+\newpage
 
 \bibliographystyle{apalike}
 \bibliography{references}
+\newpage
+\input{sections/08_appendix}
 
 \end{document}

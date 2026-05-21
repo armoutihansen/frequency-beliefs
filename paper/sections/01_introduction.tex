@@ -45,6 +45,8 @@ Manhattan-distance scoring has an exact identified set and sharp, semi-analytica
 
 The contribution is not a new exact-match mechanism and not a general theory of scoring rules; Schlag and Tremewan already derive belief bounds for the frequency-guessing rule.
 It is, first, the characterizations themselves: a closed-form identified set and coordinate bounds for quadratic-distance scoring, the centerpiece result, and sharp semi-analytical bounds for Manhattan distance, alongside the known discrete-metric bounds.
-It is, second, the contingent decision rule those characterizations make rigorous: in a design comparison over the three rules with tractable bounds, the most informative rule depends on the inferential objective and the design regime, with no universal ranking.
+It is, second, the contingent decision rule those characterizations make rigorous.
+No rule is uniformly best: quadratic-distance scoring is most informative when the subject's beliefs are concentrated on a few categories and discrete-metric scoring when beliefs are balanced, with a crossover as concentration varies---first established analytically, where the two closed-form rules' average coordinate widths cross, then quantified and extended to Manhattan distance by the design comparison.
+Manhattan is rarely the most informative rule, but its bounds vary little with the regime, making it the robust choice when belief concentration cannot be anticipated.
 Partial identification is the lens that holds these together---each scoring rule maps an observed report to an identified set of latent beliefs---and is what lets the comparison be posed as a sharp, finite-sample question rather than an informal one.
 Two further count-loss rules, Hamming and Chebyshev distance, mark the boundary of the approach; Section~5 discusses them as rules whose identified sets are exact but resist tractable sharp bounds.

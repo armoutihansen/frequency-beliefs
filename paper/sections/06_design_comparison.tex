@@ -24,9 +24,9 @@ It plays three roles: it confirms the analytic crossover between the two closed-
 It is, in short, a diagnostic for the practical question: which rule gives a researcher tighter inference for the object of interest?
 
 \paragraph{The ranking is governed by belief concentration.}
-Section~3 showed, from the closed-form bounds alone, that which of the two closed-form rules gives the narrower average coordinate bound turns on report concentration---the number \(m\) of categories with positive reported counts.
+Corollary~\ref{cor:closed-form-comparison} showed, from the closed-form bounds alone, that which of the two closed-form rules gives the narrower average coordinate bound turns on report concentration---the number \(m\) of categories with positive reported counts.
 The design comparison shows that report concentration tracks belief concentration, so the crossover is governed by how concentrated the subject's beliefs are.
-Averaged over the whole grid the three rules barely differ---mean coordinate width \(0.103\), \(0.104\), and \(0.102\) for discrete-metric, quadratic-distance, and Manhattan scoring---because each rule's favourable and unfavourable regimes cancel.
+Averaged over the whole grid the three rules barely differ---mean coordinate width \(0.102\), \(0.104\), and \(0.102\) for discrete-metric, quadratic-distance, and Manhattan scoring---because each rule's favourable and unfavourable regimes cancel.
 Table~\ref{tab:regime-wins} reports the win shares---the share of belief draws on which a rule gives the narrowest interval---broken out by \(\alpha\).
 
 \begin{table}[h]
@@ -42,7 +42,7 @@ Table~\ref{tab:regime-wins} reports the win shares---the share of belief draws o
 0.3 & 0.28 & 0.58 & 0.14 & 0.22 & 0.60 & 0.18\\
 1   & 0.76 & 0.16 & 0.08 & 0.58 & 0.27 & 0.15\\
 3   & 0.98 & 0.01 & 0.01 & 0.83 & 0.13 & 0.04\\
-10  & 1.00 & 0.00 & 0.00 & 0.92 & 0.06 & 0.02\\
+10  & 1.00 & 0.00 & 0.00 & 0.92 & 0.06 & 0.01\\
 \hline
 \end{tabular}
 \caption{Win share by belief concentration \(\alpha\): the share of belief draws on which a rule gives the narrowest interval, averaged over all \(n\) and \(k\) at each \(\alpha\). Quadratic-distance scoring wins for sparse beliefs (small \(\alpha\)); discrete-metric scoring for balanced beliefs (large \(\alpha\)).}
