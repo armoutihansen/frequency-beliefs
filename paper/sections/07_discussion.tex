@@ -68,28 +68,29 @@ The implementation choice also interacts with a cost noted in the design compari
 The discrete-metric prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
 The discrete-metric rule is thus robust to risk aversion even under direct payment but can become nearly unwinnable; the distance rules avoid that under the binary-lottery implementation, whose payment probability is the expected normalized score, at the cost of relying on expected utility.
 
-\subsection{Other Count-Loss Rules and the Limits of the Approach}
+\subsection{Other Frequency-Report Scoring Rules and the Limits of the Approach}
 
 The three rules compared above do not exhaust the family of count losses, and the partial-identification approach is not a general theory of discrete scoring rules.
 Two further rules---Hamming and Chebyshev distance---are worth stating precisely, because they mark where the approach stops yielding tractable sharp bounds.
 
 \paragraph{Hamming distance.}
 The Hamming rule \(S_H(r,\omega)=a-b\sum_i\1\{r_i\ne\omega_i\}\) penalizes the number of categories whose reported count differs from the realized count.
-Its expected loss separates into binomial marginal exact-coordinate probabilities, \(\E_p[\sum_i\1\{r_i\ne\omega_i\}]=\sum_i\{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}\), so an optimal report maximizes a separable objective and the identified set \(P_H(r)\) is exactly the system of expected-loss inequalities over all feasible reports.
-For \(k=2\) the rule coincides with discrete-metric scoring and inherits its closed-form bounds.
+By linearity of expectation its expected loss is \(\sum_i\{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}\), so an optimal report maximizes the separable objective \(\sum_i\Pr(\mathrm{Bin}(n,p_i)=r_i)\) subject to \(\sum_i r_i=n\), and \(P_H(r)\) is the set of beliefs at which \(r\) attains that maximum---cut out by one expected-loss inequality per alternative report.
+For \(k=2\) the two coordinate indicators \(\1\{r_i\ne\omega_i\}\) are equal, so the Hamming count-error index \(\sum_i\1\{r_i\ne\omega_i\}\) is exactly twice the discrete metric \(\1\{r\ne\omega\}\); the rule coincides with discrete-metric scoring and inherits its closed-form bounds.
 For \(k>2\) it does not.
-Each coordinate term \(\Pr(\mathrm{Bin}(n,p_i)=r_i)\) is unimodal but not discrete-concave in the reported count, so a single-unit-transfer argument is necessary but not sufficient for global optimality: a multi-count transfer can move the report from one binomial mode to a higher one.
+Each term \(\Pr(\mathrm{Bin}(n,p_i)=r_i)\) is unimodal but not discrete-concave in the reported count, so the exchange argument that makes single-count-transfer optimality sufficient for Manhattan distance fails here: the condition remains necessary but is no longer sufficient, because a transfer of two or more counts can raise the separable objective where no single-count transfer does.
 This failure is not confined to the boundary of the simplex.
-At \(n=3\), \(k=5\), and uniform beliefs \(p=(1/5,\ldots,1/5)\), for instance, the report \((3,0,0,0,0)\) admits no improving single transfer, yet the report \((0,0,1,1,1)\) yields a strictly higher expected score.
-The identified set \(P_H(r)\) is therefore a non-convex semialgebraic set rather than a polytope.
-A closed-form modal-box inner bound and a single-unit-transfer outer bound sandwich it, but the sharp coordinate bounds lie strictly between these and are available only by numerical optimization over the non-convex set---which is computationally intractable at the category counts of the design comparison.
+At \(n=3\), \(k=5\), and uniform beliefs \(p=(1/5,\ldots,1/5)\), for instance, the report \((3,0,0,0,0)\) admits no improving single-count transfer, yet \((0,0,1,1,1)\) yields a strictly higher expected score.
+The identified set \(P_H(r)\) is therefore a non-convex set defined by polynomial inequalities, not a polytope.
+The modal box \(\prod_i[r_i/(n+1),(r_i+1)/(n+1)]\) collects the beliefs at which every \(r_i\) is a mode of its binomial marginal; there the separable objective is maximized term by term, so \(r\) is optimal, and the modal box is a closed-form inner bound for \(P_H(r)\), while the single-count-transfer inequalities give an outer bound.
+The sharp coordinate bounds lie between these two and are obtainable only by numerical optimization over the non-convex set, which is computationally intractable at the larger category counts of the design comparison.
 Hamming distance is for this reason characterized here rather than included in the comparison.
 
 \paragraph{Chebyshev distance.}
 The Chebyshev rule \(S_\infty(r,\omega)=a-b\max_i|r_i-\omega_i|\) penalizes the largest single-category count error.
-Unlike the other count losses, its expected loss does not separate across coordinates: the maximum couples the category errors within every realization.
-For \(k=2\) the rule reduces to Manhattan scoring---the two losses differ only by a positive factor---and inherits the binomial-median interval.
-For \(k>2\) no clean optimal-report characterization is available; the identified set is again only the system of expected-loss inequalities over all reports, with no transfer-polytope or threshold reduction.
+Unlike the other count losses, its expected loss does not separate across coordinates: the maximum couples the category errors within every realization, so there is no per-coordinate transfer condition to exploit.
+For \(k=2\) the two absolute errors \(|r_i-\omega_i|\) are equal, so the count-error index \(\max_i|r_i-\omega_i|\) is half of \(\sum_i|r_i-\omega_i|\); the rule coincides with Manhattan scoring and inherits the binomial-median interval.
+For \(k>2\) no optimal-report characterization comparable to those of the headline rules is known: the identified set is cut out only by the full system of expected-loss inequalities, one per alternative report, with no transfer-polytope or threshold reduction.
 Chebyshev distance is computable by enumeration for small \(n\) and \(k\) but, like Hamming, does not deliver the sharp, scalable bounds that make the three headline rules comparable.
 
 These two rules are not pathological---their identified sets are well defined and finite to check---but they show that the closed-form and semi-analytical tractability of the headline rules is a property of those rules, not a generic feature of count-loss scoring.

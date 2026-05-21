@@ -4,11 +4,8 @@ This section applies the setup to three frequency-report scoring rules.
 They span a spectrum of analytical tractability.
 Quadratic-distance and discrete-metric scoring have closed-form identified sets and closed-form coordinate bounds.
 Manhattan-distance scoring has an exact identified set and sharp coordinate bounds in semi-analytical form.
-The same machinery applies to further count-loss criteria---Hamming and Chebyshev (\(L_\infty\)) distance---whose identified sets are exact but resist tractable sharp bounds; the discussion takes them up as the boundary of the approach.
 
-\subsection{Rules with Closed-Form Bounds}
-
-\subsubsection{Quadratic-Distance Frequency Scoring}
+\subsection{Quadratic-Distance Frequency Scoring}
 
 The main analytical rule is quadratic-distance frequency scoring.
 It pays less when the reported count vector is far from the realized count vector in squared Euclidean distance:
@@ -66,8 +63,8 @@ Projection ties are included.
 \end{proposition}
 
 The inequalities compare the observed report \(r\) with reports obtained by moving one count from a positive reported category \(j\) to another category \(i\).
-If all such one-count moves weakly increase squared distance from \(np\), then \(r\) is a closest feasible report.
-Thus \(P_Q(r)\) is a polytope in the belief simplex.
+If all such single-count moves weakly increase squared distance from \(np\), then \(r\) is a closest feasible report.
+Thus \(P_Q(r)\) is a polytope in the belief simplex---a region cut out by finitely many linear inequalities.
 The proof is in Appendix \ref{app:squared-proof}.
 
 \paragraph{Probability and mean bounds.}
@@ -87,7 +84,7 @@ Quadratic distance is mean-oriented: it links a report \(r\) to beliefs for whic
 Compared with exact matching, the payment varies smoothly with distance rather than only with exact equality.
 The main implementation cost is that direct monetary quadratic-distance payments generally require risk neutrality unless the score is implemented probabilistically, as discussed below.
 
-\subsubsection{Discrete-Metric Frequency Scoring}
+\subsection{Discrete-Metric Frequency Scoring}
 
 The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewanSimple}.
 Its count-error index is the count-vector discrete metric,
@@ -142,7 +139,7 @@ P_{0,i}(r)
 \]
 \end{proposition}
 
-The inequalities say that no one-count transfer from a reported category \(j\) to another category \(i\) can increase the multinomial probability of the report.
+The inequalities say that no single-count transfer from a reported category \(j\) to another category \(i\) can increase the multinomial probability of the report.
 Weak inequalities include ties.
 The formula also handles boundaries: if \(r_i=0\), the lower bound is \(0\); if \(r_i=n\), the upper bound is \(1\).
 These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewanSimple}; they are restated here to make the informational-efficiency comparison self-contained.
@@ -164,84 +161,82 @@ Discrete-metric frequency scoring is transparent and robust to risk aversion bec
 Its implementation cost is that the probability of an exact match can be small when \(n\) is large or the outcome space is rich.
 It is a prominent known rule in the comparison, not a new mechanism introduced here.
 
-\subsubsection{Comparing the Two Closed-Form Rules}
+\subsection{Comparing the Two Closed-Form Rules}
 
-The two closed-form rules can be compared directly through their coordinate-bound widths.
-The discrete-metric coordinate width, \([r_i(k-2)+(n+k-1)]/[(n+1)(n+k-1)]\), is linear in the reported count \(r_i\); because \(\sum_i r_i=n\) fixes the average reported count at \(n/k\), the average of this width over the \(k\) coordinates is a constant,
+The closed-form coordinate bounds of Propositions \ref{prop:quadratic} and \ref{prop:discrete} can be compared directly, before any simulation.
+For a rule \(S\) and report \(r\), call the mean of the coordinate widths \(\overline p_{S,i}(r)-\underline p_{S,i}(r)\) over the \(k\) coordinates the \emph{average coordinate width}.
+
+\begin{corollary}[Average coordinate width of the closed-form rules]\label{cor:closed-form-comparison}
+Fix \(n\ge2\) and \(k\ge2\), and for a report \(r\) let \(m=m(r)\) be the number of categories with positive reported counts.
+\begin{enumerate}
+\item The discrete-metric average coordinate width equals the constant
 \[
-\frac{(k-1)(2n+k)}{k(n+1)(n+k-1)},
+W_0(n,k)=\frac{(k-1)(2n+k)}{k(n+1)(n+k-1)},
 \]
-the same for every report.
-The quadratic-distance coordinate width for a positive-report category, \(2/n-1/(nm)-1/(nk)\) with \(m=m(r)\) the number of categories with positive reported counts, does not depend on \(r_i\) and shrinks as the report concentrates on fewer categories.
-A report concentrated on few categories therefore has a small average quadratic width; a balanced report, with \(m=k\), has an average quadratic width that exceeds the discrete-metric constant.
-Which of the two closed-form rules gives the narrower average coordinate bound thus turns on how concentrated the report is, before any simulation---a contrast the design comparison of the next section ties to belief concentration, quantifies, and extends to Manhattan distance.
+the same for every report \(r\).
+\item The quadratic-distance average coordinate width depends on \(r\) only through \(m\):
+\[
+W_Q(m;n,k)=\frac{1}{nk}\left[2m-1-\frac{m}{k}+\frac{m(k-m)}{m+1}\right].
+\]
+\item The two widths cross: \(W_Q(1;n,k)<W_0(n,k)<W_Q(k;n,k)\).
+\end{enumerate}
+\end{corollary}
+
+The proof---elementary algebra on the two coordinate-bound formulas---is in Appendix \ref{app:comparison-proof}.
+
+Parts (1) and (2) together say something clean: the discrete-metric average width is a constant, while the quadratic-distance average width is a function of \(m\) alone, so the comparison between the two closed-form rules is decided entirely by \(m=m(r)\), the number of categories the report touches.
+Part (3) shows that comparison is not one-sided---the quadratic average width falls below the discrete constant at the most concentrated report and rises above it at \(m=k\)---so which rule gives the narrower average coordinate bound genuinely turns on how concentrated the report is.
+The design comparison of the next section ties this report-level contrast to belief concentration, quantifies it, and extends it to Manhattan distance.
 
 \subsection{Manhattan-Distance Frequency Scoring}
 
-Unlike the two closed-form rules, Manhattan-distance scoring has no closed-form coordinate bounds; its identified set is nonetheless exact, and its sharp bounds reduce to a one-dimensional computation.
+Unlike the two closed-form rules, Manhattan-distance scoring has no closed-form coordinate bounds; its optimal-report correspondence and identified set are nonetheless characterized exactly, and its sharp bounds reduce to a one-dimensional computation.
 The Manhattan-distance rule is
 \[
 S_M(r,\omega)=a-b\sum_{i=1}^k |r_i-\omega_i|,
 \quad b>0.
 \]
-It rewards total absolute count accuracy rather than squared count accuracy.
-Its inferential interpretation is median-oriented rather than mean-oriented.
+It rewards total absolute count accuracy rather than squared count accuracy, and its inferential interpretation is median-oriented rather than mean-oriented.
 
-\paragraph{Optimal reports and identified set.}
-For category \(i\), the realized count has binomial marginal distribution
+For category \(i\) the realized count has binomial marginal \(W_i\sim\mathrm{Bin}(n,p_i)\); write \(F_i(t;n,p_i)=\Pr(W_i\le t)\) for its distribution function, with the conventions \(F_i(-1;n,p_i)=0\) and \(F_i(n;n,p_i)=1\).
+By linearity of expectation the expected Manhattan loss is separable across categories, \(\E_p\sum_i|r_i-\omega_i|=\sum_i\E_p|r_i-W_i|\), while the simplex constraint \(\sum_i r_i=n\) couples the coordinates.
+
+\begin{proposition}[Manhattan distance: optimal reports and identified set]\label{prop:manhattan}
+Optimal reports minimize the separable expected Manhattan loss,
 \[
-W_i\sim\mathrm{Bin}(n,p_i).
+R_M(p)=\argmin_{r\in\OmegaN}\sum_{i=1}^k\E_p|r_i-W_i|,
 \]
-Let
+and \(r\) is optimal if and only if no single-count transfer lowers that loss, equivalently
 \[
-\ell_i(t;p_i)=\E|t-W_i|,
-\qquad
-F_i(t;n,p_i)=\Pr(W_i\le t).
-\]
-Then optimal reports solve
-\[
-R_M(p)
-=
-\argmin_{r\in\OmegaN}
-\sum_{i=1}^k \ell_i(r_i;p_i).
-\]
-The simplex constraint \(\sum_i r_i=n\) prevents the researcher from treating each coordinate independently.
-Because each coordinate loss \(\ell_i\) is discrete-convex and the objective is separable, the absence of any single-count transfer that lowers expected Manhattan loss is both necessary and sufficient for global optimality.
-Equivalently,
-\[
-P_M(r)
-=
-\left\{
-p\in\DeltaK:
 F_i(r_i;n,p_i)\ge F_j(r_j-1;n,p_j)
-\quad
-\forall i,j\text{ with }r_i<n,\ r_j>0
-\right\}.
+\qquad\forall\,i,j\text{ with }r_i<n,\ r_j>0.
 \]
-Weak inequalities include ties; there is no receiver constraint when \(r_i=n\) and no sender constraint when \(r_j=0\).
-Single-unit-transfer optimality is sufficient, not merely necessary, so \(P_M(r)\) is the exact identified set rather than an outer approximation.
-The proof is in Appendix \ref{app:manhattan-proof}.
+This condition is sufficient as well as necessary, so the identified set is exactly
+\[
+P_M(r)=\left\{p\in\DeltaK:\ F_i(r_i;n,p_i)\ge F_j(r_j-1;n,p_j)\ \ \forall\,i,j\text{ with }r_i<n,\ r_j>0\right\}.
+\]
+Equivalently, \(p\in P_M(r)\) if and only if some threshold \(c\in[0,1]\) satisfies
+\[
+F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)\qquad\forall\,i.
+\]
+\end{proposition}
+
+Each coordinate loss \(\E_p|t-W_i|\) is discrete-convex in the reported count \(t\)---its successive increments are nondecreasing---and this is what lifts single-count-transfer optimality from necessary to sufficient, so \(P_M(r)\) is the exact identified set rather than an outer approximation.
+Weak inequalities include ties, and there is no receiver constraint when \(r_i=n\) nor sender constraint when \(r_j=0\).
+The proof is in Appendix~\ref{app:manhattan-proof}.
 
 \paragraph{Identification bounds.}
-For \(k=2\), write \(r=(t,n-t)\).
-Then Manhattan loss is \(2|t-W|\), with \(W\sim\mathrm{Bin}(n,p_1)\), so the report identifies the binomial-median interval
+For \(k=2\), write \(r=(t,n-t)\); the Manhattan loss is \(2|t-W|\) with \(W\sim\mathrm{Bin}(n,p_1)\), and the report identifies the binomial-median interval
 \[
-P_{M,1}(r)
-=
-\{p_1\in[0,1]:F(t-1;n,p_1)\le 1/2\le F(t;n,p_1)\}.
+P_{M,1}(r)=\{p_1\in[0,1]:F(t-1;n,p_1)\le 1/2\le F(t;n,p_1)\}.
 \]
 This binary case is clean.
 
-For \(k>2\), the pairwise CDF inequalities are equivalent to a single threshold condition: \(p\in P_M(r)\) if and only if there exists \(c\in[0,1]\) such that
-\[
-F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)
-\quad\forall i,
-\]
-using \(F_i(-1;n,p_i)=0\) and \(F_i(n;n,p_i)=1\).
-For a fixed \(c\), these inequalities give a coordinate box through inverse binomial CDFs, and intersecting that box with the simplex gives the feasible beliefs at that threshold.
-Each sharp coordinate bound then reduces to a one-dimensional optimization over the threshold \(c\): the objective is unimodal in \(c\), so the bound is the solution of a single monotone scalar equation.
-The coordinate bounds are thus sharp and semi-analytical---not closed form, because the inverse binomial CDF is not elementary, but exact and one-dimensional rather than grid-limited.
-The sharp mean bounds are obtained by a one-dimensional search over the same threshold.
+For \(k>2\) the threshold representation of Proposition~\ref{prop:manhattan} drives the bounds.
+At a fixed threshold \(c\) the inequalities \(F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)\) invert, coordinate by coordinate, to a box of beliefs through inverse binomial CDFs; intersecting that box with the simplex gives the feasible beliefs at that threshold.
+Each sharp coordinate bound is then the optimum, over \(c\in[0,1]\), of a function that is unimodal in \(c\), so it is the solution of a single monotone scalar equation.
+The coordinate bounds are therefore sharp and semi-analytical: not closed form, because the inverse binomial CDF is not elementary, but exact and one-dimensional rather than grid-limited.
+The sharp mean bounds are obtained by the same one-dimensional search over the threshold.
 
 \paragraph{Practical interpretation.}
 Manhattan distance is useful when a median-type count prediction is substantively appropriate.
