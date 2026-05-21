@@ -5,8 +5,10 @@
 The step-4 manuscript revision, the citation pass, and the step-5 proof audit
 are all complete (2026-05-21). The proofs are rigorous (the two quadratic-proof
 gaps were fixed and re-audited closed), the bibliography is corrected and
-extended, and the paper compiles cleanly. What remains before submission is a
-sharper final exposition pass and a focused external read.
+extended, and the paper compiles cleanly. The subsequent three-rule revision and its final
+exposition pass are also complete (2026-05-21); the paper compiles with no
+undefined references and no overfull boxes. What remains before submission is a
+focused external read by a human reader.
 
 ## Mathematical Issues
 
@@ -71,30 +73,28 @@ Important sources include:
 - Hogarth for probability-assessment motivation;
 - Savage, Selten, and Gneiting--Raftery for scoring-rule background.
 
-## Four-Rule Comparison Issues
+## Three-Rule Comparison
 
-The project compares quadratic, discrete-metric, Manhattan, and Hamming rules as
-headline rules in the ANALYTICAL taxonomy; the SIMULATION horse race covers only
-the first three (ADR-0001, second amendment). The 2026-05-21
-analytical-bounds-search (memo:
-`_context/exploration/bounds_search_manhattan_hamming.md`; outcome recorded in
-ADR-0001) resolved the analytical investigation. Remaining open issues:
+The paper headlines three rules — quadratic, discrete-metric, Manhattan — each
+in both the scoring-rules section and the design comparison. Hamming and
+Chebyshev are not headline rules; they are covered in the discussion subsection
+"Other Count-Loss Rules and the Limits of the Approach" (ADR-0001, fourth
+amendment). Status:
 
-- The Manhattan single-transfer-sufficiency proof and the semi-analytical
-  coordinate-bound theorem are new results awaiting the proof audit
-  (next_steps.md step 5) before manuscript entry.
-- Hamming is presented analytically only: k=2 closed form (= discrete-metric),
-  the single-transfer non-sufficiency obstruction, and the modal-box inner /
-  single-transfer outer sandwich. It is not in the simulation horse race.
-- The simulation code is being revised to upgrade Manhattan from a c-grid scan
-  to a sharp root-find at the threshold crossing.
-- The scoring-rules section must present Hamming honestly as the analytically
-  weakest and computationally intractable rule, without implying it was demoted
-  arbitrarily — the demotion is evidence-driven (see ADR-0001).
-- Chebyshev is cut from the main text (decided 2026-05-21): it is neither
-  headline, analyzed, nor simulated, so it is demoted to a single acknowledging
-  sentence noting the inverse-region machinery extends to other count-loss
-  criteria. The standalone Chebyshev subsection is removed.
+- Hamming and Chebyshev were investigated thoroughly. The interior
+  single-transfer-sufficiency conjecture for Hamming was refuted by exact search
+  (Step 0a; `outputs/verification/hamming_interior_search.md`), and a
+  bound-computation spike failed at k=10 on both reliability and runtime (Step
+  0b; `outputs/verification/hamming_spike.md`). The demotion is evidence-driven,
+  not arbitrary — see ADR-0001's third and fourth amendments.
+- The discussion subsection states the obstructions precisely and must stay
+  conservative: Hamming is not "unsolvable" (it has an exact identified set, a
+  closed-form modal-box inner bound, and a k=2 closed form); the precise claim
+  is that its sharp k>2 bounds are computationally intractable at the design
+  grid's scale, and single-transfer optimality fails even at interior beliefs.
+- Chebyshev is no longer a single passing sentence: it has a paragraph in the
+  discussion subsection (no clean optimal-report characterization for k>2; its
+  expected loss does not separate across coordinates).
 
 ## Simulation Metric Issues
 

@@ -2,6 +2,30 @@
 
 Date: 2026-05-21
 
+## Update — 2026-05-21 Hamming grilling session and three-rule revision
+
+A `grill-with-docs` session reopened the Hamming rule, ran a two-track
+derisking effort (the Hamming-first plan), and resolved it: both tracks failed
+— the interior single-transfer-sufficiency theorem was refuted, and the
+Hamming bound computation was intractable and unreliable at `k=10` (ADR-0001
+third amendment; artifacts in `outputs/verification/`). The author then removed
+Hamming from the headline analysis entirely (ADR-0001 fourth amendment), and the
+manuscript revision in `_context/revision_plan.md` was executed:
+
+- The paper now headlines THREE rules — quadratic-distance, discrete-metric,
+  Manhattan — each in both the scoring-rules section and the design comparison.
+- Hamming and Chebyshev are covered in a new discussion subsection, "Other
+  Count-Loss Rules and the Limits of the Approach," stating their obstructions
+  precisely.
+- §3 owns the analytic comparison of the two closed-form rules at the level of
+  report concentration; §4 ties it to belief concentration, quantifies it, and
+  extends to Manhattan. The introduction and abstract were reframed to lead with
+  the concrete characterizations, partial identification as the lens.
+- The paper compiles cleanly (0 undefined references).
+
+Text below that still says "four headline rules" reflects the earlier
+2026-05-21 direction decision and is superseded by this update.
+
 ## Project Thesis
 
 As of the 2026-05-21 direction decision, the project is a methodological paper
@@ -13,7 +37,7 @@ identified set
 \Theta_S(r)=P_S(r)=\{p:r\in R_S(p)\},
 \]
 the set of beliefs that rationalize \(r\) as an optimal report. The paper
-compares four rules by the sharpness of the identified sets they induce. The
+compares three rules by the sharpness of the identified sets they induce. The
 practical output is a set of finite-sample bounds for latent probabilities and
 linear functionals such as means.
 
@@ -42,7 +66,8 @@ standalone section; `06_risk_attitudes.tex` was removed):
 
 ## Active Rules
 
-The four headline rules sit on an analytical-to-computational spectrum (ADR-0001):
+The paper headlines three rules, all in both the scoring-rules section and the
+design comparison (ADR-0001, fourth amendment):
 
 - Quadratic-distance: closed-form identified set and coordinate bounds; the
   analytical centerpiece.
@@ -51,11 +76,15 @@ The four headline rules sit on an analytical-to-computational spectrum (ADR-0001
 - Manhattan-distance: exact identified set (single-transfer optimality proven
   sufficient and audited), sharp coordinate bounds via a one-dimensional
   threshold root-find — semi-analytical, not closed form.
-- Hamming-distance: analytical-only — k=2 closed form, the single-transfer
-  non-sufficiency obstruction, the modal-box inner / single-transfer outer
-  sandwich. Excluded from the simulation (intractable at scale).
 
-Chebyshev distance has been cut to a single acknowledging sentence.
+Hamming and Chebyshev distance are not headline rules. They appear only in the
+discussion subsection "Other Count-Loss Rules and the Limits of the Approach":
+Hamming has an exact identified set, a closed-form modal-box inner bound, and a
+k=2 closed form, but its sharp k>2 bounds need numerical optimization over a
+non-convex set that is intractable at the design grid's scale, and
+single-transfer optimality fails even at interior beliefs; Chebyshev's expected
+loss does not separate across coordinates and has no clean optimal-report
+characterization for k>2.
 
 ## Current Evidence
 

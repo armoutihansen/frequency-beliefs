@@ -376,15 +376,29 @@ report. This is sharper and more honest than the earlier "near the boundary,
 `min(p) ~ 1e-3`" description, which conflated genuine boundary counterexamples
 with sub-tolerance float noise.
 
-Interior status — open. No interior counterexample was found in the exact
-search. Whether single-transfer optimality is sufficient for Hamming at
-strictly interior beliefs is an open question; it is a plausible conjecture but
-is NOT proven and must not be claimed. It would not change the classification
-below in any case (see (5)): the identified set is a closed subset of `Delta`
-that includes the boundary, and the defining inequalities are polynomial.
+Interior status — REFUTED (2026-05-21, Step 0a of the Hamming-first plan;
+`scripts/hamming_interior_search.py`, artifact
+`outputs/verification/hamming_interior_search.md`). An earlier version of this
+memo recorded interior sufficiency as an open conjecture, the `k=3` exact
+search having found no interior counterexample. An extended exact
+rational-arithmetic search over `k=4,5,6` REFUTED it. Cleanest counterexample:
+`n=3`, `k=5`, the UNIFORM belief `p=(1/5,1/5,1/5,1/5,1/5)`. The report
+`r=(3,0,0,0,0)` is single-unit-transfer optimal — coordinate 1 is the only
+sender and every transfer from it changes `G` by
+`[b(1)-b(0)]+[b(2)-b(3)] = -16/125 + 11/125 = -5/125 < 0` — yet `G(r)=257/125`
+while `s=(0,0,1,1,1)` has `G(s)=272/125 > G(r)`. The obstruction is therefore
+NOT a boundary phenomenon: it occurs at the most interior point of the simplex,
+and because every single-transfer increment is strictly negative and
+`G(s)-G(r)` is strictly positive, single-transfer sufficiency fails on a
+positive-measure set of strictly interior beliefs (verified for `k>=5`). The
+`k=3` null result was a `k=3`-specific fact, not evidence for general interior
+sufficiency. Consequence: `(H-loc)` is a strict outer set even on the interior
+— there is no theorem route to certified-sharp Hamming bounds by collapsing
+`P_H(r)` to `(H-loc)`.
 
 Conclusion on claim (c). Single-unit-transfer optimality is NECESSARY but NOT
-SUFFICIENT for Hamming (the failure occurring on the simplex boundary). The
+SUFFICIENT for Hamming (the failure occurring even at strictly interior
+beliefs — see the REFUTED note above). The
 single-transfer system `(H-loc)` defines only an OUTER set; the exact `P_H(r)`
 requires the full report set:
 
@@ -507,12 +521,12 @@ So for `k=2` Hamming inherits the discrete-metric closed form; the difficulty is
 strictly a `k>2` phenomenon, created by the budget constraint coupling three or
 more non-concave coordinate terms.
 
-Degenerate / sparse beliefs. The genuine counterexamples to single-transfer
-sufficiency all live ON the simplex boundary — every one found by the exact
-rational-grid search has at least one coordinate `p_i` exactly equal to `0` (see
-(3')). For strictly interior `p`, the exact search found no counterexample;
-whether single-transfer optimality is sufficient at strictly interior beliefs is
-an open conjecture and must NOT be claimed without proof.
+Degenerate / sparse beliefs. In the `k=3` exact search every counterexample to
+single-transfer sufficiency had a coordinate exactly `0` — but this is
+`k=3`-specific. The extended `k=4,5,6` search (see (3'), REFUTED note) found
+interior counterexamples, including at the uniform belief; single-transfer
+sufficiency fails on a positive-measure set of strictly interior beliefs for
+`k>=5`. It is not a boundary-only phenomenon.
 
 ### (8) Analytical status [classification]
 

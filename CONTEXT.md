@@ -17,8 +17,8 @@ The set of latent multinomial beliefs \(p\) consistent with an observed incentiv
 _Avoid_: "inverse belief region" (legacy term from earlier drafts; retire in new text), "feasible belief set", "preimage".
 
 **Headline rule**:
-A scoring rule given primary attention in the paper. Four rules are headline in the *analytical* taxonomy: quadratic-distance, discrete-metric, Manhattan, Hamming. The *simulation* horse race covers only the three with tractable sharp bounds — quadratic-distance, discrete-metric, Manhattan — because Hamming's identified set is computationally intractable at the design grid's scale (ADR-0001, second amendment).
-_Avoid_: "main rule", "central rule"; do not describe the simulation as a four-rule horse race.
+A scoring rule given primary attention in the paper. Three rules are headline: quadratic-distance, discrete-metric, and Manhattan — each characterized in the scoring-rules section and each in the design comparison. Hamming and Chebyshev distance are *not* headline rules: their identified sets are exact but resist tractable sharp bounds, and the discussion takes them up as the boundary of the approach (ADR-0001, fourth amendment).
+_Avoid_: "main rule", "central rule"; describing Hamming or Chebyshev as headline rules; any "four-rule" framing of the paper.
 
 **Coordinate bound**:
 The interval projection of the identified set onto a single coordinate \(p_j\); i.e., \([\min_{p \in \Theta_S(r)} p_j, \max_{p \in \Theta_S(r)} p_j]\).
@@ -76,9 +76,9 @@ _Avoid_: using "risk-aversion-robust" without specifying the payment frame.
 The implementation cost specific to the discrete-metric rule under either payment frame: the per-trial probability of receiving any positive payment shrinks exponentially in \((n, k)\) for non-degenerate beliefs, eventually making the implied lottery degenerate. This is a single-rule implementation discussion, not a cross-rule comparison metric.
 _Avoid_: presenting payment probability as a horse-race metric.
 
-**Design exercise**:
-The simulation comparing the three simulation-headline rules (quadratic-distance, discrete-metric, Manhattan) across design dimensions \((n, k, p)\) — number of trials, number of categories, latent-belief structure — under stated inferential objectives. Hamming is excluded from this exercise (ADR-0001, second amendment).
-_Avoid_: "horse race" in manuscript prose (acceptable in working notes only), "simulation tournament".
+**Design comparison**:
+The simulation comparing the three simulation-headline rules (quadratic-distance, discrete-metric, Manhattan) across design dimensions \((n, k, p)\) — number of trials, number of categories, latent-belief structure — under stated inferential objectives. Hamming is excluded from this comparison (ADR-0001, second amendment).
+_Avoid_: "design exercise" (legacy term from earlier drafts; retire in new text), "horse race" in manuscript prose (acceptable in working notes only), "simulation tournament".
 
 ## Relationships
 
@@ -92,7 +92,7 @@ _Avoid_: "horse race" in manuscript prose (acceptable in working notes only), "s
 > **Reader:** "When you say the quadratic-distance rule has sharp closed-form bounds, you mean closed form for the **identified set** itself?"
 > **Author:** "Closed form for both the **identified set** and its **coordinate bounds**. The **mean bound** also admits a closed-form expression as an optimization over the full **identified set**, not a combination of **coordinate bounds**."
 > **Reader:** "And for **Manhattan** or **Hamming**?"
-> **Author:** "There we currently have characterizations of \(R_S(p)\) and threshold-computed bounds. Whether closed-form **identified set** descriptions exist for those rules is an open analytical question — they remain **headline rules** in the **design exercise** even when only computational bounds are available."
+> **Author:** "There we currently have characterizations of \(R_S(p)\) and threshold-computed bounds. Whether closed-form **identified set** descriptions exist for those rules is an open analytical question — they remain **headline rules** in the **design comparison** even when only computational bounds are available."
 
 ## Flagged ambiguities
 

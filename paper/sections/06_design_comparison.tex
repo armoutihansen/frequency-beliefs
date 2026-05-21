@@ -7,7 +7,7 @@ The exercise draws latent beliefs
 p\sim\operatorname{Dirichlet}(\alpha,\ldots,\alpha)
 \]
 and, for each of the three rules with tractable sharp bounds---discrete-metric, quadratic-distance, and Manhattan distance---computes an optimal report \(r_S(p)\) and the bounds induced by \(P_S(r_S(p))\).
-Hamming distance is characterized analytically in the preceding section and is not part of this comparison: its sharp identified set is computationally intractable at these \((n,k)\) scales.
+Hamming and Chebyshev distance fall outside this comparison; Section~5 takes them up as count-loss rules whose identified sets are exact but resist tractable sharp bounds.
 The final run uses \(5{,}000\) belief draws for each cell in
 \[
 n\in\{5,10,20,50\},\qquad
@@ -15,21 +15,17 @@ k\in\{2,3,5,10\},\qquad
 \alpha\in\{0.1,0.3,1,3,10\}.
 \]
 The Dirichlet parameter \(\alpha\) sets belief concentration: small \(\alpha\) draws sparse beliefs near a vertex of the simplex, large \(\alpha\) draws balanced, interior beliefs.
-For each rule the comparison records two inferential targets---the average width of the coordinate bounds, and the width of the bound on the linear functional \(\sum_i p_i x_i\) with outcome values \(x_i=(i-1)/(k-1)\).
+For each rule the comparison records two headline inferential targets---the average width of the coordinate bounds, and the width of the bound on the linear functional \(\sum_i p_i x_i\) with outcome values \(x_i=(i-1)/(k-1)\).
 Manhattan coordinate bounds are sharp, computed by a threshold root-find; Manhattan mean bounds are threshold-computed with tolerance \(10^{-4}\).
 
 The comparison is conditional on the theoretical characterizations above.
 It is not evidence of incentive compatibility, and it is not an optimality theorem.
-It is a diagnostic for the practical question: which rule gives a researcher tighter inference for the object of interest?
+It plays three roles: it confirms the analytic crossover between the two closed-form rules established in Section~3, quantifies that crossover through win shares and regret, and extends the comparison to Manhattan distance, whose lack of a closed-form bound rules out a comparable analytic treatment.
+It is, in short, a diagnostic for the practical question: which rule gives a researcher tighter inference for the object of interest?
 
 \paragraph{The ranking is governed by belief concentration.}
-For the two rules with closed-form bounds the crossover can be read from those bounds before any simulation.
-The discrete-metric coordinate width, \([r_i(k-2)+(n+k-1)]/[(n+1)(n+k-1)]\), is linear in the reported count \(r_i\); because \(\sum_i r_i=n\), its average over the \(k\) coordinates is a constant, \((k-1)(2n+k)/[k(n+1)(n+k-1)]\), the same for every report.
-The quadratic-distance coordinate width for a positive-report category, \(2/n-1/(nm)-1/(nk)\) with \(m=m(r)\) the number of categories with positive reported counts, does not depend on \(r_i\) and shrinks as the report concentrates on fewer categories.
-A report concentrated on few categories therefore has a small average quadratic width; a balanced report, with \(m=k\), has an average quadratic width that exceeds the discrete-metric constant.
-The ranking of the two closed-form rules thus crosses over with belief concentration as a matter of the closed forms alone.
-The design comparison confirms and quantifies this crossover, and extends it to Manhattan distance, which has no closed-form bound.
-
+Section~3 showed, from the closed-form bounds alone, that which of the two closed-form rules gives the narrower average coordinate bound turns on report concentration---the number \(m\) of categories with positive reported counts.
+The design comparison shows that report concentration tracks belief concentration, so the crossover is governed by how concentrated the subject's beliefs are.
 Averaged over the whole grid the three rules barely differ---mean coordinate width \(0.103\), \(0.104\), and \(0.102\) for discrete-metric, quadratic-distance, and Manhattan scoring---because each rule's favourable and unfavourable regimes cancel.
 Table~\ref{tab:regime-wins} reports the win shares---the share of belief draws on which a rule gives the narrowest interval---broken out by \(\alpha\).
 
@@ -58,6 +54,7 @@ At \(\alpha=0.1\) quadratic gives the narrowest average-coordinate interval on \
 The linear-mean target shows the same crossover.
 The number of categories \(k\) and the number of trials \(n\) are second-order, as Table~\ref{tab:design-nk} in Appendix~\ref{app:design-details} documents: for the coordinate target the ranking is nearly flat in both, while for the mean target larger \(n\) mildly favours quadratic and the binary case \(k=2\) favours discrete-metric.
 The worst-coordinate target follows the same pattern shifted in quadratic's favour---quadratic gives the narrowest maximum-coordinate interval on a majority of draws for every \(\alpha\le3\).
+The ranking is robust to the choice of outcome vector and is unaffected by optimal-report ties, which are negligible under the Dirichlet draws; Appendix~\ref{app:design-details} reports both checks.
 
 The crossover has a mechanism in the projection interpretation of quadratic-distance scoring.
 A subject reports the integer count vector closest to \(np\); when beliefs are sparse, \(np\) lies near a vertex of the simplex, the feasible reports around it are extreme count vectors, and the projection polytope is tight, so the induced bounds are narrow.
@@ -101,3 +98,5 @@ The discrete-metric rule has a fixed-prize implementation, which is attractive u
 Its implementation cost is that the exact-match payment probability can be small.
 In the final run, the average exact-match probability is high for very sparse binary beliefs, but it falls sharply as \(n\), \(k\), and belief balance increase; for instance, it is essentially zero in the \(n=50,k=10,\alpha\in\{1,3,10\}\) cells.
 Thus narrow bounds under discrete-metric scoring should be weighed against the chance that the subject rarely wins the fixed prize.
+
+The comparison thus delivers a contingent recommendation, not a single winner: the most informative rule is the one matched to the anticipated belief regime and inferential target, a choice the discussion turns into practical guidance.

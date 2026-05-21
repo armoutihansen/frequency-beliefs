@@ -1,5 +1,39 @@
 # Paper Revision Plan — Handoff (2026-05-21)
 
+> **STATUS — COMPLETE (2026-05-21).** The three-rule revision was executed.
+> Steps 1–6 below were carried out with decisions D1–D3 applied, and the author
+> additionally removed Hamming from the headline analysis (ADR-0001 fourth
+> amendment): the paper now headlines three rules, and Hamming and Chebyshev are
+> covered in a new discussion subsection, "Other Count-Loss Rules and the Limits
+> of the Approach," which states their obstructions precisely (Hamming's §3
+> non-sufficiency point uses the interior uniform-belief counterexample). The
+> paper compiles cleanly — 0 undefined references; one pre-existing overfull box
+> remains in the untouched risk-aversion paragraph. The steps below are retained
+> as the executed record. A final end-to-end exposition read was also done
+> (2026-05-21): the closed-form comparison was promoted to its own subsubsection,
+> minor repetition trimmed, the one large pre-existing overfull box fixed, and
+> the design-comparison robustness checks (alternative outcome vector; tie rate)
+> surfaced from the existing simulation output into the appendix rather than
+> left as deferred "open questions". The paper compiles cleanly: 0 undefined
+> references, no errors, one negligible sub-2pt overfull box. Remaining before
+> submission: a focused external read by a human reader.
+>
+> Three grilling-session decisions carry into the eventual revision and amend
+> the steps below:
+> - **D1 (amends Step 1 and §1).** The moved §3 crossover paragraph and the §4
+>   back-reference must say the ranking turns on *report* concentration — the
+>   count `m` of positive-report categories — because the §3 bounds are a
+>   statement about `m(r)`, not about beliefs. §4 ties report concentration to
+>   belief concentration. §1's "it does not need the simulation" overclaims: §3
+>   owns the report-level crossover, §4 owns the belief-level one.
+> - **D2 (amends Step 5).** Canonical term is "design comparison"; "design
+>   exercise" is retired (CONTEXT.md glossary updated). Section title unchanged.
+> - **D3 (amends Step 3).** The contribution paragraph leads with the three
+>   concrete new characterizations (quadratic closed-form; Manhattan sharp
+>   semi-analytical; Hamming obstruction + sandwich) and the contingent decision
+>   rule. Partial identification is named as the organizing lens, not asserted
+>   as the headline novelty.
+
 ## How to use this document
 
 Self-contained handoff for a fresh Claude Code session; the prior session ran low
