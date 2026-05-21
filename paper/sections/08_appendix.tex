@@ -5,14 +5,16 @@
 \subsection{Discrete-Metric Frequency Scoring}
 \label{app:exact-match-proof}
 
-\begin{proof}[Proof of Proposition 1]
+\begin{proof}[Proof of Proposition~\ref{prop:discrete}]
 For any report \(r\),
 \[
-\E_p[a+b\1\{r=\omega\}]
+\E_p[S_0(r,\omega)]
 =
-a+b\Pr_p(\omega=r),
+a-b\Pr_p(\omega\ne r)
+=
+(a-b)+b\Pr_p(\omega=r),
 \]
-so expected-score maximization is equivalent to maximizing the multinomial probability mass.
+so, since \(b>0\), expected-score maximization is equivalent to maximizing the multinomial probability mass \(\Pr_p(\omega=r)\).
 
 It remains to characterize the mode region.
 Compare \(r\) with \(r+e_i-e_j\), which is feasible when \(r_j>0\).
@@ -100,7 +102,14 @@ F_i(r_i;n,p_i)\ge F_j(r_j-1;n,p_j)
 \quad
 \forall i,j\text{ with }r_i<n,\ r_j>0.
 \]
-Because the marginal increments are weakly increasing in the reported count, this local no-transfer condition is also sufficient for global optimality on the integer simplex.
+This local no-transfer condition is also sufficient for global optimality.
+Each coordinate loss \(\ell_i\) is discrete-convex---its increments \(2F_i(t;n,p_i)-1\) are weakly increasing in \(t\)---and the objective \(\sum_i\ell_i(r_i;p_i)\) is minimized over the integer simplex \(\{r:\sum_i r_i=n\}\).
+Suppose \(r\) satisfies the no-transfer condition and let \(s\) be any feasible report.
+The difference \(s-r\) sums to zero, so \(s\) is reached from \(r\) by a sequence of single-count transfers; choose the sequence monotone, at each step moving a unit from a coordinate currently above its target \(s\) to one currently below.
+A coordinate below its target only ever receives counts and so remains below it, and a coordinate above its target only ever sends counts and remains above it; hence each coordinate's count moves monotonically between \(r_i\) and \(s_i\), and every intermediate report is feasible.
+At a step that moves a unit from \(j\) to \(i\), the receiving count \(c_i\) satisfies \(c_i\ge r_i\) and the sending count \(c_j\) satisfies \(c_j\le r_j\); by discrete-convexity the step's cost \(\{\ell_i(c_i+1)-\ell_i(c_i)\}+\{\ell_j(c_j-1)-\ell_j(c_j)\}\) is at least the cost of the corresponding transfer evaluated at \(r\), which is nonnegative because \(r\) satisfies the no-transfer condition.
+Summing over the path gives \(\sum_i\ell_i(s_i)\ge\sum_i\ell_i(r_i)\), so \(r\) is globally optimal.
+Hence \(P_M(r)\) is the exact identified set.
 
 The threshold representation follows by taking \(c\) between
 \[
@@ -113,7 +122,7 @@ Inverting the resulting binomial-CDF inequalities coordinate by coordinate gives
 \subsection{Quadratic-Distance Rule}
 \label{app:squared-proof}
 
-\begin{proof}[Proof of Proposition 2]
+\begin{proof}[Proof of Proposition~\ref{prop:quadratic}]
 Maximizing \(S_2\) is equivalent to minimizing \(\E_p\|r-\omega\|_2^2\).
 For fixed \(r\),
 \[
@@ -143,16 +152,18 @@ n(p_i-p_j)\le r_i-r_j+1.
 Conversely, suppose all these one-count inequalities hold.
 For any \(s\in\OmegaN\), write \(d=s-r\).
 Pair each positive unit of \(d_i\) with a negative unit of \(d_j\).
+Each coordinate \(j\) with \(d_j<0\) has \(s_j<r_j\) and hence \(r_j>0\), so the one-count inequality \(n(p_i-p_j)\le r_i-r_j+1\) is available for every paired transfer.
 Summing the one-count inequalities over the paired transfers gives
 \[
 np\cdot d\le r\cdot d+M,
 \]
 where \(M=\sum_{i:d_i>0}d_i\) is the number of transferred counts.
-Because \(d\) has integer components and sums to zero,
+Because \(d\) has integer components, \(|d_i|\ge 1\) on its support, so
 \[
-M\le \frac12\sum_i d_i^2.
+\sum_i d_i^2\ge\sum_i |d_i|=2M.
 \]
-Therefore
+Doubling the displayed inequality and substituting \(2M\le\sum_i d_i^2=\|d\|_2^2\) gives \(2np\cdot d\le 2r\cdot d+\|d\|_2^2\).
+Since \(d=s-r\),
 \[
 2np\cdot(s-r)
 \le
@@ -202,7 +213,13 @@ so
 \[
 p_i\le \frac{m}{n(m+1)}.
 \]
-The endpoints are attained by making the relevant summed inequalities bind and assigning remaining probability within the categories not used in the binding constraints.
+The bounds are sharp, with an explicit attaining belief for each endpoint.
+For the lower bound with \(r_i>0\), take \(p_i=(r_i-1)/n+1/(nk)\) and \(p_u=r_u/n+1/(nk)\) for \(u\ne i\).
+This is a probability vector---it sums to one and every coordinate is at least \(1/(nk)\)---and \(n(p_a-p_b)=r_a-r_b\le r_a-r_b+1\) for \(a,b\ne i\) while \(n(p_a-p_i)=r_a-r_i+1\), so it lies in \(P_Q(r)\) and the constraints with \(b=i\) bind, attaining the lower endpoint.
+For the upper bound with \(r_i>0\), take \(p_i=(r_i+1)/n-1/(nm)\), take \(p_v=r_v/n-1/(nm)\) for the positive-report coordinates \(v\ne i\), and set \(p_v=0\) for the zero-report coordinates.
+This sums to one and is nonnegative, lies in \(P_Q(r)\), and makes the constraints \(n(p_i-p_v)\le r_i-r_v+1\) bind for every positive-report \(v\ne i\), attaining the upper endpoint.
+For the upper bound with \(r_i=0\), take \(p_i=m/(n(m+1))\), take \(p_v=\{(m+1)r_v-1\}/(n(m+1))\) for the positive-report coordinates \(v\), and set \(p_w=0\) for the other zero-report coordinates.
+This sums to one and is nonnegative, lies in \(P_Q(r)\), and makes the constraints \(n(p_i-p_v)\le 1-r_v\) bind, attaining the upper endpoint.
 Thus the displayed bounds are sharp.
 \end{proof}
 
@@ -211,13 +228,44 @@ Thus the displayed bounds are sharp.
 
 The design exercise is generated by the script \texttt{scripts/design\_efficiency.py}.
 The final grid uses \(n\in\{5,10,20,50\}\), \(k\in\{2,3,5,10\}\), \(\alpha\in\{0.1,0.3,1,3,10\}\), and \(5{,}000\) draws from the symmetric Dirichlet distribution for each cell.
-For each draw and rule, the script computes an optimal report and then computes bounds for the inverse region generated by that report.
+For each draw, and for each of the three rules in the comparison---discrete-metric, quadratic-distance, and Manhattan---the script computes an optimal report and then bounds for the identified set generated by that report.
+Hamming distance is excluded: its sharp bounds are computationally intractable at this grid's scale.
 
 Discrete-metric coordinate bounds are closed form and mean bounds are linear programs over the transfer region.
 Quadratic-distance coordinate bounds are closed form and mean bounds are linear programs over the one-count transfer polytope.
-Manhattan coordinate and mean bounds use the threshold representation in Appendix \ref{app:manhattan-proof}; the script inverts binomial CDF inequalities by generalized inverse functions and searches over a threshold grid with tolerance \(10^{-4}\).
-The Manhattan entries are therefore threshold-computed.
+Manhattan coordinate bounds are sharp: the script solves the one-dimensional threshold optimization implied by Appendix \ref{app:manhattan-proof} with a monotone root-find.
+Manhattan mean bounds use the same threshold representation but are computed over a threshold grid with tolerance \(10^{-4}\).
 
-The generated files are CSV tables under \texttt{outputs/simulation\_design/}.
+The generated files are CSV tables under \texttt{outputs/design\_exercise/}.
 These outputs are diagnostics for experimental design.
 They are not simulations of subject behavior and do not replace the mathematical characterization of \(R_S(p)\) and \(P_S(r)\).
+
+Table~\ref{tab:design-nk} substantiates the claim in Section 4 that the number of categories \(k\) and the number of trials \(n\) are second-order.
+It reports win shares marginally by \(k\) and by \(n\), averaging over the other two design dimensions.
+Against the variation across belief concentration \(\alpha\) in Table~\ref{tab:regime-wins}---where the leading rule's win share runs from near zero to one---the dependence on \(k\) and \(n\) is slight.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lrrrrrr}
+\hline
+& \multicolumn{3}{c}{Average-coordinate} & \multicolumn{3}{c}{Linear-mean}\\
+\cline{2-4}\cline{5-7}
+& Discrete & Quadratic & Manhattan & Discrete & Quadratic & Manhattan\\
+\hline
+\multicolumn{7}{l}{By number of categories \(k\)}\\
+2  & 0.72 & 0.25 & 0.03 & 0.72 & 0.25 & 0.03\\
+3  & 0.59 & 0.37 & 0.04 & 0.34 & 0.51 & 0.15\\
+5  & 0.58 & 0.35 & 0.07 & 0.49 & 0.42 & 0.09\\
+10 & 0.59 & 0.31 & 0.10 & 0.56 & 0.33 & 0.11\\
+\hline
+\multicolumn{7}{l}{By number of trials \(n\)}\\
+5  & 0.60 & 0.34 & 0.06 & 0.57 & 0.33 & 0.10\\
+10 & 0.61 & 0.32 & 0.07 & 0.57 & 0.33 & 0.11\\
+20 & 0.62 & 0.31 & 0.06 & 0.53 & 0.38 & 0.09\\
+50 & 0.65 & 0.30 & 0.05 & 0.44 & 0.47 & 0.09\\
+\hline
+\end{tabular}
+\caption{Win share marginally by number of categories \(k\) and number of trials \(n\), averaging over the other two design dimensions. Relative to belief concentration (Table~\ref{tab:regime-wins}), the dependence is second-order: the coordinate target is nearly flat in both, and the only visible movements are the binary case \(k=2\) and a mild drift toward quadratic-distance scoring at large \(n\) for the mean target.}
+\label{tab:design-nk}
+\end{table}

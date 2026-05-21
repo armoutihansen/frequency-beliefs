@@ -6,30 +6,70 @@ It is evidence about \(p\), and the scoring rule determines how informative that
 The relevant chain is therefore
 \[
 S
-\rightarrow
+\;\rightarrow\;
 R_S(p)
-\rightarrow
+\;\rightarrow\;
 P_S(r)
-\rightarrow
-\text{bounds on beliefs and functionals}.
+\;\rightarrow\;
+\bigl[\underline p_{S,i}(r),\overline p_{S,i}(r)\bigr].
 \]
 
-The results suggest three practical recommendations.
-First, use discrete-metric frequency scoring when the priority is transparency and fixed-prize robustness.
-It has closed-form coordinate bounds and is robust to risk aversion, but exact-match payment probabilities can be low away from concentrated reports.
+The design comparison shows that the most informative rule depends on how concentrated the subject's beliefs are; three practical recommendations follow.
+First, use discrete-metric frequency scoring when the subject is expected to spread probability fairly evenly across the outcomes, with no single outcome carrying most of the probability.
+It is the most informative rule in that regime, has closed-form coordinate bounds, and is the only rule robust to risk aversion under direct payment; its implementation cost is that exact-match payment probabilities can be low away from concentrated reports.
 
-Second, use quadratic-distance frequency scoring when the priority is transparent belief and mean inference.
-It produces a projection rule, a linear belief region, closed-form coordinate bounds, and linear-program bounds for any linear functional.
-The design exercise shows that quadratic distance is especially attractive for worst-coordinate uncertainty and for mean-oriented targets in sparse-belief environments.
+Second, use quadratic-distance frequency scoring when the subject is expected to place most of the probability on one or a few outcomes.
+It is the most informative rule in that regime---for the average-coordinate, worst-coordinate, and mean targets alike---and it offers a transparent projection rule, a linear identified set, closed-form coordinate bounds, and linear-program bounds for any linear functional.
 
-Third, use Manhattan distance when median-type frequency reports are substantively desired or when it is useful as a comparison rule.
-Its binary case is clean, and its multi-category inverse region is explicit, but the coordinate and mean bounds require threshold computation rather than a simple closed form.
+Third, use Manhattan distance when it cannot be anticipated in advance whether the subject's beliefs will be concentrated on a few outcomes or spread across many.
+Its identified set is exact and its coordinate bounds are sharp---semi-analytical, reducing to a one-dimensional threshold computation rather than a closed form.
+Manhattan rarely gives the single narrowest interval, but the design comparison shows its regret is nearly constant across belief concentrations: it is never far from the best rule, and so minimizes worst-case regret for a researcher who does not know the regime.
+Its inferential interpretation is also median-oriented, which suits settings where a median-type count prediction is substantively appropriate.
 
-The paper should not be read as a general theory of all discrete scoring rules.
-Hamming and Chebyshev distance are discussed as additional computable rules, but the primary analytic-bound results are the quadratic-distance and discrete-metric cases.
-The intended contribution is narrower: a finite-sample design guide for researchers who want to interpret observed frequency reports as bounds on latent beliefs and target functionals.
+\subsection{Risk Aversion and Implementation}
+
+The body of the paper assumes risk neutrality.
+Whether that assumption can be relaxed depends on how the scoring rule is implemented as a payment.
+The distinction is between paying the score directly as money and using the score to determine the probability of a fixed prize.
+
+\paragraph{Direct monetary scores.}
+If the subject is paid the score itself, the subject solves \(\argmax_{r\in\OmegaN}\E_p[u(S(r,\omega))]\).
+For the discrete-metric rule this does not change incentives.
+The payment is a fixed prize \(B\) if \(r=\omega\) and zero otherwise, so
+\[
+\E_p[u]=u(0)+\Pr_p(\omega=r)\{u(B)-u(0)\},
+\]
+and any strictly increasing \(u\) preserves the same optimal reports as maximizing the exact-match probability.
+Direct monetary distance scores do not have this robustness: quadratic and Manhattan distance generate several possible payment levels, so nonlinear utility can change the ranking of reports.
+This is the standard risk-aversion problem for monetary scoring rules \cite{ArmantierTreich2012,SchlagEtAl2013}.
+
+\paragraph{Probability implementation.}
+The distance rules can instead be implemented as a binary lottery.
+Let \(q(r,\omega)\in[0,1]\) be the score normalized into a probability, and pay a fixed prize \(B\) with probability \(q(r,\omega)\) and zero otherwise.
+If the prize and outside payment are fixed, utility depends only on final money, and the randomization is objective and independent, then
+\[
+\E_p[q(r,\omega)u(B)+(1-q(r,\omega))u(0)]
+=
+u(0)+(u(B)-u(0))\,\E_p[q(r,\omega)],
+\]
+so maximizing expected utility is equivalent to maximizing the expected normalized score, regardless of the curvature of \(u\).
+A positive affine normalization of the bounded score into \([0,1]\) preserves the expected-score ranking of reports, so the body's risk-neutral analysis carries over unchanged.
+This is the binary-lottery, or binarized-scoring-rule, technique \cite{RothMalouf1979,BergEtAl1986,Karni2009,HossainOkui2013}; the contribution here is to apply it, not to introduce it.
+
+Two qualifications matter.
+First, the robustness is to risk aversion within expected utility.
+Subjects who depart from expected utility---for instance through probability weighting---can report non-truthfully even under the binary-lottery implementation, and the paper does not address such departures.
+Second, the binary-lottery implementation asks subjects to reason about a compound lottery on top of the count report, which partially offsets the cognitive simplicity that motivates frequency reports in the first place.
+
+The implementation choice also interacts with a cost noted in the design exercise.
+The discrete-metric prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
+The discrete-metric rule is thus robust to risk aversion even under direct payment but can become nearly unwinnable; the distance rules avoid that under the binary-lottery implementation, whose payment probability is the expected normalized score, at the cost of relying on expected utility.
+
+The paper should not be read as a general theory of discrete scoring rules.
+Hamming distance is characterized analytically rather than through the design exercise, and other count-loss criteria such as Chebyshev distance are noted only in passing.
+The intended contribution is narrower: a partial-identification account of frequency reports---turning an observed report into an identified set and finite-sample bounds---together with a design comparison of the rules for which those bounds are tractable.
 
 Important open questions remain.
-The design exercise should be refined before empirical use, especially with alternative outcome vectors, a final choice of paper tables or figures, and robustness checks for tie-breaking conventions.
-The cognitive advantage of frequency reports and distance payments should also be tested experimentally rather than assumed.
-Those extensions are separate from the main theoretical point: different frequency-report scoring rules induce different inverse belief regions, and those regions determine the informational efficiency of the mechanism.
+The design exercise should be refined before empirical use, especially with alternative outcome vectors and robustness checks for tie-breaking conventions.
+The cognitive advantage of frequency reports and distance payments should be tested experimentally rather than assumed.
+Those extensions are separate from the main point: different frequency-report scoring rules induce different identified sets, and those sets determine the informational efficiency of the mechanism.

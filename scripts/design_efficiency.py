@@ -30,7 +30,7 @@ from statistics import median
 from typing import Iterable
 
 import numpy as np
-from scipy.optimize import linprog
+from scipy.optimize import brentq, linprog
 from scipy.special import betaincinv, gammaln
 from scipy.stats import binom
 
@@ -316,6 +316,84 @@ def manhattan_threshold_bounds(
     )
 
 
+def _binom_inv_scalar(t: int, n: int, c: float) -> float:
+    """Inverse decreasing binomial CDF at scalar c: the u with Pr(Bin(n,u)<=t)=c."""
+    if t >= n:
+        return 1.0
+    if t < 0:
+        return 0.0
+    return float(inverse_binom_cdf_decreasing(t, n, np.array([c]))[0])
+
+
+def manhattan_sharp_coordinate_bounds(
+    r: tuple[int, ...], n: int, k: int
+) -> list[tuple[float, float]]:
+    """Sharp Manhattan coordinate bounds via the audited threshold root-find.
+
+    For coordinate h, sup p_h = max_c g_h(c) with g_h(c) = min(hi_h(c),
+    1 - sum_{i!=h} lo_i(c)); g_h is unimodal in the threshold c, so the optimum
+    is the crossing clamped to the feasible interval [c_lo, c_hi]. The infimum
+    is the symmetric construction. See
+    `_context/exploration/bounds_search_manhattan_hamming.md` (audited sound).
+    """
+
+    def lo(c: float) -> np.ndarray:
+        return np.array(
+            [0.0 if r[i] == 0 else _binom_inv_scalar(r[i] - 1, n, c) for i in range(k)]
+        )
+
+    def hi(c: float) -> np.ndarray:
+        return np.array(
+            [1.0 if r[i] == n else _binom_inv_scalar(r[i], n, c) for i in range(k)]
+        )
+
+    # Feasible threshold interval: sum_lo(c) and sum_hi(c) are decreasing in c.
+    if float(lo(0.0).sum()) <= 1.0:
+        c_lo = 0.0
+    else:
+        c_lo = float(brentq(lambda c: float(lo(c).sum()) - 1.0, 0.0, 1.0))
+    if float(hi(1.0).sum()) >= 1.0:
+        c_hi = 1.0
+    else:
+        c_hi = float(brentq(lambda c: float(hi(c).sum()) - 1.0, 0.0, 1.0))
+    if c_lo > c_hi + 1e-12:
+        raise RuntimeError(f"Empty Manhattan threshold interval for r={r}, n={n}")
+    c_hi = max(c_hi, c_lo)
+
+    coord: list[tuple[float, float]] = []
+    for h in range(k):
+        # sup p_h: phi_sup(c) = hi_h(c) + sum_{i!=h} lo_i(c) - 1 is decreasing.
+        def phi_sup(c: float, h: int = h) -> float:
+            lc, hc = lo(c), hi(c)
+            return float(hc[h] + (lc.sum() - lc[h]) - 1.0)
+
+        if phi_sup(c_lo) <= 0.0:
+            cs = c_lo
+        elif phi_sup(c_hi) >= 0.0:
+            cs = c_hi
+        else:
+            cs = float(brentq(phi_sup, c_lo, c_hi))
+        lc, hc = lo(cs), hi(cs)
+        sup_h = min(float(hc[h]), 1.0 - (float(lc.sum()) - float(lc[h])))
+
+        # inf p_h: psi_inf(c) = lo_h(c) + sum_{i!=h} hi_i(c) - 1 is decreasing.
+        def psi_inf(c: float, h: int = h) -> float:
+            lc, hc = lo(c), hi(c)
+            return float(lc[h] + (hc.sum() - hc[h]) - 1.0)
+
+        if psi_inf(c_hi) >= 0.0:
+            ci = c_hi
+        elif psi_inf(c_lo) <= 0.0:
+            ci = c_lo
+        else:
+            ci = float(brentq(psi_inf, c_lo, c_hi))
+        lc, hc = lo(ci), hi(ci)
+        inf_h = max(float(lc[h]), 1.0 - (float(hc.sum()) - float(hc[h])))
+
+        coord.append((clean(inf_h), clean(sup_h)))
+    return coord
+
+
 @dataclass(frozen=True)
 class BoundResult:
     coord: list[tuple[float, float]]
@@ -349,10 +427,18 @@ class BoundComputer:
             skewed = quadratic_transfer_mean_bounds(r, n, k, x_skewed)
             method = "closed-form coordinates; LP functionals"
         elif rule == "manhattan":
-            coord, linear, skewed, feasible = manhattan_threshold_bounds(
+            _grid_coord, linear, skewed, feasible = manhattan_threshold_bounds(
                 r, n, k, self.c_grid, x_linear, x_skewed
             )
-            method = f"threshold-computed; tolerance {self.tolerance:g}; {feasible} feasible thresholds"
+            # Coordinate bounds: sharp root-find (audited). Mean bounds: the
+            # Manhattan mean is a threshold search with no clean crossing, so it
+            # stays grid-computed at the stated tolerance.
+            coord = manhattan_sharp_coordinate_bounds(r, n, k)
+            method = (
+                f"sharp coordinate bounds (threshold root-find); "
+                f"mean bounds threshold-computed, tolerance {self.tolerance:g}, "
+                f"{feasible} feasible thresholds"
+            )
         else:
             raise ValueError(rule)
 
@@ -433,6 +519,7 @@ def run_latent_simulation(
         lambda: defaultdict(list)
     )
     wins: dict[tuple[int, int, float, str, str], float] = defaultdict(float)
+    regret_sum: dict[tuple[int, int, float, str, str], float] = defaultdict(float)
 
     metrics = ("coord_avg", "coord_max", "mean_linear", "mean_skewed")
     draw_id = 0
@@ -471,8 +558,12 @@ def run_latent_simulation(
                         "mean_skewed": {rule: m.mean_skewed_width for rule, m in per_rule.items()},
                     }
                     for metric_name in metrics:
-                        for rule, credit in split_winner_credit(values[metric_name]).items():
+                        cell_values = values[metric_name]
+                        for rule, credit in split_winner_credit(cell_values).items():
                             wins[(n, k, alpha, metric_name, rule)] += credit
+                        cell_best = min(cell_values.values())
+                        for rule, val in cell_values.items():
+                            regret_sum[(n, k, alpha, metric_name, rule)] += val - cell_best
 
     aggregate_rows = []
     for (n, k, alpha, rule), vals in sorted(aggregate.items()):
@@ -511,6 +602,7 @@ def run_latent_simulation(
                                 "metric": metric_name,
                                 "rule": RULE_LABELS[rule],
                                 "win_share": wins[(n, k, alpha, metric_name, rule)] / total,
+                                "mean_regret": regret_sum[(n, k, alpha, metric_name, rule)] / total,
                             }
                         )
     return aggregate_rows, win_rows
@@ -581,9 +673,17 @@ def make_summary_md(
         f"- Mode: `{mode}`.",
         f"- Draws per cell: `{draws}`.",
         f"- Random seed: `{seed}`.",
-        f"- Manhattan threshold tolerance: `{tolerance:g}`.",
-        "- Headline rules: discrete metric, quadratic distance, Manhattan distance.",
-        "- Hamming and Chebyshev are not included in headline rankings.",
+        f"- Manhattan mean-bound threshold tolerance: `{tolerance:g}` "
+        "(Manhattan coordinate bounds are sharp, computed by a threshold root-find).",
+        "- Simulation horse race: discrete metric, quadratic distance, Manhattan distance.",
+        "- Hamming is excluded from the simulation by design (ADR-0001, second "
+        "amendment): its sharp bounds are computationally intractable at this "
+        "grid's scale. It is a headline rule in the analytical taxonomy only.",
+        "- Headline metrics: average coordinate width (`coord_avg`) and the "
+        "ordered-category-mean bound (`mean_linear`). Appendix/robustness "
+        "metrics: worst-coordinate width (`coord_max`, equal to the "
+        "sup-over-simplex linear-functional width) and the extreme-category "
+        "mean (`mean_skewed`).",
         "",
         "## Overall Averages Across Cells",
         "",
@@ -609,16 +709,26 @@ def make_summary_md(
         overall,
     )
 
-    lines += ["", "## Rule-Win Shares Across Cells", ""]
-    by_metric_rule: dict[tuple[str, str], list[float]] = defaultdict(list)
+    lines += ["", "## Rule Comparison Across Cells (win share and cell-best regret)", ""]
+    win_by: dict[tuple[str, str], list[float]] = defaultdict(list)
+    regret_by: dict[tuple[str, str], list[float]] = defaultdict(list)
     for row in win_rows:
-        by_metric_rule[(row["metric"], row["rule"])].append(float(row["win_share"]))
+        win_by[(row["metric"], row["rule"])].append(float(row["win_share"]))
+        regret_by[(row["metric"], row["rule"])].append(float(row["mean_regret"]))
     win_table = []
     for metric_name in ("coord_avg", "coord_max", "mean_linear", "mean_skewed"):
         for rule in [RULE_LABELS[r] for r in RULES]:
-            vals = by_metric_rule[(metric_name, rule)]
-            win_table.append([metric_name, rule, fmt_float(float(np.mean(vals)), 4)])
-    lines += markdown_table(["Metric", "Rule", "mean win share"], win_table)
+            win_table.append(
+                [
+                    metric_name,
+                    rule,
+                    fmt_float(float(np.mean(win_by[(metric_name, rule)])), 4),
+                    fmt_float(float(np.mean(regret_by[(metric_name, rule)])), 4),
+                ]
+            )
+    lines += markdown_table(
+        ["Metric", "Rule", "mean win share", "mean cell-best regret"], win_table
+    )
 
     lines += ["", "## Fixed-Report Illustrations", ""]
     fixed_table = []
@@ -644,8 +754,13 @@ def make_summary_md(
         "",
         "- These are design diagnostics conditional on optimal reporting and the stated belief environments.",
         "- They do not establish universal dominance of any scoring rule.",
-        "- Manhattan entries are threshold-computed and should not be described as closed form.",
-        "- Mean intervals use the full inverse region; they are not obtained by combining coordinate intervals.",
+        "- Manhattan coordinate bounds are sharp (threshold root-find); Manhattan",
+        "  mean bounds are threshold-computed at the stated tolerance. Neither is",
+        "  closed form: the inverse binomial CDF is non-elementary.",
+        "- Mean intervals use the full identified set; they are not obtained by combining coordinate intervals.",
+        "- Payment probability is reported only for the discrete-metric rule, as an",
+        "  implementation diagnostic of that fixed-prize mechanism. It is not a",
+        "  cross-rule comparison metric.",
     ]
     return "\n".join(lines)
 
@@ -715,7 +830,9 @@ def main() -> None:
     parser.add_argument("--draws", type=int, default=None, help="Override draws per cell.")
     parser.add_argument("--seed", type=int, default=20260508)
     parser.add_argument("--manhattan-tolerance", type=float, default=1e-4)
-    parser.add_argument("--output-dir", type=Path, default=Path("outputs/simulation_design"))
+    # New output location. The prior committed run lives in
+    # outputs/simulation_design/ and is not overwritten by this revised script.
+    parser.add_argument("--output-dir", type=Path, default=Path("outputs/design_exercise"))
     parser.add_argument("--summary-path", type=Path, default=Path("_context/simulation_results_summary.md"))
     parser.add_argument("--save-draws", action="store_true", help="Save draw-level rows.")
     parser.add_argument("--validate", action="store_true", help="Run small brute-force validation checks first.")
@@ -770,7 +887,7 @@ def main() -> None:
     fixed_rows = fixed_report_rows(default_fixed_reports(), tolerance=args.manhattan_tolerance)
 
     write_csv(args.output_dir / "latent_aggregate.csv", aggregate_rows)
-    write_csv(args.output_dir / "rule_wins.csv", win_rows)
+    write_csv(args.output_dir / "rule_comparison.csv", win_rows)
     write_csv(args.output_dir / "fixed_reports.csv", fixed_rows)
     args.summary_path.parent.mkdir(parents=True, exist_ok=True)
     args.summary_path.write_text(
@@ -787,7 +904,7 @@ def main() -> None:
 
     print(f"mode={mode}")
     print(f"wrote {args.output_dir / 'latent_aggregate.csv'}")
-    print(f"wrote {args.output_dir / 'rule_wins.csv'}")
+    print(f"wrote {args.output_dir / 'rule_comparison.csv'}")
     print(f"wrote {args.output_dir / 'fixed_reports.csv'}")
     print(f"wrote {args.summary_path}")
 

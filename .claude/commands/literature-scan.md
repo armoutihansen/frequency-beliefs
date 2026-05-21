@@ -1,4 +1,4 @@
-# Run an online literature scan and relate the results to this paper.
+Run an online literature scan and relate the results to this paper.
 
 Steps:
 

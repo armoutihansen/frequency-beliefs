@@ -1,4 +1,4 @@
-# Run a proof audit on the specified claim, theorem, proposition, or section.
+Run a proof audit on the specified claim, theorem, proposition, or section.
 
 If no specific claim is provided, prioritize the quadratic-distance result in `paper/sections/03_scoring_rules.tex`.
 

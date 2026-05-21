@@ -1,4 +1,4 @@
-# Summarize the current project status.
+Summarize the current project status.
 
 Steps:
 

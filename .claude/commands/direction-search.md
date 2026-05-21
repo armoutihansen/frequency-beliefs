@@ -1,4 +1,4 @@
-# Explore whether the current project is taking the best direction.
+Explore whether the current project is taking the best direction.
 
 Steps:
 
