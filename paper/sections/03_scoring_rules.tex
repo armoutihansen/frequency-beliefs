@@ -1,11 +1,10 @@
 \section{Frequency-Report Scoring Rules}
 
-This section applies the setup to four frequency-report scoring rules.
+This section applies the setup to three frequency-report scoring rules.
 They span a spectrum of analytical tractability.
 Quadratic-distance and discrete-metric scoring have closed-form identified sets and closed-form coordinate bounds.
 Manhattan-distance scoring has an exact identified set and sharp coordinate bounds in semi-analytical form.
-Hamming-distance scoring has an exact identified set but, for more than two categories, coordinate bounds that resist closed form.
-The same inverse-region machinery applies to other count-loss criteria, such as Chebyshev (\(L_\infty\)) distance, which we do not pursue here.
+The same machinery applies to further count-loss criteria---Hamming and Chebyshev (\(L_\infty\)) distance---whose identified sets are exact but resist tractable sharp bounds; the discussion takes them up as the boundary of the approach.
 
 \subsection{Rules with Closed-Form Bounds}
 
@@ -90,7 +89,7 @@ The main implementation cost is that direct monetary quadratic-distance payments
 
 \subsubsection{Discrete-Metric Frequency Scoring}
 
-The second primary rule is the frequency-guessing mechanism of Schlag and Tremewan \cite{SchlagTremewanSimple}.
+The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewanSimple}.
 Its count-error index is the count-vector discrete metric,
 \[
 D_0(r,\omega)=\1\{r\ne\omega\},
@@ -146,7 +145,7 @@ P_{0,i}(r)
 The inequalities say that no one-count transfer from a reported category \(j\) to another category \(i\) can increase the multinomial probability of the report.
 Weak inequalities include ties.
 The formula also handles boundaries: if \(r_i=0\), the lower bound is \(0\); if \(r_i=n\), the upper bound is \(1\).
-These are the frequency-guessing bounds in Schlag and Tremewan \cite[Proposition 1]{SchlagTremewanSimple}; they are restated here to make the informational-efficiency comparison self-contained.
+These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewanSimple}; they are restated here to make the informational-efficiency comparison self-contained.
 The proof is in Appendix \ref{app:exact-match-proof}.
 
 \paragraph{Probability and mean bounds.}
@@ -165,14 +164,21 @@ Discrete-metric frequency scoring is transparent and robust to risk aversion bec
 Its implementation cost is that the probability of an exact match can be small when \(n\) is large or the outcome space is rich.
 It is a prominent known rule in the comparison, not a new mechanism introduced here.
 
-\subsection{Rules Without Closed-Form Bounds}
+\subsubsection{Comparing the Two Closed-Form Rules}
 
-The remaining two headline rules lack closed-form coordinate bounds, but they differ sharply from each other.
-Manhattan-distance scoring has an exact identified set, and its sharp coordinate bounds reduce to a one-dimensional computation; it is included in the design exercise.
-Hamming-distance scoring also has an exact identified set, but for more than two categories its sharp bounds resist closed form and are computationally intractable at the \((n,k)\) scales of the design exercise; it is therefore characterized analytically and excluded from the design comparison.
+The two closed-form rules can be compared directly through their coordinate-bound widths.
+The discrete-metric coordinate width, \([r_i(k-2)+(n+k-1)]/[(n+1)(n+k-1)]\), is linear in the reported count \(r_i\); because \(\sum_i r_i=n\) fixes the average reported count at \(n/k\), the average of this width over the \(k\) coordinates is a constant,
+\[
+\frac{(k-1)(2n+k)}{k(n+1)(n+k-1)},
+\]
+the same for every report.
+The quadratic-distance coordinate width for a positive-report category, \(2/n-1/(nm)-1/(nk)\) with \(m=m(r)\) the number of categories with positive reported counts, does not depend on \(r_i\) and shrinks as the report concentrates on fewer categories.
+A report concentrated on few categories therefore has a small average quadratic width; a balanced report, with \(m=k\), has an average quadratic width that exceeds the discrete-metric constant.
+Which of the two closed-form rules gives the narrower average coordinate bound thus turns on how concentrated the report is, before any simulation---a contrast the design comparison of the next section ties to belief concentration, quantifies, and extends to Manhattan distance.
 
-\subsubsection{Manhattan-Distance Frequency Scoring}
+\subsection{Manhattan-Distance Frequency Scoring}
 
+Unlike the two closed-form rules, Manhattan-distance scoring has no closed-form coordinate bounds; its identified set is nonetheless exact, and its sharp bounds reduce to a one-dimensional computation.
 The Manhattan-distance rule is
 \[
 S_M(r,\omega)=a-b\sum_{i=1}^k |r_i-\omega_i|,
@@ -241,42 +247,3 @@ The sharp mean bounds are obtained by a one-dimensional search over the same thr
 Manhattan distance is useful when a median-type count prediction is substantively appropriate.
 It is also useful as a contrast: changing the distance criterion changes the inferred identified set.
 The multi-category Manhattan bounds are sharp and reduce to a one-dimensional threshold computation; they are less transparent than the closed-form quadratic-distance bounds but are exact, not approximations.
-
-\subsubsection{Hamming-Distance Frequency Scoring}
-
-The Hamming-distance rule penalizes the number of categories whose reported count differs from the realized count:
-\[
-S_H(r,\omega)=a-b\sum_{i=1}^k\1\{r_i\ne\omega_i\},
-\quad b>0.
-\]
-Its expected loss separates into binomial marginal exact-coordinate probabilities:
-\[
-\E_p\left[\sum_i \1\{r_i\ne\omega_i\}\right]
-=
-\sum_i \{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}.
-\]
-Thus the forward objective is computationally simple, even though the reported counts still have to sum to \(n\).
-
-For an observed report \(r\), define
-\[
-L_H(r;p)
-=
-\sum_i \{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}.
-\]
-The identified set is exactly
-\[
-P_H(r)
-=
-\{p\in\DeltaK:L_H(r;p)\le L_H(s;p)\ \forall s\in\OmegaN\}.
-\]
-This finite set of expected-loss inequalities fully specifies identification.
-
-For \(k=2\), Hamming distance coincides with discrete-metric frequency scoring: matching one coordinate is equivalent to matching the whole binary count vector, so the report incentives are identical, and \(P_H(r)\) inherits the closed-form discrete-metric coordinate interval.
-
-For \(k>2\) the rule is markedly harder.
-Each coordinate term \(\Pr(\mathrm{Bin}(n,p_i)=r_i)\) is unimodal in the reported count but not discrete-concave, so a single-unit-transfer argument does not establish global optimality: a multi-count transfer can move the report from one binomial mode to a higher one, and single-unit-transfer optimality is necessary but not sufficient.
-The identified set \(P_H(r)\) is therefore genuinely the system above---a non-convex semialgebraic set, not a transfer polytope.
-A two-sided sandwich is nonetheless available.
-The modal box \(\prod_i [r_i/(n+1),(r_i+1)/(n+1)]\), the set of beliefs at which every \(r_i\) is a mode of its binomial marginal, is a closed-form inner bound: when every coordinate sits at its marginal mode, \(r\) maximizes the separable objective term by term.
-The single-unit-transfer inequalities give an outer bound.
-The sharp coordinate bounds lie between these and are obtained only by finite numerical computation; at the \((n,k)\) scales of the design exercise this computation is intractable, so Hamming distance is characterized analytically here and excluded from the design comparison.

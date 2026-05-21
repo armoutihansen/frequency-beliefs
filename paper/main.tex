@@ -3,6 +3,7 @@
 \usepackage[margin=1.15in]{geometry}
 \usepackage{amsmath,amssymb,amsthm}
 \usepackage[hidelinks]{hyperref}
+\usepackage{natbib}
 
 \DeclareMathOperator*{\argmax}{arg\,max}
 \DeclareMathOperator*{\argmin}{arg\,min}
@@ -35,8 +36,8 @@ In a multinomial frequency-report environment, a subject has latent beliefs \(p\
 We compare frequency-report scoring rules by how sharply that report identifies the latent beliefs.
 The inference is recast as a partial-identification problem: each scoring rule maps the report to an identified set of beliefs---those under which the report would have been optimal---from which coordinate and mean bounds follow.
 The main analytical result is that quadratic-distance frequency scoring gives a transparent projection rule, a linear identified set, closed-form coordinate bounds, and linear-program bounds for means.
-Discrete-metric scoring is the known fixed-prize rule with closed-form bounds, Manhattan distance has an exact identified set with sharp semi-analytical bounds, and Hamming distance is characterized analytically.
-A design exercise over the three rules with tractable bounds finds no universal ranking: the most informative rule depends on the inferential objective and the design regime.
+Discrete-metric scoring is the known fixed-prize rule with closed-form bounds, and Manhattan distance has an exact identified set with sharp semi-analytical bounds.
+A design comparison over these three rules finds no universal ranking: the most informative rule depends on the inferential objective and the design regime.
 \end{abstract}
 
 \input{sections/01_introduction}
@@ -46,7 +47,7 @@ A design exercise over the three rules with tractable bounds finds no universal 
 \input{sections/07_discussion}
 \input{sections/08_appendix}
 
-\bibliographystyle{plain}
+\bibliographystyle{apalike}
 \bibliography{references}
 
 \end{document}
