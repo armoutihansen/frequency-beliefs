@@ -254,3 +254,66 @@ findings.
   distinguishable inferential profiles).
 - If step 2 finds a close prior competitor for N2: the contribution statement
   and positioning must be sharpened before manuscript revision.
+
+--------------------------------------------------------------------------------
+
+## Candidate-rule screen (2026-05-22)
+
+A systematic search for additional frequency-report scoring rules was completed;
+full screen in `_context/exploration/rule_candidate_screen.md`. Outcome:
+
+- New feasible rules found: KL divergence and RPS (closed-form / polytope);
+  pinball, expectile, L_p-power, Hellinger, Huber, cumulative-L1 (semi-analytical).
+- The search yielded essentially no new infeasible rules: the feasibility
+  frontier is sharp — tractable iff separable AND per-coordinate cost
+  discrete-convex; Hamming and Chebyshev are the two canonical failure modes.
+- Verified by `scripts/candidate_rule_checks.py` (finite enumeration checks).
+
+Candidate Stage-3 tasks, gated on a case-by-case disposition decision:
+
+1. Prove the feasibility-frontier characterization (separable + discrete-convex
+   per-coordinate ⇔ tractable / O(k²)-facet identified set). Highest-value
+   result the screen surfaced — turns the rule-by-rule tractability story into
+   one theorem.
+2. If RPS is promoted: complete the RPS single-count-transfer sufficiency proof
+   for general k (monotone cumulative lattice / L-natural-convexity), via
+   `theory-auditor`; add the ordered-category setup.
+3. If pinball is promoted: full derivation of the quantile rule (generalizes
+   Manhattan; reuses the threshold root-find).
+4. Characterize the sparse-facet Bregman sub-family (h' discrete-concave).
+
+### Feasibility-frontier derivation (2026-05-22)
+
+Done: `_context/exploration/feasibility_frontier.md` develops and audits the
+characterization. Outcome — the result is real and useful but its optimization
+core is CLASSICAL (discrete separable resource allocation: Fox 1966; Federgruen
+& Groenevelt 1986; Ibaraki & Katoh 1988; Murota 2003). Per the user's decision
+it is carried as an **organizing lemma + application**, not a headline theorem.
+Theorem-developer + theory-auditor passes complete; all audit fixes incorporated
+(notably Corollary 5's tractability "dichotomy" corrected to a three-tier
+ladder). The genuinely novel parts: the optimal-report = resource-allocation
+reduction, the feasibility-frontier map of scoring rules, and the identified-set
+inversion (Corollary 5).
+
+Remaining before manuscript insertion (all gated):
+- Write the Theorem 3 ⟸ proof at full rigor (explicit unit-bijection +
+  sender-side discrete-convexity bound).
+- Verify Federgruen & Groenevelt (1986)'s exact condition phrasing for the
+  separable case; add the four classical references to `references.bib`.
+- Decide placement (organizing lemma in §3; §5 Hamming/Chebyshev reframed as the
+  two failure modes) — a manuscript-revision decision, not taken yet.
+
+### Feasibility-frontier lemma — inserted into the manuscript (2026-05-22)
+
+Done. `paper/sections/03_scoring_rules.tex` now opens with a new subsection
+"Optimal Reports as a Resource-Allocation Problem" — Lemma~\ref{lem:transfer}
+(the single-transfer characterization), framed as an organizing lemma that the
+three rule subsections instantiate. `07_discussion.tex` §5.2 reframes Hamming
+and Chebyshev as the lemma's two failure modes. Four classical references added
+to `references.bib` (Fox 1966; Federgruen--Groenevelt 1986; Ibaraki--Katoh 1988;
+Murota 2003). The optimization result is cited as classical, not claimed new;
+the stated contribution is the resource-allocation reduction + the identified-set
+inversion. Paper compiles clean (26 pp). Open: a human read of the new
+subsection for exposition; optionally a standalone appendix proof of the lemma
+(currently it cites the classical result and points to the Manhattan appendix
+proof as the worked exchange argument).
