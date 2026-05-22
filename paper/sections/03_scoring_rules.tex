@@ -31,12 +31,13 @@ and the identified set \(P_S(r)\) is exactly the set of beliefs satisfying these
 \end{lemma}
 
 Necessity of the no-transfer condition is immediate: a transfer produces a feasible competing report.
-Sufficiency is a monotone-path exchange argument---any competing report is reached by single-count transfers along which discrete convexity makes each step at least as costly as the corresponding transfer evaluated at \(r\); this is the argument carried out for Manhattan distance in Appendix~\ref{app:manhattan-proof}.
+Sufficiency is a monotone-path exchange argument---any competing report is reached by single-count transfers along which discrete convexity makes each step at least as costly as the corresponding transfer evaluated at \(r\); it is proved in Appendix~\ref{app:lemma-proof}.
 That the equivalence holds precisely when the per-coordinate costs are discrete-convex is the classical greedy-optimality characterization for separable resource allocation \citep{Fox1966,FedergruenGroenevelt1986}, with discrete convexity the standard diminishing-differences condition \citep{Murota2003}.
 
 The three headline rules satisfy the hypothesis: the squared-distance cost is quadratic in \(r_i\), the Manhattan cost \(\E_p|r_i-\omega_i|\) inherits discrete convexity from the absolute value, and the frequency-guessing cost \(\log(r_i!)-r_i\log p_i\) is discrete-convex because \(\log(t!)\) has nondecreasing differences.
 Each rule's characterization below is therefore an instance of Lemma~\ref{lem:transfer}; the rules differ only in the shape of the single-transfer inequalities.
 When those inequalities are linear in \(p\)---squared-distance and frequency-guessing---the identified set is a polytope and the coordinate bounds are closed form; when they are monotone but transcendental in \(p\)---Manhattan---the identified set is still exact and the bounds are sharp, but only semi-analytically.
+The lemma's reach is not confined to these three: other separable count losses are governed by it in the same way---for instance asymmetric-absolute losses, which elicit quantiles other than the median, and the ranked probability score, a squared distance on cumulative counts---so the headline rules are representatives of a wider tractable family rather than a closed list.
 
 The lemma also marks the limits of the approach.
 Its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~5 takes up the two rules that do: Hamming distance is separable but its per-coordinate cost is not discrete-convex, and Chebyshev distance is not separable.
@@ -128,7 +129,7 @@ Its count-error index is the count-vector discrete metric,
 \[
 D_0(r,\omega)=\1\{r\ne\omega\},
 \]
-so, in the form \(S_D=a-bD\) of Section 2, the score is
+so, in the form \(S_D=a-bD\) of Section~2, the score is
 \[
 S_0(r,\omega)=a-b\,\1\{r\ne\omega\},
 \quad b>0.
@@ -258,7 +259,7 @@ F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)\qquad\forall\,i.
 \]
 \end{proposition}
 
-Each coordinate loss \(\E_p|t-W_i|\) is discrete-convex in the reported count \(t\)---its successive increments are nondecreasing---and this is what lifts single-count-transfer optimality from necessary to sufficient, so \(P_M(r)\) is the exact identified set rather than an outer approximation.
+Each coordinate loss \(\E_p|t-W_i|\) is discrete-convex in the reported count \(t\)---its successive increments are nondecreasing---so Lemma~\ref{lem:transfer} applies and \(P_M(r)\) is the exact identified set rather than an outer approximation.
 Weak inequalities include ties, and there is no receiver constraint when \(r_i=n\) nor sender constraint when \(r_j=0\).
 The proof is in Appendix~\ref{app:manhattan-proof}.
 

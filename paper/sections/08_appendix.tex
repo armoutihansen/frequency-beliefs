@@ -2,6 +2,29 @@
 
 \section{Proofs}
 
+\subsection{The Single-Transfer Characterization}
+\label{app:lemma-proof}
+
+\begin{proof}[Proof of Lemma~\ref{lem:transfer}]
+Write \(\Delta\ell(t;q)=\ell(t+1;q)-\ell(t;q)\); discrete convexity of \(\ell(\cdot;q)\) means \(\Delta\ell(\cdot;q)\) is nondecreasing.
+
+\emph{Necessity.}
+For any \(i,j\) with \(r_j>0\) the report \(r+e_i-e_j\) is feasible, and it changes the objective by \(\Delta\ell(r_i;p_i)-\Delta\ell(r_j-1;p_j)\).
+If \(r\) is optimal this change is nonnegative, which is the displayed inequality.
+
+\emph{Sufficiency.}
+Suppose \(r\) satisfies every displayed inequality, and let \(s\in\OmegaN\) be any competing report.
+Since \(\sum_i s_i=\sum_i r_i=n\), the surplus units \(\sum_i(s_i-r_i)^+\) and the deficit units \(\sum_j(r_j-s_j)^+\) are equal in number, say \(M\).
+Reach \(s\) from \(r\) by \(M\) single-count transfers, each moving one unit from a coordinate still above its target \(s\) to one still below.
+A receiver coordinate then only rises, from \(r_i\) toward \(s_i\), and a sender only falls, from \(r_j\) toward \(s_j\); so every intermediate report is feasible, and at the step transferring a unit \(j\to i\) the running counts satisfy \(c_i\ge r_i\) and \(c_j\le r_j\).
+That step changes the objective by \(\Delta\ell(c_i;p_i)-\Delta\ell(c_j-1;p_j)\).
+Because \(\Delta\ell(\cdot;p)\) is nondecreasing, \(c_i\ge r_i\) gives \(\Delta\ell(c_i;p_i)\ge\Delta\ell(r_i;p_i)\), and \(c_j-1\le r_j-1\) gives \(\Delta\ell(c_j-1;p_j)\le\Delta\ell(r_j-1;p_j)\); so the step's change is at least \(\Delta\ell(r_i;p_i)-\Delta\ell(r_j-1;p_j)\), nonnegative by the displayed inequality for the pair \((i,j)\).
+Summing over the \(M\) steps gives \(\sum_i\ell(s_i;p_i)\ge\sum_i\ell(r_i;p_i)\).
+As \(s\) was arbitrary, \(r\) minimizes the separable objective.
+
+Necessity and sufficiency together give \(r\in R_S(p)\) if and only if the displayed inequalities hold at \(p\), so \(P_S(r)\) is exactly the set of beliefs satisfying them.
+\end{proof}
+
 \subsection{Squared-Distance Scoring}
 \label{app:squared-proof}
 
@@ -247,14 +270,7 @@ F_i(r_i;n,p_i)\ge F_j(r_j-1;n,p_j)
 \quad
 \forall i,j\text{ with }r_i<n,\ r_j>0.
 \]
-This local no-transfer condition is also sufficient for global optimality.
-Each coordinate loss \(\ell_i\) is discrete-convex---its increments \(2F_i(t;n,p_i)-1\) are weakly increasing in \(t\)---and the objective \(\sum_i\ell_i(r_i;p_i)\) is minimized over the integer simplex \(\{r:\sum_i r_i=n\}\).
-Suppose \(r\) satisfies the no-transfer condition and let \(s\) be any feasible report.
-The difference \(s-r\) sums to zero, so \(s\) is reached from \(r\) by a sequence of single-count transfers; choose the sequence monotone, at each step moving a unit from a coordinate currently above its target \(s\) to one currently below.
-A coordinate below its target only ever receives counts and so remains below it, and a coordinate above its target only ever sends counts and remains above it; hence each coordinate's count moves monotonically between \(r_i\) and \(s_i\), and every intermediate report is feasible.
-At a step that moves a unit from \(j\) to \(i\), the receiving count \(c_i\) satisfies \(c_i\ge r_i\) and the sending count \(c_j\) satisfies \(c_j\le r_j\); by discrete-convexity the step's cost \(\{\ell_i(c_i+1)-\ell_i(c_i)\}+\{\ell_j(c_j-1)-\ell_j(c_j)\}\) is at least the cost of the corresponding transfer evaluated at \(r\), which is nonnegative because \(r\) satisfies the no-transfer condition.
-Summing over the path gives \(\sum_i\ell_i(s_i)\ge\sum_i\ell_i(r_i)\), so \(r\) is globally optimal.
-Hence \(P_M(r)\) is the exact identified set.
+The increments \(2F_i(t;n,p_i)-1\) are weakly increasing in \(t\), so each coordinate loss \(\ell_i(\cdot;p_i)\) is discrete-convex; Lemma~\ref{lem:transfer} then applies, and the no-transfer condition just derived is sufficient as well as necessary---so \(P_M(r)\) is the exact identified set.
 
 The threshold representation follows by taking \(c\) between
 \[
@@ -282,7 +298,7 @@ The generated files are CSV tables under \texttt{outputs/design\_exercise/}.
 These outputs are diagnostics for experimental design.
 They are not simulations of subject behavior and do not replace the mathematical characterization of \(R_S(p)\) and \(P_S(r)\).
 
-Table~\ref{tab:design-nk} substantiates the claim in Section 4 that the number of categories \(k\) and the number of trials \(n\) are second-order.
+Table~\ref{tab:design-nk} substantiates the claim in Section~4 that the number of categories \(k\) and the number of trials \(n\) are second-order.
 It reports win shares marginally by \(k\) and by \(n\), averaging over the other two design dimensions.
 Against the variation across belief concentration \(\alpha\) in Table~\ref{tab:regime-wins}---where the leading rule's win share runs from near zero to one---the dependence on \(k\) and \(n\) is slight.
 
