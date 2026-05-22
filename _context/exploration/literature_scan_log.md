@@ -129,3 +129,157 @@ partial-ID contribution explicitly against Schlag-Tremewan. Section 06: expand
 the binary-lottery attribution. All "what the paper proves" claims must be
 checked against the PDFs (several relevant PDFs are already local in
 _context/related_literature/) before manuscript entry.
+
+---
+
+## Scan 2026-05-22 — related-work expansion (front-matter contrast pass)
+
+Triggered by a request to capture all related papers and contrast the paper's
+approach/findings to theirs. `_context/library.bib` was checked: it is a general
+Zotero export with almost no belief-elicitation-specific entries, so the scan
+relied on substantial web search. A `literature-reviewer` agent ran the search;
+all citation details below were independently verified against publisher /
+RePEc / Semantic Scholar metadata.
+
+### Papers added to `paper/references.bib` and cited
+
+- Gneiting 2011 (JASA 106(494):746--762) — elicitability; squared loss elicits
+  the mean, absolute loss the median. Cited at the mean/median framing.
+- Lambert, Pennock & Shoham 2008 (EC '08:129--138) — a functional is elicitable
+  iff its level sets are convex. Cited with Gneiting.
+- Heinrich 2014 (Biometrika 101(1):245--251) — the mode is not elicitable for
+  general continuous distributions. Cited to flag that the discrete-metric
+  rule elicits the multinomial mode only because the count space is discrete.
+- Schotter & Trevino 2014 (Ann. Rev. Econ. 6:103--128); Charness, Gneezy &
+  Rasocha 2021 (JEBO 189:234--256) — belief-elicitation method surveys.
+- Trautmann & van de Kuilen 2015 (Econ. J. 125(589):2116--2135) — "horse race"
+  among truth serums; contrasted as recovering a point belief vs our identified
+  set conditional on optimal reporting.
+- Offerman, Sonnemans, van de Kuilen & Wakker 2009 (RES 76(4):1461--1489) —
+  ex-post risk-attitude correction of scoring rules; the alternative to our
+  rule/implementation choice.
+- Danz, Vesterlund & Wilson 2022 (AER 112(9):2851--2883) — behavioural
+  incentive compatibility fails; cited as the explicit scope condition.
+- Gigerenzer & Hoffrage 1995 (Psych. Review 102(4):684--704) — frequency
+  formats aid Bayesian reasoning; suggestive support for the count format.
+- Manski 2004 (Econometrica 72(5):1329--1376); Engelberg, Manski & Williams
+  2009 (JBES 27(1):30--41); Delavande, Giné & McKenzie 2011 (JDE 94(2):151--163)
+  — survey elicitation of subjective distributions / count-format elicitation.
+- Harrison, Martínez-Correa & Swarthout 2014 (JEBO 101:128--140) — binary
+  lotteries applied to probability elicitation; added to the binarized-rule
+  citation list.
+
+Note: the literature agent initially mis-attributed Danz et al. as
+"Danz, Vespa, Wilson"; the correct middle author is Lise Vesterlund (verified).
+
+### Manuscript changes made (guardrail mode)
+
+- New "Related literature" block at the end of `01_introduction.tex` (three
+  paragraphs): elicitability; elicitation-method/truth-serum/behavioural-IC
+  literature; count-format elicitation. Positions the contribution as treating
+  the scoring-rule optimality condition as the identifying restriction.
+- `03_scoring_rules.tex`: point-of-use Gneiting cites at the quadratic
+  "mean-oriented" and Manhattan "median-oriented" interpretations.
+- `07_discussion.tex`: Offerman 2009 added as the ex-post-correction
+  alternative; Harrison 2014 added to the binary-lottery citation; Danz et al.
+  2022 added as an optimal-reporting scope condition in the open-question
+  subsection.
+
+### Novelty assessment
+
+No paper was found that set-identifies beliefs by inverting a scoring-rule
+optimal-report correspondence. The partial-identification machinery (Manski)
+and the elicitability dictionary (Gneiting, Lambert et al.) are not new and are
+now cited rather than claimed. The defensible novelty — characterizing the
+mechanism-induced identified set P_S(r) for distance-based count rules — is
+stated as such. No full papers were read end-to-end in this scan; the contrasts
+drawn use well-established results of the cited work.
+
+---
+
+## Scan 2026-05-22 (cont.) — full-text read of cited literature, intro/discussion revision
+
+Followed the request to read and understand all cited papers, then sharpen the
+contrasts. PDFs of the citable papers were downloaded into
+`_context/related_literature/` (see its README). Read in full or in depth:
+Schlag--Tremewan 2021, Schlag et al. 2013, Armantier--Treich 2013,
+Danz--Vesterlund--Wilson 2022, Gneiting 2011, Lambert--Pennock--Shoham 2008
+(SIGecom highlights), Offerman et al. 2009, Engelberg--Manski--Williams 2009,
+Harrison et al. 2014. Four paywalled papers (Heinrich 2014, Schotter--Trevino
+2014, Trautmann--van de Kuilen 2015, Delavande et al. 2011) could not be
+obtained; positioning of these rests on abstracts and well-established results.
+
+### What the reading changed
+
+- **Schlag--Tremewan is a closer relative than the earlier draft conveyed.**
+  They already establish, for frequency guessing: optimal report = multinomial
+  mode; the consistent beliefs form a simplex region; the region yields LP
+  bounds on probabilities, means, and variances. The whole region-and-bounds
+  program exists for that one rule. The honest contribution is to (a) name it
+  partial identification with the mechanism's optimality as the identifying
+  restriction, (b) extend it to quadratic (closed form) and Manhattan, (c)
+  compare. The intro's "Related literature" block was rewritten to lead with
+  this and state it precisely.
+- **Engelberg--Manski--Williams already bound means/medians/modes from coarse
+  interval-probability reports** — so set-valued inference about a belief
+  distribution from a coarse report is not new. The difference is the
+  identifying restriction: they take reported probabilities at face value;
+  here the set is cut out by the scoring rule's optimality condition. This is
+  now stated in the intro.
+- **Danz--Vesterlund--Wilson directly test the binarized scoring rule** — the
+  exact implementation the discussion proposes for distance rules — and find
+  centre-biased misreporting driven by the incentive information, *not* by risk
+  attitude. **Harrison et al. 2014**, by contrast, find the binary-lottery
+  procedure does induce approximately risk-neutral reporting. The discussion's
+  risk-aversion subsection was revised to present both: the technique resolves
+  the risk-attitude problem but leaves a separate behavioural one open.
+- Gneiting/Lambert: the mean/median framing is their elicitability dictionary;
+  the mode has maximal elicitation complexity (Lambert et al.) and is not
+  elicitable in the continuous case (Heinrich). Stated as "applied, not
+  invented."
+
+### Manuscript changes
+
+- `01_introduction.tex`: "Related literature" block rewritten into four
+  paragraphs — frequency guessing (Schlag--Tremewan), elicitability
+  (Gneiting/Lambert/Heinrich), what a coarse report identifies
+  (Engelberg--Manski--Williams, Manski 2004, Delavande et al.), and the
+  elicitation-methods/risk-attitude literature (Schlag et al., Schotter--Trevino,
+  Charness et al., Armantier--Treich, Trautmann--van de Kuilen, Offerman et al.,
+  Danz--Vesterlund--Wilson).
+- `07_discussion.tex`: risk-aversion subsection expanded with the Harrison
+  (supportive) and Danz et al. (cautionary) evidence on the binary-lottery
+  implementation; Harrison 2014 moved out of the technique-origin citation.
+  Open-question subsection trimmed to cross-reference rather than repeat.
+- Paper compiles cleanly (25 pages, no undefined references).
+
+---
+
+## 2026-05-22 — notation and scoring-rule naming review
+
+A review of the manuscript's notation/definitions against the literature now
+read in full. Findings and author decisions:
+
+- "identified set" / "sharp bounds" / $P_S(r)$ (parallels Schlag--Tremewan's
+  $P^u_b$) / Manhattan-Hamming-Chebyshev distance names: consistent with the
+  literature — kept.
+- "exact identified set" vs "sharp bounds": flagged, then judged acceptable
+  (exact = the set, sharp = the bounds is a workable distinction; forcing
+  "sharp" for both creates redundancy) — kept.
+- "quadratic-distance scoring" collided with the *quadratic scoring rule*
+  (QSR). Renamed to **squared-distance scoring** manuscript-wide.
+- "discrete-metric scoring" was the paper's taxonomic rename of the established
+  *frequency guessing* (Schlag--Tremewan). Renamed to **frequency-guessing
+  scoring**; the metric $D_0$ is still "the discrete metric".
+- "informational efficiency" (title) collided with the EMH sense. Changed to
+  **informativeness** throughout, including the title.
+- "scoring rule" was never disambiguated from *proper* scoring rules — §2 now
+  states these are not proper and that the optimal report is a functional of
+  the sampling distribution, with inference by inversion.
+- "frequency report" vs "count" — §2 now states a frequency report is a vector
+  of counts, not relative frequencies.
+- Found and fixed an internal inconsistency: the appendix proof used $S_2$ for
+  the squared rule while §3 used $S_Q$; unified on $S_Q$.
+
+Subscripts $S_Q, P_Q, S_0, P_0$ kept (defined labels; renaming risks cross-ref
+breakage for no reader benefit). Scripts and `CLAUDE.md` not yet synced.

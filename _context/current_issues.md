@@ -73,6 +73,31 @@ Important sources include:
 - Hogarth for probability-assessment motivation;
 - Savage, Selten, and Gneiting--Raftery for scoring-rule background.
 
+A related-work expansion was done 2026-05-22 (logged in
+`_context/exploration/literature_scan_log.md`), in two passes. The first added
+13 verified citations. The second read the cited papers in full (PDFs in
+`_context/related_literature/`; four paywalled papers excepted) and rewrote the
+introduction's "Related literature" block and the discussion's risk-aversion
+subsection so the contrasts are precise:
+
+- Schlag--Tremewan is positioned as the closest relative — they already give
+  the region-and-bounds program for frequency guessing; the paper's job is to
+  generalize it across count-loss rules and add the closed-form quadratic rule
+  and the comparison.
+- Engelberg--Manski--Williams is positioned as a partial-identification
+  precedent (they bound means/medians/modes from coarse reports); the
+  difference is that the identifying restriction here is the scoring rule's
+  optimality condition, not reports taken at face value.
+- The binary-lottery discussion now presents both the supportive evidence
+  (Harrison et al. 2014) and the cautionary evidence (Danz--Vesterlund--Wilson
+  2022, who test the binarized rule directly).
+
+Outstanding: four cited papers (Heinrich 2014, Schotter--Trevino 2014,
+Trautmann--van de Kuilen 2015, Delavande et al. 2011) could not be obtained as
+PDFs; their positioning rests on abstracts and well-established results. A
+human reader should confirm the elicitability and Schlag--Tremewan framing
+before submission.
+
 ## Three-Rule Comparison
 
 The paper headlines three rules — quadratic, discrete-metric, Manhattan — each

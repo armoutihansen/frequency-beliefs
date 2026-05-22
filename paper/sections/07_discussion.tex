@@ -15,10 +15,10 @@ P_S(r)
 \]
 
 The design comparison shows that the most informative rule depends on how concentrated the subject's beliefs are; three practical recommendations follow.
-First, use discrete-metric frequency scoring when the subject is expected to spread probability fairly evenly across the outcomes, with no single outcome carrying most of the probability.
+First, use frequency-guessing scoring when the subject is expected to spread probability fairly evenly across the outcomes, with no single outcome carrying most of the probability.
 It is the most informative rule in that regime, has closed-form coordinate bounds, and is the only rule robust to risk aversion under direct payment; its implementation cost is that exact-match payment probabilities can be low away from concentrated reports.
 
-Second, use quadratic-distance frequency scoring when the subject is expected to place most of the probability on one or a few outcomes.
+Second, use squared-distance frequency scoring when the subject is expected to place most of the probability on one or a few outcomes.
 It is the most informative rule in that regime---for the average-coordinate, worst-coordinate, and mean targets alike---and it offers a transparent projection rule, a linear identified set, closed-form coordinate bounds, and linear-program bounds for any linear functional.
 
 Third, use Manhattan distance when it cannot be anticipated in advance whether the subject's beliefs will be concentrated on a few outcomes or spread across many.
@@ -37,14 +37,15 @@ If the subject is paid the score itself, the subject solves
 \[
 \argmax_{r\in\OmegaN}\E_p[u(S(r,\omega))].
 \]
-For the discrete-metric rule this does not change incentives.
+For the frequency-guessing rule this does not change incentives.
 The payment is a fixed prize \(B\) if \(r=\omega\) and zero otherwise, so
 \[
 \E_p[u]=u(0)+\Pr_p(\omega=r)\{u(B)-u(0)\},
 \]
 and any strictly increasing \(u\) preserves the same optimal reports as maximizing the exact-match probability.
-Direct monetary distance scores do not have this robustness: quadratic and Manhattan distance generate several possible payment levels, so nonlinear utility can change the ranking of reports.
+Direct monetary distance scores do not have this robustness: squared-distance and Manhattan distance generate several possible payment levels, so nonlinear utility can change the ranking of reports.
 This is the standard risk-aversion problem for monetary scoring rules \citep{ArmantierTreich2012,SchlagEtAl2013}.
+One response in the literature keeps the scoring rule unchanged and corrects the elicited report ex post for the subject's risk attitude and probability weighting \citep{Offerman2009}; the route taken here is instead to choose a rule, or an implementation, under which no such correction is needed.
 
 \paragraph{Probability implementation.}
 The distance rules can instead be implemented as a binary lottery.
@@ -59,39 +60,47 @@ so maximizing expected utility is equivalent to maximizing the expected normaliz
 A positive affine normalization of the bounded score into \([0,1]\) preserves the expected-score ranking of reports, so the body's risk-neutral analysis carries over unchanged.
 This is the binary-lottery, or binarized-scoring-rule, technique \citep{RothMalouf1979,BergEtAl1986,Karni2009,HossainOkui2013}; the contribution here is to apply it, not to introduce it.
 
-Two qualifications matter.
-First, the robustness is to risk aversion within expected utility.
+The algebra above establishes only \emph{theoretical} robustness, and two qualifications bound what it buys in practice.
+First, the robustness is to risk aversion \emph{within} expected utility.
 Subjects who depart from expected utility---for instance through probability weighting---can report non-truthfully even under the binary-lottery implementation, and the paper does not address such departures.
-Second, the binary-lottery implementation asks subjects to reason about a compound lottery on top of the count report, which partially offsets the cognitive simplicity that motivates frequency reports in the first place.
+Second, the implementation asks subjects to reason about a compound lottery layered on top of the count report, which partially offsets the cognitive simplicity that motivates frequency reports in the first place.
+The empirical record reflects this tension.
+\citet{Harrison2014} find that a binary-lottery procedure does induce approximately risk-neutral reporting in a subjective-probability elicitation task, evidence that the technique can deliver its theoretical promise.
+But \citet{DanzVesterlundWilson2022}, testing the binarized scoring rule directly, find that informing subjects of the quantitative incentives induces systematic centre-biased misreporting---a failure they trace not to risk attitudes, which the binary lottery already neutralizes, but to the incentive information itself.
+The binary-lottery implementation should therefore be read as resolving the risk-attitude problem the body sets aside while leaving a separate, behavioural one open.
 
 The implementation choice also interacts with a cost noted in the design comparison.
-The discrete-metric prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
-The discrete-metric rule is thus robust to risk aversion even under direct payment but can become nearly unwinnable; the distance rules avoid that under the binary-lottery implementation, whose payment probability is the expected normalized score, at the cost of relying on expected utility.
+The frequency-guessing prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
+The frequency-guessing rule is thus robust to risk aversion even under direct payment but can become nearly unwinnable; the distance rules avoid that under the binary-lottery implementation, whose payment probability is the expected normalized score, at the cost of relying on expected utility.
 
 \subsection{Other Frequency-Report Scoring Rules and the Limits of the Approach}
 
 The three rules compared above do not exhaust the family of count losses, and the partial-identification approach is not a general theory of discrete scoring rules.
 Two further rules---Hamming and Chebyshev distance---are worth stating precisely, because they mark where the approach stops yielding tractable sharp bounds.
+They are, in fact, the two ways the structural lemma of Section~3 (Lemma~\ref{lem:transfer}) can fail: Hamming distance meets its separability hypothesis but not its discrete-convexity hypothesis, and Chebyshev distance fails separability itself.
 
 \paragraph{Hamming distance.}
 The Hamming rule \(S_H(r,\omega)=a-b\sum_i\1\{r_i\ne\omega_i\}\) penalizes the number of categories whose reported count differs from the realized count.
 By linearity of expectation its expected loss is \(\sum_i\{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}\), so an optimal report maximizes the separable objective \(\sum_i\Pr(\mathrm{Bin}(n,p_i)=r_i)\) subject to \(\sum_i r_i=n\), and \(P_H(r)\) is the set of beliefs at which \(r\) attains that maximum---cut out by one expected-loss inequality per alternative report.
-For \(k=2\) the two coordinate indicators \(\1\{r_i\ne\omega_i\}\) are equal, so the Hamming count-error index \(\sum_i\1\{r_i\ne\omega_i\}\) is exactly twice the discrete metric \(\1\{r\ne\omega\}\); the rule coincides with discrete-metric scoring and inherits its closed-form bounds.
+For \(k=2\) the two coordinate indicators \(\1\{r_i\ne\omega_i\}\) are equal, so the Hamming count-error index \(\sum_i\1\{r_i\ne\omega_i\}\) is exactly twice the discrete metric \(\1\{r\ne\omega\}\); the rule coincides with frequency-guessing scoring and inherits its closed-form bounds.
 For \(k>2\) it does not.
 Each term \(\Pr(\mathrm{Bin}(n,p_i)=r_i)\) is unimodal but not discrete-concave in the reported count, so the exchange argument that makes single-count-transfer optimality sufficient for Manhattan distance fails here: the condition remains necessary but is no longer sufficient, because a transfer of two or more counts can raise the separable objective where no single-count transfer does.
 This failure is not confined to the boundary of the simplex.
 At \(n=3\), \(k=5\), and uniform beliefs \(p=(1/5,\ldots,1/5)\), for instance, the report \((3,0,0,0,0)\) admits no improving single-count transfer, yet \((0,0,1,1,1)\) yields a strictly higher expected score.
 The identified set \(P_H(r)\) is therefore a non-convex set defined by polynomial inequalities, not a polytope.
 The modal box \(\prod_i[r_i/(n+1),(r_i+1)/(n+1)]\) collects the beliefs at which every \(r_i\) is a mode of its binomial marginal; there the separable objective is maximized term by term, so \(r\) is optimal, and the modal box is a closed-form inner bound for \(P_H(r)\), while the single-count-transfer inequalities give an outer bound.
-The sharp coordinate bounds lie between these two and are obtainable only by numerical optimization over the non-convex set, which is computationally intractable at the larger category counts of the design comparison.
+The sharp coordinate bounds lie between these two and require optimizing a coordinate directly over the non-convex set---a global optimization whose feasible region is cut out by one polynomial inequality for each of the \(\binom{n+k-1}{k-1}\) feasible reports, a constraint count that grows combinatorially and exceeds \(10^{10}\) at the largest cell of the design comparison (\(n=50\), \(k=10\)).
+A direct feasibility check bore out the obstruction: computing the sharp Hamming bounds proved both prohibitively slow and numerically unreliable for \(k=10\), while the closed-form bounds of the other rules are immediate.
 Hamming distance is for this reason characterized here rather than included in the comparison.
 
 \paragraph{Chebyshev distance.}
 The Chebyshev rule \(S_\infty(r,\omega)=a-b\max_i|r_i-\omega_i|\) penalizes the largest single-category count error.
 Unlike the other count losses, its expected loss does not separate across coordinates: the maximum couples the category errors within every realization, so there is no per-coordinate transfer condition to exploit.
 For \(k=2\) the two absolute errors \(|r_i-\omega_i|\) are equal, so the count-error index \(\max_i|r_i-\omega_i|\) is half of \(\sum_i|r_i-\omega_i|\); the rule coincides with Manhattan scoring and inherits the binomial-median interval.
-For \(k>2\) no optimal-report characterization comparable to those of the headline rules is known: the identified set is cut out only by the full system of expected-loss inequalities, one per alternative report, with no transfer-polytope or threshold reduction.
-Chebyshev distance is computable by enumeration for small \(n\) and \(k\) but, like Hamming, does not deliver the sharp, scalable bounds that make the three headline rules comparable.
+For \(k>2\) neither half of the pipeline is tractable at scale.
+The non-separable objective admits no transfer or exchange argument, so no characterization of the optimal report beyond search is known: a certified optimal report must be found by comparing all \(\binom{n+k-1}{k-1}\) feasible reports.
+The identified set, in turn, is cut out only by the full system of expected-loss inequalities, one per alternative report, with no transfer-polytope or threshold reduction---the same kind of non-convex semialgebraic set as \(P_H(r)\), whose sharp bounds the Hamming feasibility check above already found intractable at \(k=10\).
+Chebyshev distance is therefore computable by enumeration for small \(n\) and \(k\) but, like Hamming, cannot be carried across the design grid; it is characterized here rather than included in the comparison.
 
 These two rules are not pathological---their identified sets are well defined and finite to check---but they show that the closed-form and semi-analytical tractability of the headline rules is a property of those rules, not a generic feature of count-loss scoring.
 
@@ -99,8 +108,10 @@ These two rules are not pathological---their identified sets are well defined an
 
 The case for frequency reports rests partly on a behavioural premise this paper does not test: that subjects reason more readily in counts than in abstract probabilities, and find a distance-based payment more transparent than a probability score.
 That premise is taken here on the strength of the cited literature.
-The partial-identification framework itself, however, suggests how it could be examined.
+A second, more basic premise maintained throughout the body is that subjects report optimally given the rule---a premise that, as the risk-aversion discussion above noted, the evidence on incentive-compatible mechanisms does not uniformly support \citep{DanzVesterlundWilson2022}.
+The informativeness comparison is therefore best read as a statement about the mechanism conditional on optimal reporting, not as a behavioural prediction.
+The partial-identification framework itself, however, suggests how both premises could be examined.
 If beliefs are induced by the experimenter---through draws from an urn of known composition, or a signal structure with a computable posterior---the true belief \(p\) is known, so an elicited report \(r\) can be checked against the identified set \(P_S(r)\) it generates: under optimal reporting \(P_S(r)\) contains \(p\), and the empirical coverage rate, with the direction of any systematic miss, measures how far subjects depart from optimal reporting.
 Eliciting the same induced beliefs under a frequency-report rule and under a standard probability scoring rule isolates the effect of the report format; crossing that with direct versus binary-lottery payment isolates the effect of the implementation, which the risk-aversion analysis above predicts to matter only for subjects who are not risk neutral.
 Response times, incentivized comprehension questions, and the rate of weakly dominated reports would complement the coverage measure.
-Such a design would test, rather than presume, the behavioural premise on which the case for frequency reports partly rests---a premise separate from the present contribution, which is that different frequency-report scoring rules induce different identified sets, and those sets determine the informational efficiency of the mechanism.
+Such a design would test, rather than presume, the behavioural premise on which the case for frequency reports partly rests---a premise separate from the present contribution, which is that different frequency-report scoring rules induce different identified sets, and those sets determine the informativeness of the mechanism.

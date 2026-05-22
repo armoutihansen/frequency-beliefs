@@ -46,6 +46,11 @@ where \(D:\OmegaN\times\OmegaN\to\R_+\) is a count-error index.
 The function \(D\) need not be a metric: squared distance is a divergence-style count loss, not a metric, because it fails the triangle inequality.
 \end{definition}
 
+Two clarifications of terminology are in order.
+A \emph{frequency report} \(r\in\OmegaN\) is a vector of counts---how many of the \(n\) realizations fall in each category---not a vector of relative frequencies; dividing by \(n\) recovers the latter.
+And these are not \emph{proper} scoring rules in the sense of \citet{Savage1971} and \citet{GneitingRaftery2007}: they are not designed to make a truthful report of the belief vector \(p\) optimal, and generally do not.
+As the next section shows, the optimal report is instead a functional of the multinomial sampling distribution that \(p\) induces---its mode, its mean, or its coordinate-wise medians, depending on the rule---so recovering \(p\) calls for the inverse, partial-identification step developed below.
+
 The constants \(a\) and \(b\) do not matter for expected-score rankings as long as \(b>0\).
 They matter for implementation.
 If scores are paid directly as money and nonnegative payments are desired, one can choose
@@ -132,6 +137,6 @@ and functional widths,
 \[
 \overline\mu_S(r;x)-\underline\mu_S(r;x).
 \]
-Exact-match payment probability is reported only for the discrete-metric rule, as an implementation diagnostic of that fixed-prize mechanism; it is not a cross-rule comparison metric.
+Exact-match payment probability is reported only for the frequency-guessing rule, as an implementation diagnostic of that fixed-prize mechanism; it is not a cross-rule comparison metric.
 
-The next section applies this setup to the three headline rules: quadratic-distance, discrete-metric, and Manhattan.
+The next section applies this setup to the three headline rules: squared-distance, frequency-guessing, and Manhattan.

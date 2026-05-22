@@ -2,12 +2,49 @@
 
 This section applies the setup to three frequency-report scoring rules.
 They span a spectrum of analytical tractability.
-Quadratic-distance and discrete-metric scoring have closed-form identified sets and closed-form coordinate bounds.
+Squared-distance and frequency-guessing scoring have closed-form identified sets and closed-form coordinate bounds.
 Manhattan-distance scoring has an exact identified set and sharp coordinate bounds in semi-analytical form.
+A single structural observation, developed first, accounts for that spectrum---and for the two further rules, in Section~5, that fall outside it.
 
-\subsection{Quadratic-Distance Frequency Scoring}
+\subsection{Optimal Reports as a Resource-Allocation Problem}
 
-The main analytical rule is quadratic-distance frequency scoring.
+The three rules share a structure that determines what a report reveals.
+For each, an optimal report minimizes a \emph{separable} objective over the feasible count vectors,
+\[
+R_S(p)=\argmin_{r\in\OmegaN}\sum_{i=1}^k\ell(r_i;p_i),
+\]
+for a per-coordinate cost \(\ell\).
+For squared-distance and Manhattan scoring the expected loss is itself additively separable, and \(\ell\) is the expected per-coordinate loss.
+Frequency-guessing scoring is not an additively separable loss---the multinomial probability is a product---but maximizing \(\Pr_p(\omega=r)\) is equivalent to minimizing \(\sum_i\{\log(r_i!)-r_i\log p_i\}\), so it has the same form, with \(\ell(t;p_i)=\log(t!)-t\log p_i\).
+
+This is the integer \emph{separable resource-allocation problem}: distribute \(n\) units across \(k\) categories under separable costs.
+Its solution structure is classical \citep{Fox1966,FedergruenGroenevelt1986,IbarakiKatoh1988}.
+
+\begin{lemma}[Single-transfer characterization]\label{lem:transfer}
+Suppose an optimal report minimizes a separable objective \(\sum_i\ell(r_i;p_i)\) over \(\OmegaN\), and each \(\ell(\cdot;p_i)\) is \emph{discrete-convex}: its successive differences \(\ell(t+1;p_i)-\ell(t;p_i)\) are nondecreasing in \(t\).
+Then \(r\) is optimal if and only if no single-count transfer lowers the objective,
+\[
+\ell(r_i+1;p_i)-\ell(r_i;p_i)\;\ge\;\ell(r_j;p_j)-\ell(r_j-1;p_j)
+\qquad\forall\,i,j\text{ with }r_j>0,
+\]
+and the identified set \(P_S(r)\) is exactly the set of beliefs satisfying these \(O(k^2)\) inequalities.
+\end{lemma}
+
+Necessity of the no-transfer condition is immediate: a transfer produces a feasible competing report.
+Sufficiency is a monotone-path exchange argument---any competing report is reached by single-count transfers along which discrete convexity makes each step at least as costly as the corresponding transfer evaluated at \(r\); this is the argument carried out for Manhattan distance in Appendix~\ref{app:manhattan-proof}.
+That the equivalence holds precisely when the per-coordinate costs are discrete-convex is the classical greedy-optimality characterization for separable resource allocation \citep{Fox1966,FedergruenGroenevelt1986}, with discrete convexity the standard diminishing-differences condition \citep{Murota2003}.
+
+The three headline rules satisfy the hypothesis: the squared-distance cost is quadratic in \(r_i\), the Manhattan cost \(\E_p|r_i-\omega_i|\) inherits discrete convexity from the absolute value, and the frequency-guessing cost \(\log(r_i!)-r_i\log p_i\) is discrete-convex because \(\log(t!)\) has nondecreasing differences.
+Each rule's characterization below is therefore an instance of Lemma~\ref{lem:transfer}; the rules differ only in the shape of the single-transfer inequalities.
+When those inequalities are linear in \(p\)---squared-distance and frequency-guessing---the identified set is a polytope and the coordinate bounds are closed form; when they are monotone but transcendental in \(p\)---Manhattan---the identified set is still exact and the bounds are sharp, but only semi-analytically.
+
+The lemma also marks the limits of the approach.
+Its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~5 takes up the two rules that do: Hamming distance is separable but its per-coordinate cost is not discrete-convex, and Chebyshev distance is not separable.
+The optimization content of the lemma is classical; what this paper adds is the observation that incentivized frequency-report elicitation \emph{is} a resource-allocation problem of this kind, and the inversion of the resulting optimal-report correspondence into an identified set of latent beliefs.
+
+\subsection{Squared-Distance Scoring}
+
+The main analytical rule is squared-distance frequency scoring.
 It pays less when the reported count vector is far from the realized count vector in squared Euclidean distance:
 \[
 S_Q(r,\omega)=a-b\|r-\omega\|_2^2,
@@ -18,10 +55,10 @@ It is a frequency-report count-loss rule: subjects report counts, and the penalt
 Write \(P_Q\) for the identified set induced by this rule.
 
 Given beliefs \(p\), the expected count vector is \(np\).
-The key forward fact is that quadratic-distance scoring asks the subject to report the feasible integer count vector closest to \(np\).
+The key forward fact is that squared-distance scoring asks the subject to report the feasible integer count vector closest to \(np\).
 The inverse question is therefore geometric: for which beliefs is the observed report \(r\) the closest feasible count vector to \(np\)?
 
-\begin{proposition}[Quadratic distance: reports, regions, and bounds]\label{prop:quadratic}
+\begin{proposition}[Squared distance: reports, regions, and bounds]\label{prop:quadratic}
 For every \(p\in\DeltaK\),
 \[
 R_{S_Q}(p)
@@ -77,14 +114,14 @@ For numerical outcomes \(x_1,\ldots,x_k\), sharp mean bounds are obtained by opt
 \]
 These are linear programs.
 For coordinate probabilities, the displayed intervals give the corresponding linear-program solutions explicitly.
-This is the main practical advantage of quadratic-distance frequency scoring: the same transparent region gives both probability bounds and bounds on expected values.
+This is the main practical advantage of squared-distance frequency scoring: the same transparent region gives both probability bounds and bounds on expected values.
 
 \paragraph{Practical interpretation.}
-Quadratic distance is mean-oriented: it links a report \(r\) to beliefs for which \(r\) is the integer projection of \(np\).
+Squared distance is mean-oriented: it links a report \(r\) to beliefs for which \(r\) is the integer projection of \(np\)---the count-report counterpart of squared-error loss eliciting the mean \citep{Gneiting2011}.
 Compared with exact matching, the payment varies smoothly with distance rather than only with exact equality.
-The main implementation cost is that direct monetary quadratic-distance payments generally require risk neutrality unless the score is implemented probabilistically, as discussed below.
+The main implementation cost is that direct monetary squared-distance payments generally require risk neutrality unless the score is implemented probabilistically, as discussed below.
 
-\subsection{Discrete-Metric Frequency Scoring}
+\subsection{Frequency-Guessing Scoring}
 
 The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewanSimple}.
 Its count-error index is the count-vector discrete metric,
@@ -109,9 +146,9 @@ The mechanism is simple: a subject with beliefs \(p\) maximizes the probability 
 Thus the forward object is the multinomial mode set.
 The inverse object is the set of beliefs for which the observed report is one of those modes.
 
-\begin{proposition}[Discrete metric: reports, regions, and bounds]\label{prop:discrete}
+\begin{proposition}[Frequency guessing: reports, regions, and bounds]\label{prop:discrete}
 Let \(r\in\OmegaN\), and allow ties in the multinomial mode.
-Then \(r\) is optimal under discrete-metric frequency scoring if and only if \(r\) is a multinomial mode:
+Then \(r\) is optimal under frequency-guessing scoring if and only if \(r\) is a multinomial mode:
 \[
 R_0(p)
 =
@@ -142,11 +179,11 @@ P_{0,i}(r)
 The inequalities say that no single-count transfer from a reported category \(j\) to another category \(i\) can increase the multinomial probability of the report.
 Weak inequalities include ties.
 The formula also handles boundaries: if \(r_i=0\), the lower bound is \(0\); if \(r_i=n\), the upper bound is \(1\).
-These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewanSimple}; they are restated here to make the informational-efficiency comparison self-contained.
+These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewanSimple}; they are restated here to make the informativeness comparison self-contained.
 The proof is in Appendix \ref{app:exact-match-proof}.
 
 \paragraph{Probability and mean bounds.}
-The discrete-metric rule gives closed-form coordinate intervals.
+The frequency-guessing rule gives closed-form coordinate intervals.
 For linear functionals such as means, sharp bounds use the full joint region, not just the coordinate intervals:
 \[
 \min_{p\in P_0(r)}\sum_{i=1}^k p_i x_i
@@ -154,10 +191,10 @@ For linear functionals such as means, sharp bounds use the full joint region, no
 \max_{p\in P_0(r)}\sum_{i=1}^k p_i x_i.
 \]
 These are linear programs because \(P_0(r)\) is defined by linear inequalities.
-Thus discrete-metric frequency scoring is analytically convenient for individual probability bounds, while mean inference still requires using the joint mode region.
+Thus frequency-guessing scoring is analytically convenient for individual probability bounds, while mean inference still requires using the joint mode region.
 
 \paragraph{Practical interpretation.}
-Discrete-metric frequency scoring is transparent and robust to risk aversion because it is a fixed-prize event.
+Frequency-guessing scoring is transparent and robust to risk aversion because it is a fixed-prize event.
 Its implementation cost is that the probability of an exact match can be small when \(n\) is large or the outcome space is rich.
 It is a prominent known rule in the comparison, not a new mechanism introduced here.
 
@@ -169,12 +206,12 @@ For a rule \(S\) and report \(r\), call the mean of the coordinate widths \(\ove
 \begin{corollary}[Average coordinate width of the closed-form rules]\label{cor:closed-form-comparison}
 Fix \(n\ge2\) and \(k\ge2\), and for a report \(r\) let \(m=m(r)\) be the number of categories with positive reported counts.
 \begin{enumerate}
-\item The discrete-metric average coordinate width equals the constant
+\item The frequency-guessing average coordinate width equals the constant
 \[
 W_0(n,k)=\frac{(k-1)(2n+k)}{k(n+1)(n+k-1)},
 \]
 the same for every report \(r\).
-\item The quadratic-distance average coordinate width depends on \(r\) only through \(m\):
+\item The squared-distance average coordinate width depends on \(r\) only through \(m\):
 \[
 W_Q(m;n,k)=\frac{1}{nk}\left[2m-1-\frac{m}{k}+\frac{m(k-m)}{m+1}\right].
 \]
@@ -184,11 +221,11 @@ W_Q(m;n,k)=\frac{1}{nk}\left[2m-1-\frac{m}{k}+\frac{m(k-m)}{m+1}\right].
 
 The proof---elementary algebra on the two coordinate-bound formulas---is in Appendix \ref{app:comparison-proof}.
 
-Parts (1) and (2) together say something clean: the discrete-metric average width is a constant, while the quadratic-distance average width is a function of \(m\) alone, so the comparison between the two closed-form rules is decided entirely by \(m=m(r)\), the number of categories the report touches.
-Part (3) shows that comparison is not one-sided---the quadratic average width falls below the discrete constant at the most concentrated report and rises above it at \(m=k\)---so which rule gives the narrower average coordinate bound genuinely turns on how concentrated the report is.
+Parts (1) and (2) together say something clean: the frequency-guessing average width is a constant, while the squared-distance average width is a function of \(m\) alone, so the comparison between the two closed-form rules is decided entirely by \(m=m(r)\), the number of categories the report touches.
+Part (3) shows that comparison is not one-sided---the squared-distance average width falls below the frequency-guessing constant at the most concentrated report and rises above it at \(m=k\)---so which rule gives the narrower average coordinate bound genuinely turns on how concentrated the report is.
 The design comparison of the next section ties this report-level contrast to belief concentration, quantifies it, and extends it to Manhattan distance.
 
-\subsection{Manhattan-Distance Frequency Scoring}
+\subsection{Manhattan-Distance Scoring}
 
 Unlike the two closed-form rules, Manhattan-distance scoring has no closed-form coordinate bounds; its optimal-report correspondence and identified set are nonetheless characterized exactly, and its sharp bounds reduce to a one-dimensional computation.
 The Manhattan-distance rule is
@@ -196,7 +233,7 @@ The Manhattan-distance rule is
 S_M(r,\omega)=a-b\sum_{i=1}^k |r_i-\omega_i|,
 \quad b>0.
 \]
-It rewards total absolute count accuracy rather than squared count accuracy, and its inferential interpretation is median-oriented rather than mean-oriented.
+It rewards total absolute count accuracy rather than squared count accuracy, and its inferential interpretation is median-oriented rather than mean-oriented---the count-report counterpart of absolute-error loss eliciting the median \citep{Gneiting2011}.
 
 For category \(i\) the realized count has binomial marginal \(W_i\sim\mathrm{Bin}(n,p_i)\); write \(F_i(t;n,p_i)=\Pr(W_i\le t)\) for its distribution function, with the conventions \(F_i(-1;n,p_i)=0\) and \(F_i(n;n,p_i)=1\).
 By linearity of expectation the expected Manhattan loss is separable across categories, \(\E_p\sum_i|r_i-\omega_i|=\sum_i\E_p|r_i-W_i|\), while the simplex constraint \(\sum_i r_i=n\) couples the coordinates.
@@ -241,4 +278,4 @@ The sharp mean bounds are obtained by the same one-dimensional search over the t
 \paragraph{Practical interpretation.}
 Manhattan distance is useful when a median-type count prediction is substantively appropriate.
 It is also useful as a contrast: changing the distance criterion changes the inferred identified set.
-The multi-category Manhattan bounds are sharp and reduce to a one-dimensional threshold computation; they are less transparent than the closed-form quadratic-distance bounds but are exact, not approximations.
+The multi-category Manhattan bounds are sharp and reduce to a one-dimensional threshold computation; they are less transparent than the closed-form squared-distance bounds but are exact, not approximations.

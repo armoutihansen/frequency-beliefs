@@ -1,6 +1,38 @@
 # Current Status
 
-Date: 2026-05-21
+Date: 2026-05-22
+
+## Update — 2026-05-22 Related-work expansion and scoring-rule renaming
+
+Two manuscript passes were completed (logged in
+`_context/exploration/literature_scan_log.md`):
+
+1. A thorough related-literature review: the cited papers were read in full
+   (PDFs in `_context/related_literature/`), and the introduction's "Related
+   literature" block and the discussion were rewritten to contrast the paper
+   against the elicitability, frequency-guessing, partial-identification, and
+   elicitation-method literatures. 13 verified citations added.
+
+2. A notation/naming-consistency review against that literature, which led to
+   three author-approved renames applied manuscript-wide:
+   - "quadratic-distance" scoring -> **"squared-distance"** scoring (the
+     centerpiece rule), to avoid collision with the *quadratic scoring rule*
+     (QSR), a different, proper, probability-report rule.
+   - "discrete-metric" scoring -> **"frequency-guessing"** scoring, matching
+     Schlag--Tremewan. The metric object \(D_0=\mathbf 1\{r\neq\omega\}\) is
+     still called "the discrete metric".
+   - "informational efficiency" -> **"informativeness"** (title, body), closer
+     to partial-identification usage. New title: *The Informativeness of
+     Frequency-Report Scoring Rules*.
+   Also: §2 now states explicitly that these are not *proper* scoring rules and
+   that a frequency report is a vector of counts; a stray \(S_2\) in the
+   appendix proof was unified to \(S_Q\). The paper compiles cleanly (25 pages).
+
+NOT yet synced to the new names: `scripts/` (display labels/keys are coupled
+across `design_efficiency.py`, `consistency_check.py`, `verify_regions.py` and
+to the committed CSV outputs — a separate refactor + rerun), and `CLAUDE.md`
+(which also still lists four headline rules and is independently stale on the
+three-rule decision). Both should be reconciled before the next simulation run.
 
 ## Update — 2026-05-21 Hamming grilling session and three-rule revision
 
