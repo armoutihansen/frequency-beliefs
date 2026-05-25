@@ -33,13 +33,12 @@
 \maketitle
 
 \begin{abstract}
-In a multinomial frequency-report environment, a subject has latent beliefs \(p\), but the researcher observes only an incentivized count report \(r\).
-We compare frequency-report scoring rules by how sharply that report identifies the latent beliefs.
-The inference is recast as a partial-identification problem: each scoring rule maps the report to an identified set of beliefs---those under which the report would have been optimal---from which coordinate and mean bounds follow.
-The main analytical result is that squared-distance frequency scoring gives a transparent projection rule, a linear identified set, closed-form coordinate bounds, and linear-program bounds for means.
-Frequency-guessing scoring is the known fixed-prize rule with closed-form coordinate and mean bounds; Manhattan distance has an exact identified set, sharp one-dimensional coordinate bounds, and grid-implemented mean bounds.
-All three rules share a single structural condition---separability and discrete convexity of an appropriate per-coordinate cost; two further count-loss rules, Hamming and Chebyshev distance, violate it, and Section~\ref{sec:other-rules} takes them up as the boundary of the approach.
-No rule is universally most informative. Which one yields the tightest bounds turns on how concentrated the subject's beliefs are: squared-distance scoring when beliefs are concentrated on a few categories, frequency-guessing scoring when they are balanced across them, with the two closed-form rules' average coordinate widths crossing as a function of the number of positive-report coordinates---a crossover a design comparison then locates in the Dirichlet concentration parameter. Manhattan distance is rarely the tightest, but its bounds barely move across regimes, making it the robust choice when the belief regime cannot be anticipated. The body maintains risk-neutral expected-payoff maximization; the discussion extends the comparison to risk-averse subjects via a binary-lottery implementation.
+A subject's latent multinomial beliefs are elicited via an incentivized count report under a scoring rule.
+We recast the inference as a partial-identification problem: each rule maps the report to the set of beliefs under which it is optimal, from which coordinate and linear-functional bounds follow.
+Three rules are characterized---squared-distance scoring (closed-form coordinate bounds, linear-program means), frequency-guessing (the known closed-form fixed-prize rule), and Manhattan distance (sharp one-dimensional bounds via threshold root-finds)---unified by a single structural condition: separability and discrete convexity of a per-coordinate cost.
+No rule dominates: squared-distance for concentrated beliefs, frequency-guessing for balanced, with the two closed-form rules' coordinate widths crossing in the number of positive-report coordinates---a crossover the design comparison locates in the Dirichlet concentration.
+Manhattan is rarely tightest but barely moves across regimes, the robust choice when the regime is unknown.
+The body assumes risk neutrality; a binary-lottery implementation extends to risk-averse subjects.
 
 \medskip
 \noindent\textbf{Keywords:} belief elicitation; scoring rules; frequency reports; partial identification; informativeness; multinomial beliefs.
