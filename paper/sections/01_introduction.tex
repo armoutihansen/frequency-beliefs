@@ -39,8 +39,8 @@ Under this rule, a subject reports the feasible count vector closest to the expe
 This gives a linear identified set and closed-form bounds for each \(p_i\).
 Mean bounds and other linear functional bounds are then simple linear programs over the same region.
 
-The paper compares this rule to two other count-loss mechanisms along a spectrum of analytical tractability.
-Frequency-guessing scoring, due to \citet{SchlagTremewan2021}, is the known exact-match mechanism: it elicits multinomial modes, gives closed-form bounds, and is robust to risk aversion under a fixed-prize implementation.
+Extending the partial-identification program of \citet{SchlagTremewan2021}, the paper compares this rule to two other count-loss mechanisms along a spectrum of analytical tractability.
+Frequency-guessing scoring is their known exact-match mechanism: it elicits multinomial modes, gives closed-form bounds, and is robust to risk aversion under a fixed-prize implementation.
 Manhattan-distance scoring has an exact identified set and sharp, semi-analytical coordinate bounds.
 
 The contribution is not a new exact-match mechanism and not a general theory of scoring rules; Schlag and Tremewan already derive belief bounds for the frequency-guessing rule.
@@ -63,7 +63,7 @@ The contribution here is to carry the program beyond the rule for which it is kn
 Schlag and Tremewan also show that, for a binary event, frequency guessing is the most precise rule eliciting a single frequency; the question here is the different one of which rule is sharpest across belief regimes, where no rule wins outright.
 The boundary with their contribution is therefore three-fold.
 Their binary-event dominance result is uniform within their class of single-frequency-eliciting rules; the present comparison is contingent across multinomial belief regimes and rules, and a uniform winner is shown not to exist.
-What the partial-identification framework adds beyond restated bounds is a unified treatment of linear-functional inference: mean and linear-functional bounds on a single polytope of single-transfer inequalities for the closed-form rules, and on a single threshold-indexed box-simplex slice for Manhattan, without per-functional bespoke derivations.
+What the partial-identification framework adds beyond restated bounds is a unified treatment of linear-functional inference across rules: mean and linear-functional bounds on a single polytope of single-transfer inequalities for the closed-form rules, and on a single threshold-indexed box-simplex slice for Manhattan, without per-rule bespoke derivations.
 \citet{SchlagEtAl2013} survey belief-elicitation methods broadly; the present paper studies a specific within-method comparison---frequency-report rules under count losses---that the survey identifies as understudied.
 
 A second literature is the theory of \emph{elicitability}.
