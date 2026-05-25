@@ -320,7 +320,39 @@ For (i), Proposition~\ref{prop:manhattan} gives \(p\in P_M(r)\) iff there is a t
 and \(\bar p_i(r)=\sup_{c\in[0,1]}\phi(c)\). The first argument \(p_i^{(U)}(c)\) is continuous and weakly decreasing in \(c\), while the second argument \(1-\sum_{v\ne i}p_v^{(L)}(c)\) is continuous and weakly increasing in \(c\) (since each \(p_v^{(L)}\) is weakly decreasing); their unique crossing is the \(c^*\) where \(p_i^{(U)}(c^*)+\sum_{v\ne i}p_v^{(L)}(c^*)=1\), and \(\phi\) is unimodal in \(c\) with peak at \(c^*\). For \(c<c^*\), \(\phi(c)=1-\sum_{v\ne i}p_v^{(L)}(c)\le 1-\sum_{v\ne i}p_v^{(L)}(c^*)=p_i^{(U)}(c^*)\) (strict decrease of \(\sum_{v\ne i}p_v^{(L)}\)); for \(c>c^*\), \(\phi(c)=p_i^{(U)}(c)\le p_i^{(U)}(c^*)\) (strict decrease of \(p_i^{(U)}\)). So \(\phi\) attains its maximum at \(c^*\) with value \(p_i^{(U)}(c^*)\), and \(c^*\) is the unique solution of the displayed equation since its left-hand side is continuous and strictly decreasing in \(c\) (from a value \(\ge 1\) at \(c=0\) to \(0\) at \(c=1\)). Part (ii) is symmetric, exchanging the roles of \(p_v^{(L)}\) and \(p_v^{(U)}\).
 \end{proof}
 
-\begin{proof}[Proof of Lemma~\ref{lem:l1-linear}]
+\subsection{Bounds on Additional Functionals of the Induced Outcome Distribution}\label{app:functional-menu}
+
+The bounds developed in the body have been on individual coordinates of \(p\) and on the linear functional \(\sum_i x_i p_i\) for a numerical outcome vector \(x\). The same identified sets yield bounds on a broader inferential menu---variance, median, other quantiles---with the available functionals depending on what \(x\) represents.
+
+\paragraph{The role of \(x\).} Three regimes cover the cases of practical interest.
+\begin{enumerate}
+\item[(i)] \emph{No \(x\).} Only coordinate bounds \([\underline p_{S,i}(r), \overline p_{S,i}(r)]\) are meaningful---probabilities of individual unordered categories.
+\item[(ii)] \emph{Ordinal \(x\).} Categories carry an ordering \(x_1<x_2<\cdots<x_k\) but the values are nominal; the menu adds bounds on the median \(\mathrm{Med}(Y)\) and other quantiles \(q_\tau(Y)\) of the induced random variable \(Y=x_J\), \(J\sim p\).
+\item[(iii)] \emph{Numerical \(x\).} Categories have numerical values in \(\R^k\); the menu adds bounds on the mean \(\E(Y)\), variance \(\mathrm{Var}(Y)\), and any polynomial functional of the induced outcome distribution.
+\end{enumerate}
+
+\paragraph{General machinery.} For any functional \(T:\Delta^k\to\R\), the identified bound under rule \(S\) is the pair
+\[
+\Big[\inf_{p\in P_S(r)} T(p),\ \sup_{p\in P_S(r)} T(p)\Big].
+\]
+The geometry of \(P_S(r)\) determines which optimization machinery applies. Squared-distance and frequency-guessing scoring induce polytope identified sets, so linear \(T\) (mean) reduces to a linear program; the variance \(\mathrm{Var}(Y)=\sum_i x_i^2 p_i-(\sum_i x_i p_i)^2\) is concave in \(p\), so its upper bound is a convex quadratic program over the polytope and its lower bound is a non-convex minimum attained at a polytope vertex; and a step-function \(T\)---the \(\tau\)-quantile index \(j^*_\tau(p)=\min\{j:S_j(p)\ge\tau\}\) with \(S_j(p)=\sum_{i\le j}p_i\), and any monotone transformation of it including the median---reduces to a sequence of linear programs over the polytope, one per candidate value of \(j^*_\tau\). Manhattan-distance scoring induces a threshold-indexed slice family rather than a polytope (Proposition~\ref{prop:manhattan}), but the same operations apply on each slice and the optimum is then taken over the threshold parameter.
+
+The threshold representation gives a particularly clean characterization for cumulative sums, the building blocks of median and quantile bounds.
+
+\begin{lemma}[Linear functionals over the Manhattan identified set]\label{lem:l1-linear}
+Fix \(r\in\OmegaN\). For any vector \(a\in\R^k\),
+\[
+\sup_{p\in P_M(r)} \sum_i a_i p_i
+\;=\;
+\sup_{c\in[0,1]}\,\sup\Big\{\textstyle\sum_i a_i p_i \;:\; p_v^{(L)}(c)\le p_v\le p_v^{(U)}(c)\;\forall v,\ \sum_v p_v=1\Big\},
+\]
+and analogously for the infimum, where \(p_v^{(L)}(c),p_v^{(U)}(c)\) are the threshold-indexed endpoints from Lemma~\ref{lem:manhattan-unimodal} and the inner supremum is taken with the convention \(-\infty\) when the slice is empty. The inner supremum is a linear program over a box-simplex slice. Applied to the indicator vector \(a=(\1\{i\le j\})_{i=1}^k\), this yields the cumulative-sum bounds \(\sup_{p\in P_M(r)} S_j(p)\) and \(\inf_{p\in P_M(r)} S_j(p)\); the \(\tau\)-quantile-index bound on the induced \(Y\) follows from
+\[
+\min_{p}j^*_\tau(p)=\min\{j:\sup_p S_j(p)\ge\tau\},\qquad \max_{p}j^*_\tau(p)=\max\{j:\inf_p S_{j-1}(p)<\tau\}.
+\]
+\end{lemma}
+
+\begin{proof}
 By Proposition~\ref{prop:manhattan}, \(p\in P_M(r)\) iff there is a threshold \(c\in[0,1]\) with \(p_v^{(L)}(c)\le p_v\le p_v^{(U)}(c)\) for all \(v\). Equivalently, \(P_M(r)=\bigcup_{c\in[0,1]}\Sigma(c)\), where \(\Sigma(c)=\{p\in\Delta^k:p_v^{(L)}(c)\le p_v\le p_v^{(U)}(c)\,\forall v\}\). For any \(a\in\R^k\),
 \[
 \sup_{p\in P_M(r)} \textstyle\sum_i a_i p_i
@@ -328,16 +360,36 @@ By Proposition~\ref{prop:manhattan}, \(p\in P_M(r)\) iff there is a threshold \(
 \]
 since the supremum over a union equals the supremum of suprema. The inner problem at fixed \(c\) is a linear program over the box-simplex slice \(\Sigma(c)\); the analogous identity holds for the infimum. Specialising to \(a_i=\1\{i\le j\}\) gives the cumulative-sum bounds \(\sup_{p\in P_M(r)} S_j(p)\) and \(\inf_{p\in P_M(r)} S_j(p)\) for each \(j\).
 
-For the quantile-index bounds, write \(j^*_\tau(p)=\min\{j:S_j(p)\ge\tau\}\). Since \(S_j(p)\) is nondecreasing in \(j\), \(j^*_\tau(p)\le j\) iff \(S_j(p)\ge\tau\), and \(j^*_\tau(p)\ge j\) iff \(S_{j-1}(p)<\tau\) (with \(S_0\equiv 0\)). Hence
+For the quantile-index bounds, since \(S_j(p)\) is nondecreasing in \(j\), \(j^*_\tau(p)\le j\) iff \(S_j(p)\ge\tau\), and \(j^*_\tau(p)\ge j\) iff \(S_{j-1}(p)<\tau\) (with \(S_0\equiv 0\)). Hence
 \[
-\min_{p\in P_M(r)}j^*_\tau(p)=\min\{j:\exists p\in P_M(r)\text{ with }j^*_\tau(p)\le j\}=\min\{j:\sup_{p\in P_M(r)} S_j(p)\ge\tau\},
+\min_{p\in P_M(r)}j^*_\tau(p)=\min\{j:\sup_{p\in P_M(r)} S_j(p)\ge\tau\},\quad
+\max_{p\in P_M(r)}j^*_\tau(p)=\max\{j:\inf_{p\in P_M(r)} S_{j-1}(p)<\tau\}.
 \]
-and
-\[
-\max_{p\in P_M(r)}j^*_\tau(p)=\max\{j:\exists p\in P_M(r)\text{ with }S_{j-1}(p)<\tau\}=\max\{j:\inf_{p\in P_M(r)} S_{j-1}(p)<\tau\}.
-\]
-Each cumulative-sum supremum and infimum is computed by the displayed expression with \(a=(\1\{i\le j\})_i\); the resulting one-parameter family of box-simplex linear programs is solved by sweeping \(c\) on a fine grid (with the tolerance reported in Appendix~\ref{app:design-details}).
+The one-parameter family of box-simplex linear programs is solved by sweeping \(c\) on a fine grid (with the tolerance reported in Appendix~\ref{app:design-details}).
 \end{proof}
+
+\paragraph{Worked example.}
+Take \(n=10\), \(k=5\), report \(r=(2,2,2,2,2)\), and numerical outcomes \(x=(0,1,2,3,4)\)---the symmetric report at which the no-universal-winner conclusion of Section~\ref{sec:design} is most visible. Table~\ref{tab:functional-menu} reports the bounds.
+
+\begin{table}[h]
+\centering
+\small
+\begin{tabular}{lccc}
+\hline
+Functional & Frequency-guessing & Squared-distance & Manhattan\\
+\hline
+Each \(p_i\)                                  & \([0.143,\,0.273]\) & \([0.120,\,0.280]\) & \([0.129,\,0.280]\)\\
+Mean \(\E(Y)\)                                & \([1.75,\,2.25]\)   & \([1.70,\,2.30]\)   & \([1.71,\,2.29]\)\\
+Median \(\mathrm{Med}(Y)\)                    & \(\{1,2\}\)         & \(\{1,2,3\}\)       & \(\{1,2,3\}\)\\
+Lower quartile \(q_{0.25}(Y)\)                & \(\{0,1\}\)         & \(\{0,1\}\)         & \(\{0,1\}\)\\
+Upper quartile \(q_{0.75}(Y)\)                & \(\{3,4\}\)         & \(\{3,4\}\)         & \(\{3,4\}\)\\
+\hline
+\end{tabular}
+\caption{Identified bounds for \(n=10\), \(k=5\), \(r=(2,2,2,2,2)\), \(x=(0,1,2,3,4)\). Frequency-guessing gives the tightest mean and median bounds at this symmetric report; the rules coincide on the upper and lower quartiles. Variance bounds follow from a constrained optimization over the same identified sets (a convex quadratic program for the upper bound, a vertex search for the lower) and are omitted to keep the table compact.}
+\label{tab:functional-menu}
+\end{table}
+
+Two structural observations. First, the inferential menu---coordinate, mean, variance, median, quantile---is unified through the identified set rather than through rule-specific machinery; each functional is the same optimization problem with a different objective. Second, the no-universal-winner conclusion of Section~\ref{sec:design} extends to non-linear functionals: which rule yields the tightest bound depends jointly on the report shape and the chosen functional. The Gneiting (2011) correspondence between absolute-error loss and the median, invoked in the body at the level of optimal reports, is a statement about \emph{elicitation}, not \emph{identified-set tightness}: at the symmetric report displayed in Table~\ref{tab:functional-menu} the median-eliciting Manhattan rule does not give tighter median bounds than frequency-guessing. \citet{SchlagTremewan2021} derive bounds on means, variances, and quantiles for frequency-guessing in their setting; the statement above carries that program across all three rules.
 
 \section{Design Comparison Details}
 \label{app:design-details}

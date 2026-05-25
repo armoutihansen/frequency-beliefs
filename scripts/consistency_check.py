@@ -182,9 +182,9 @@ def check_robustness() -> None:
 
 
 def check_functional_menu() -> None:
-    """Check 4: §3.6 worked-example table for n=10, k=5, r=(2,2,2,2,2), x=(0,1,2,3,4)."""
+    """Check 4: Appendix worked-example table for n=10, k=5, r=(2,2,2,2,2), x=(0,1,2,3,4)."""
     print()
-    print("=== Check 4: §3.6 worked-example functional menu ===")
+    print("=== Check 4: Appendix worked-example functional menu ===")
     n, k = 10, 5
     r = (2, 2, 2, 2, 2)
     x = np.arange(k, dtype=float)
@@ -239,7 +239,7 @@ def check_functional_menu() -> None:
         if not ok:
             fails += 1
         print(f"  {'OK' if ok else 'FAIL'} {key[0]:<6} {key[1]:<10}: paper={exp}  actual=({act[0]:.3f}, {act[1]:.3f})")
-    print(f"  {'PASS' if fails == 0 else f'FAIL ({fails})'} -- §3.6 worked-example table tab:functional-menu")
+    print(f"  {'PASS' if fails == 0 else f'FAIL ({fails})'} -- Appendix worked-example table tab:functional-menu")
 
 
 if __name__ == "__main__":
