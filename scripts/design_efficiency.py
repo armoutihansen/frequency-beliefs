@@ -629,6 +629,7 @@ ROBUSTNESS_CELLS: tuple[tuple[str, int, int, tuple[float, ...]], ...] = (
     ("one-dominant", 20, 5, (5.0, 0.5, 0.5, 0.5, 0.5)),
     ("two-modes",    20, 5, (3.0, 3.0, 0.3, 0.3, 0.3)),
     ("graded",       20, 5, (5.0, 2.0, 1.0, 0.5, 0.2)),
+    ("no-small",     20, 5, (5.0, 4.0, 3.0, 2.0, 2.0)),
 )
 
 

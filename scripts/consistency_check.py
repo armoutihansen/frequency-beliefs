@@ -148,6 +148,10 @@ def check_robustness() -> None:
             "coord_avg":   (0.07, 0.67, 0.26),
             "mean_linear": (0.03, 0.86, 0.11),
         },
+        "no-small": {
+            "coord_avg":   (0.84, 0.11, 0.05),
+            "mean_linear": (0.68, 0.27, 0.05),
+        },
     }
     fails = 0
     for label, metrics in expected.items():

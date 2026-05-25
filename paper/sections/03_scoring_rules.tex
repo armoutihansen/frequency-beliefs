@@ -19,6 +19,7 @@ Frequency-guessing scoring is not an additively separable loss---the multinomial
 
 This is the integer \emph{separable resource-allocation problem}: distribute \(n\) units across \(k\) categories under separable costs.
 Its solution structure is classical \citep{Fox1966,FedergruenGroenevelt1986,IbarakiKatoh1988}.
+The intuition for what follows is that, under discrete convexity, no local single-count transfer being profitable rules out any larger transfer too: each successive count moved along a path to a competing report is at least as costly as the first, so the local no-improvement condition is also the global one.
 
 \begin{lemma}[Single-transfer characterization]\label{lem:transfer}
 Suppose an optimal report minimizes a separable objective \(\sum_i\ell(r_i;p_i)\) over \(\OmegaN\), and each \(\ell(\cdot;p_i)\) is \emph{discrete-convex}: its successive differences \(\ell(t+1;p_i)-\ell(t;p_i)\) are nondecreasing in \(t\).
@@ -268,7 +269,7 @@ For \(k=2\), write \(r=(t,n-t)\); the Manhattan loss is \(2|t-W|\) with \(W\sim\
 \[
 P_{M,1}(r)=\{p_1\in[0,1]:F(t-1;n,p_1)\le 1/2\le F(t;n,p_1)\}.
 \]
-This binary case is clean.
+This binary case is clean: for \(n=10\) and the report \(r=(6,4)\), inverting the binomial CDF at \(1/2\) at the integer boundaries \(t-1=5\) and \(t=6\) gives \(P_{M,1}(r)\approx[0.55, 0.64]\)---the set of beliefs at which 6 is a median of \(\mathrm{Bin}(10,p_1)\).
 
 For \(k>2\) the threshold representation of Proposition~\ref{prop:manhattan} drives the bounds.
 At a fixed threshold \(c\) the inequalities \(F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)\) invert, coordinate by coordinate, to a box of beliefs through inverse binomial CDFs; intersecting that box with the simplex gives the feasible beliefs at that threshold.

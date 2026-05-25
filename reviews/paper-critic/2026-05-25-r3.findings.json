@@ -1,0 +1,38 @@
+{
+  "method": "paper-critic",
+  "paper_slug": "frequency-beliefs",
+  "anchor_version": 1,
+  "round": 3,
+  "verdict": "APPROVED",
+  "score": 96,
+  "overall_feedback": "Round 3 audit after substantive new content (C4 discussion paragraph, C5 appendix subsection with new asymmetric-Dirichlet table). Integration is clean. Robustness data matches the CSV outputs to displayed precision. No regressions on math or numerical claims. One Oxford-UK spelling lapse ('realisations' in the new C4 paragraph) — the same class of regression as round 2's M2 in §3.4, two-line fix.",
+  "num_comments": 2,
+  "comments": [
+    {
+      "id": "m1",
+      "tier": "m",
+      "category": "Consistency / LaTeX-Specific",
+      "title": "Oxford-UK spelling regression in new C4 paragraph",
+      "quote": "Hedging-style behaviour aimed at balancing payoffs across realisations is structurally similar.",
+      "explanation": "Paper is standardised on Oxford UK: -ize and -our. 'realisations' is British -ise and conflicts with 'realizations'/'realized' used throughout 01-, 02-, 03-, and elsewhere in 07_.",
+      "fix": "07_discussion.tex:117 — replace 'realisations' with 'realizations'.",
+      "comment_type": "spelling",
+      "location": "paper/sections/07_discussion.tex:117",
+      "deduction": 1,
+      "paragraph_index": null
+    },
+    {
+      "id": "m2",
+      "tier": "m",
+      "category": "Style / Hedging",
+      "title": "New C4 paragraph makes one mechanism claim slightly stronger than the underlying analysis",
+      "quote": "This moves the squared-distance identified set the most, because that set is the projection polytope of the reported count vector and shifts continuously with the reported coordinates; for frequency-guessing the report is a multinomial mode, so discrete jumps in the report can leave the identified set unchanged across a range of true beliefs.",
+      "explanation": "Phrase 'moves the squared-distance identified set the most' is a comparative claim across rules; the rest of the paragraph supports a directional/qualitative ordering, not a strict 'most'. A referee may read it as overclaim relative to the testable-predictions framing.",
+      "fix": "07_discussion.tex:116 — soften 'moves the squared-distance identified set the most' to 'moves the squared-distance identified set more than the frequency-guessing identified set'.",
+      "comment_type": "style",
+      "location": "paper/sections/07_discussion.tex:116",
+      "deduction": 3,
+      "paragraph_index": null
+    }
+  ]
+}

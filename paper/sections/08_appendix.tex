@@ -375,8 +375,9 @@ Second, optimal-report ties are a measure-zero event under the continuous Dirich
 
 \paragraph{Robustness to asymmetric beliefs.}
 The main design comparison draws beliefs from symmetric Dirichlet distributions, which are exchangeable across categories.
-A symmetric draw cannot produce a systematic asymmetry across categories---a one-dominant, two-mode, or graded prior on the simplex.
-Three asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each, same seed and bounds machinery as the main grid) check whether the regime story extends.
+A symmetric draw cannot produce a systematic asymmetry across categories---a one-dominant, two-mode, graded, or balanced-but-asymmetric prior on the simplex.
+Four asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each, same seed and bounds machinery as the main grid) check whether the regime story extends.
+The first three have at least one component \(\alpha_i\le 0.5\) (concentrated-asymmetric); the fourth has all components \(\ge 2\) (balanced-asymmetric).
 
 \begin{table}[h]
 \centering
@@ -387,15 +388,19 @@ Three asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws e
 \cline{2-4}\cline{5-7}
 \(\boldsymbol\alpha\) & Guessing & Squared & Manhattan & Guessing & Squared & Manhattan\\
 \hline
+\multicolumn{7}{l}{Concentrated-asymmetric (at least one \(\alpha_i\le 0.5\))}\\
 \((5, 0.5, 0.5, 0.5, 0.5)\)   & 0.06 & 0.60 & 0.33 & 0.04 & 0.72 & 0.24\\
 \((3, 3, 0.3, 0.3, 0.3)\)     & 0.03 & 0.76 & 0.21 & 0.04 & 0.82 & 0.14\\
 \((5, 2, 1, 0.5, 0.2)\)       & 0.07 & 0.67 & 0.26 & 0.03 & 0.86 & 0.11\\
 \hline
+\multicolumn{7}{l}{Balanced-asymmetric (all \(\alpha_i\ge 2\))}\\
+\((5, 4, 3, 2, 2)\)           & 0.84 & 0.11 & 0.05 & 0.68 & 0.27 & 0.05\\
+\hline
 \end{tabular}
-\caption{Win share under three asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each). Squared-distance scoring dominates in every cell on both headline metrics. The pattern is consistent with the symmetric grid (Table~\ref{tab:regime-wins}) at small \(\alpha\): each of the three vectors has at least one component \(\alpha_i\le 0.5\), so the resulting beliefs are marginally concentrated. The regime story therefore extends---the governing variable is the marginal concentration of the draws, not the symmetry of the Dirichlet.}
+\caption{Win share under four asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each). Squared-distance scoring dominates the three concentrated-asymmetric cells; frequency-guessing scoring dominates the balanced-asymmetric cell. The regime crossover therefore reproduces under asymmetry exactly as in the symmetric grid (Table~\ref{tab:regime-wins}): when the resulting beliefs are marginally concentrated, squared-distance wins; when they are balanced, frequency-guessing wins. The governing variable is the marginal concentration of the draws, not the symmetry of the Dirichlet.}
 \label{tab:regime-wins-asymmetric}
 \end{table}
 
 Mean regret tells the same story.
-In the average-coordinate metric, squared-distance's mean regret is \(\le 0.003\) in every asymmetric cell, while frequency-guessing's reaches \(0.012\) (two-mode) and Manhattan's stays at \(0.002\)--\(0.004\).
-The Manhattan ``regime-robust'' property---rarely the outright winner, never far from the leader---survives intact under asymmetry.
+In the average-coordinate metric the leading rule's regret is \(\le 0.002\) in every cell (squared-distance under concentration, frequency-guessing under balance), while the trailing rule's regret reaches \(0.012\) (frequency-guessing in the two-mode cell) and \(0.008\) (squared-distance in the balanced-asymmetric cell).
+The Manhattan ``regime-robust'' property---rarely the outright winner, never far from the leader---survives intact: Manhattan's mean regret stays at \(0.002\)--\(0.005\) across all four cells.

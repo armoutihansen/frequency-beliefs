@@ -35,3 +35,15 @@ graded,"5,2,1,0.5,0.2",20,5,mean_linear,Manhattan distance,0.1144,0.006234159975
 graded,"5,2,1,0.5,0.2",20,5,mean_skewed,Discrete metric,0.199,0.007758580381017421
 graded,"5,2,1,0.5,0.2",20,5,mean_skewed,Quadratic distance,0.442,0.006174342285779428
 graded,"5,2,1,0.5,0.2",20,5,mean_skewed,Manhattan distance,0.359,0.0032204578413444467
+no-small,"5,4,3,2,2",20,5,coord_avg,Discrete metric,0.8358,0.00026122407829777696
+no-small,"5,4,3,2,2",20,5,coord_avg,Quadratic distance,0.1094,0.007636052649726578
+no-small,"5,4,3,2,2",20,5,coord_avg,Manhattan distance,0.0548,0.004982595775513446
+no-small,"5,4,3,2,2",20,5,coord_max,Discrete metric,0.043,0.01566376190476157
+no-small,"5,4,3,2,2",20,5,coord_max,Quadratic distance,0.957,0.0001133095238095245
+no-small,"5,4,3,2,2",20,5,coord_max,Manhattan distance,0.0,0.006386239043990365
+no-small,"5,4,3,2,2",20,5,mean_linear,Discrete metric,0.6762,0.001825125917019601
+no-small,"5,4,3,2,2",20,5,mean_linear,Quadratic distance,0.2702,0.0029048405321146628
+no-small,"5,4,3,2,2",20,5,mean_linear,Manhattan distance,0.0536,0.0029721054306943353
+no-small,"5,4,3,2,2",20,5,mean_skewed,Discrete metric,0.8636,0.0011631392816736676
+no-small,"5,4,3,2,2",20,5,mean_skewed,Quadratic distance,0.062,0.017445710710244824
+no-small,"5,4,3,2,2",20,5,mean_skewed,Manhattan distance,0.0744,0.009906433564442992
