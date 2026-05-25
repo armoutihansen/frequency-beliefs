@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "skills": {
+    "devils-advocate": {
+      "source": "flonat/claude-research",
+      "sourceType": "github",
+      "skillPath": "skills/devils-advocate/SKILL.md",
+      "computedHash": "a365647e3ad39584ef4eb1a2d1c5f3c8c722c930883d27cde12b14e8d1001750"
+    },
+    "pre-submission-report": {
+      "source": "flonat/claude-research",
+      "sourceType": "github",
+      "skillPath": "skills/pre-submission-report/SKILL.md",
+      "computedHash": "12336dddecf2ab9362805404c54baa5a7970957460b3599b854d83b0cb805910"
+    }
+  }
+}
