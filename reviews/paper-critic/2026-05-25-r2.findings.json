@@ -1,0 +1,77 @@
+{
+  "method": "paper-critic",
+  "paper_slug": "frequency-beliefs",
+  "anchor_version": 1,
+  "round": 2,
+  "verdict": "APPROVED",
+  "score": 93,
+  "overall_feedback": "Round 1 P1 items all landed cleanly. Two new issues introduced by the §3.4 paragraph and the new Manhattan-unimodality lemma: (i) spelling regression to -ise/-isa- in two locations (paper otherwise uses Oxford -ize), and (ii) a localised exposition slip inside the new lemma proof (calls phi 'weakly decreasing' when it is min of a decreasing and an increasing function, i.e. unimodal). The proof's conclusion is correct; the sentence is not. No new substantive issues. Score 93/100.",
+  "num_comments": 5,
+  "comments": [
+    {
+      "id": "M1",
+      "tier": "M",
+      "category": "Notation/Internal Consistency",
+      "title": "New unimodality lemma proof misstates monotonicity of phi",
+      "quote": "Both arguments of the minimum are continuous and weakly decreasing in \\(c\\), so \\(\\phi\\) is weakly decreasing.",
+      "explanation": "The second argument 1 - sum p_v^{(L)}(c) is weakly *increasing* in c (since p_v^{(L)}(c) is weakly decreasing). phi is the min of a decreasing and an increasing function; it is unimodal (peaks at the crossing c*), not 'weakly decreasing'. The proof's subsequent case analysis is correct and uses the right monotonicity directionally, but this descriptive sentence directly contradicts it.",
+      "fix": "Replace with: 'The first argument is weakly decreasing in c, the second weakly increasing, so phi is unimodal, with maximum at the crossing point c*.'",
+      "comment_type": "exposition",
+      "location": "paper/sections/08_appendix.tex:320",
+      "deduction": -6,
+      "paragraph_index": null
+    },
+    {
+      "id": "M2",
+      "tier": "M",
+      "category": "LaTeX-Specific / Spelling",
+      "title": "Oxford-UK spelling regression: -ise/-isa- in new §3.4 paragraph",
+      "quote": "the same threshold parameterisation: the identified mean is a linear functional of \\(p\\) optimised over the same threshold-indexed box-simplex slice ... the mean bounds are sharp on the same threshold parameterisation but are implemented as a grid optimisation over the threshold.",
+      "explanation": "Paper otherwise uses Oxford UK conventions: -ize/-ization (minimize, maximize, normalize, parameterization, optimization, characterization appear throughout) combined with -our/-re/-ce (favour, centre, behaviour). These two new sentences in §3.4 use 'parameterisation', 'optimised', 'optimisation' (-ise/-isa-), creating a local inconsistency.",
+      "fix": "Replace 'parameterisation' (×2) → 'parameterization'; 'optimised' → 'optimized'; 'optimisation' → 'optimization' at lines 277 and 282 of 03_scoring_rules.tex.",
+      "comment_type": "consistency",
+      "location": "paper/sections/03_scoring_rules.tex:277, 282",
+      "deduction": -3,
+      "paragraph_index": null
+    },
+    {
+      "id": "m1",
+      "tier": "m",
+      "category": "Tone / Style",
+      "title": "Cross-reference in abstract",
+      "quote": "two further count-loss rules, Hamming and Chebyshev distance, violate it, and Section~\\ref{sec:other-rules} takes them up as the boundary of the approach.",
+      "explanation": "Abstracts are often consumed detached from the body (indexers, abstracting services). Including a \\ref to an in-body section is unconventional and may render awkwardly outside the PDF. Consider naming the section directly ('the discussion takes them up...') or dropping the cross-ref.",
+      "fix": "Replace 'Section~\\ref{sec:other-rules}' with 'the discussion' or 'a closing section'. Keep the in-body \\refs unchanged.",
+      "comment_type": "style",
+      "location": "paper/main.tex:41",
+      "deduction": -2,
+      "paragraph_index": null
+    },
+    {
+      "id": "m2",
+      "tier": "m",
+      "category": "Grammar",
+      "title": "Missing comma before non-restrictive 'which' in abstract",
+      "quote": "with a closed-form crossover in the number of positive-report coordinates which a design comparison then locates as a crossover in the Dirichlet concentration parameter.",
+      "explanation": "The 'which' clause is non-restrictive (it adds rather than restricts) and should be set off by a comma.",
+      "fix": "Insert comma: '...positive-report coordinates, which a design comparison...'",
+      "comment_type": "grammar",
+      "location": "paper/main.tex:42",
+      "deduction": -1,
+      "paragraph_index": null
+    },
+    {
+      "id": "m3",
+      "tier": "m",
+      "category": "Notation/Labelling",
+      "title": "Lemma label 'manhattan-unimodal' but title 'Single-equation characterization'",
+      "quote": "\\begin{lemma}[Single-equation characterization of Manhattan coordinate bounds]\\label{lem:manhattan-unimodal}",
+      "explanation": "The lemma is labelled 'unimodal' but its title and content are framed as a single-equation/single-bisection characterisation. Unimodality is a step inside the proof, not the lemma's headline statement. Cosmetic only — no semantic issue.",
+      "fix": "Optional: rename label to 'lem:manhattan-single-eq' or 'lem:manhattan-bound', and adjust the two \\ref calls in 03_scoring_rules.tex lines 275–276. Or accept the misalignment.",
+      "comment_type": "labelling",
+      "location": "paper/sections/08_appendix.tex:299",
+      "deduction": -1,
+      "paragraph_index": null
+    }
+  ]
+}

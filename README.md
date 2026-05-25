@@ -40,7 +40,7 @@ The final design exercise was generated with:
 uv run python scripts/design_efficiency.py --final --draws 5000
 ```
 
-The final CSV outputs are stored in `outputs/simulation_design/`.
+The final CSV outputs are stored in `outputs/design_exercise/`. (`outputs/simulation_design/` retains the earlier four-rule run for archival reference.)
 
 ## Current Context
 

@@ -73,7 +73,7 @@ The implementation choice also interacts with a cost noted in the design compari
 The frequency-guessing prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
 The frequency-guessing rule is thus robust to risk aversion even under direct payment but can become nearly unwinnable; the distance rules avoid that under the binary-lottery implementation, whose payment probability is the expected normalized score, at the cost of relying on expected utility.
 
-\subsection{Other Frequency-Report Scoring Rules and the Limits of the Approach}
+\subsection{Other Frequency-Report Scoring Rules and the Limits of the Approach}\label{sec:other-rules}
 
 The three rules compared above do not exhaust the family of count losses, and the partial-identification approach is not a general theory of discrete scoring rules.
 Two further rules---Hamming and Chebyshev distance---are worth stating precisely, because they mark where the approach stops yielding tractable sharp bounds.
@@ -110,6 +110,14 @@ The case for frequency reports rests partly on a behavioural premise this paper 
 That premise is taken here on the strength of the cited literature.
 A second, more basic premise maintained throughout the body is that subjects report optimally given the rule---a premise that, as the risk-aversion discussion above noted, the evidence on incentive-compatible mechanisms does not uniformly support \citep{DanzVesterlundWilson2022}.
 The informativeness comparison is therefore best read as a statement about the mechanism conditional on optimal reporting, not as a behavioural prediction.
+
+The conditional matters differently for different rules, and the partial-identification framework sharpens the prediction.
+Consider centre-biased reporting, the deviation \citet{DanzVesterlundWilson2022} document under the binarized scoring rule: subjects pull reports toward the interior of the simplex.
+This moves the squared-distance identified set the most, because that set is the projection polytope of the reported count vector and shifts continuously with the reported coordinates; for frequency-guessing the report is a multinomial mode, so discrete jumps in the report can leave the identified set unchanged across a range of true beliefs.
+Hedging-style behaviour aimed at balancing payoffs across realisations is structurally similar.
+Lottery confusion under the binary-lottery implementation \citep{HossainOkui2013,Harrison2014} is orthogonal: it affects the distance rules, whose risk-aversion robustness relies on the lottery, but not frequency-guessing, which retains its risk-aversion robustness under direct payment.
+These are testable predictions in the induced-beliefs design below, not assertions.
+
 The partial-identification framework itself, however, suggests how both premises could be examined.
 If beliefs are induced by the experimenter---through draws from an urn of known composition, or a signal structure with a computable posterior---the true belief \(p\) is known, so an elicited report \(r\) can be checked against the identified set \(P_S(r)\) it generates: under optimal reporting \(P_S(r)\) contains \(p\), and the empirical coverage rate, with the direction of any systematic miss, measures how far subjects depart from optimal reporting.
 Eliciting the same induced beliefs under a frequency-report rule and under a standard probability scoring rule isolates the effect of the report format; crossing that with direct versus binary-lottery payment isolates the effect of the implementation, which the risk-aversion analysis above predicts to matter only for subjects who are not risk neutral.

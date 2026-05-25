@@ -115,45 +115,46 @@ Alternative directions must be evaluated before paper edits are made.
 
 ## Active rules
 
-The paper now focuses on four headline rules:
+The paper headlines three rules (ADR-0001 fourth amendment; current state recorded in `_context/current_status.md`):
 
-1. Quadratic-distance frequency scoring.
-2. Discrete-metric / exact-match frequency scoring.
+1. Squared-distance frequency scoring (the analytical centrepiece; previously called "quadratic-distance").
+2. Frequency-guessing scoring (the known exact-match / discrete-metric rule of Schlag–Tremewan; previously called "discrete-metric").
 3. Manhattan-distance frequency scoring.
-4. Hamming-distance frequency scoring.
 
-Chebyshev distance is currently secondary. It may be discussed as an additional computable rule or appendix extension, but it is not part of the main four-rule comparison unless explicitly promoted later.
+Hamming and Chebyshev distance are NOT headline rules. They appear only in the discussion subsection "Other Frequency-Report Scoring Rules and the Limits of the Approach":
 
-The paper should treat Manhattan and Hamming symmetrically unless a mathematical or simulation-based reason justifies different treatment.
+- Hamming has an exact identified set, a closed-form modal-box inner bound, and a `k=2` closed form, but its sharp `k>2` bounds need numerical optimization over a non-convex set that is intractable at the design grid's scale, and single-transfer optimality fails even at interior beliefs.
+- Chebyshev's expected loss does not separate across coordinates and has no clean optimal-report characterization for `k>2`.
 
-## Four-rule research objective
+Older text below this section that still references "four rules" or "Hamming as headline" reflects the pre-2026-05-21 plan and is superseded.
 
-The current objective is to compare the informational efficiency of four frequency-report scoring rules.
+## Three-rule research objective
 
-For each rule, the project should try to characterize:
+The current objective is to compare the informativeness of three frequency-report scoring rules: squared-distance, frequency-guessing, and Manhattan.
+
+For each rule, the project characterizes:
 
 1. the induced optimal-report correspondence;
-2. the inverse belief region;
+2. the identified set \(P_S(r)\);
 3. coordinate bounds, if analytically tractable;
 4. mean or linear-functional bounds, if analytically tractable;
 5. computational bounds where closed-form analytical bounds are unavailable;
-6. performance in a simulation horse race over \(n\), \(k\), and latent belief distributions \(p\).
+6. performance in a three-rule comparison over \(n\), \(k\), and latent belief distributions \(p\).
 
-The analytical priority is:
+The analytical status:
 
-1. preserve and verify the quadratic-distance result;
-2. verify the discrete-metric bounds and attribution;
-3. try hard to derive sharper analytical results for Manhattan;
-4. try hard to derive analogous analytical or semi-analytical results for Hamming.
+1. Squared-distance: closed-form identified set, closed-form coordinate bounds, LP mean bounds.
+2. Frequency-guessing: closed-form coordinate bounds and mean bounds (Schlag–Tremewan); the present paper restates them for self-containment.
+3. Manhattan: exact identified set; sharp one-dimensional coordinate bounds (Lemma `lem:manhattan-unimodal`); sharp mean bounds via threshold-grid optimisation.
 
-If closed-form analytical bounds for Manhattan or Hamming are not available, the paper should say so explicitly and use computational bounds or simulation evidence carefully.
+If closed-form analytical bounds are unavailable, the paper says so explicitly and uses computational bounds or simulation evidence carefully.
 
 ## Main contribution candidates
 
 The current main contribution candidates are:
 
-1. A transparent inverse-region and bound characterization for quadratic-distance frequency scoring.
-2. A unified four-rule comparison of quadratic, discrete metric, Manhattan, and Hamming frequency-report scoring rules.
+1. A transparent identified-set and bound characterization for squared-distance frequency scoring (the analytical centrepiece).
+2. A unified three-rule comparison of squared-distance, frequency-guessing, and Manhattan frequency-report scoring rules, organised by a single structural condition (separability plus discrete convexity) that Hamming and Chebyshev each violate.
 3. A design exercise showing which rule performs best in which contexts, varying \(n\), \(k\), and latent belief structure \(p\).
 
 The project should not assume ex ante that one rule is uniformly best.
@@ -187,14 +188,13 @@ For Manhattan and Hamming, Claude should distinguish:
 
 ## Simulation and design-comparison objective
 
-The simulation exercise should be redesigned as a four-rule horse race among:
+The simulation is a three-rule comparison among:
 
-1. quadratic distance;
-2. discrete metric / exact match;
-3. Manhattan distance;
-4. Hamming distance.
+1. squared-distance;
+2. frequency-guessing (discrete-metric / exact match);
+3. Manhattan distance.
 
-The purpose is to identify which rule is more informationally efficient in which contexts.
+Hamming is excluded because its sharp `k>2` bounds are computationally intractable at the design grid's scale (ADR-0001 second amendment); Chebyshev because its expected loss does not separate across coordinates. The purpose is to identify which rule is more informative in which contexts.
 
 The relevant design dimensions are:
 
@@ -230,7 +230,7 @@ Relevant metrics include:
 
 The existing winning-probability/payment-probability component is not central to the paper because only the discrete-metric / frequency-guessing rule pays based on exact correctness in that sense.
 
-Payment probability may be discussed only as an implementation issue for the discrete-metric rule, not as a symmetric horse-race metric across all four rules.
+Payment probability may be discussed only as an implementation issue for the frequency-guessing / discrete-metric rule, not as a symmetric horse-race metric across rules.
 
 ## Interpretation risks
 
@@ -245,13 +245,12 @@ Avoid the following claims in manuscript text:
 
 Exploration documents may discuss such ideas as hypotheses or risks, but must label them as unverified.
 
-Additional interpretation risks for the four-rule comparison:
+Additional interpretation risks for the rule comparison:
 
-- Do not compare payment probabilities across rules as if they were common informational-efficiency metrics.
-- Do not treat exact-match winning probability as relevant for Manhattan, Hamming, or quadratic rules unless the payment implementation is explicitly defined.
-- Do not describe the horse race as behavioral evidence; it is conditional on optimal reporting.
-- Do not claim Hamming is inferior merely because analytical bounds are harder.
-- Do not claim Manhattan deserves prominence if Hamming is treated only as secondary for the same reason.
+- Do not compare payment probabilities across rules as if they were common informativeness metrics.
+- Do not treat exact-match winning probability as relevant for Manhattan or squared-distance rules unless the payment implementation is explicitly defined.
+- Do not describe the comparison as behavioural evidence; it is conditional on optimal reporting.
+- Do not claim Hamming is inferior; the project's position is that Hamming has an exact identified set but no tractable sharp bounds at the design grid's scale.
 - Do not imply that computational bounds are analytically closed form.
 
 ## Literature review policy
@@ -373,8 +372,8 @@ Use:
 - `simulation-methodologist` for the design exercise and simulation interpretation.
 - `paper-editor` for LaTeX exposition and section rewriting.
 - `code-reviewer` for Python scripts and reproducibility checks.
-- Use the `rule-comparison` skill whenever comparing the four headline rules or revising the design-comparison section.
-- Use the `analytical-bounds-search` skill before concluding that Manhattan or Hamming lacks analytical bounds.
+- Use the `rule-comparison` skill whenever comparing the three headline rules or revising the design-comparison section.
+- Use the `analytical-bounds-search` skill before concluding that a rule lacks analytical bounds.
 
 For exploratory work, combine `literature-reviewer` and `research-strategist`.
 

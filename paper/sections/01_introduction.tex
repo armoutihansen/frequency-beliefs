@@ -40,23 +40,23 @@ This gives a linear identified set and closed-form bounds for each \(p_i\).
 Mean bounds and other linear functional bounds are then simple linear programs over the same region.
 
 The paper compares this rule to two other count-loss mechanisms along a spectrum of analytical tractability.
-Frequency-guessing scoring, due to \citet{SchlagTremewanSimple}, is the known exact-match mechanism: it elicits multinomial modes, gives closed-form bounds, and is robust to risk aversion under a fixed-prize implementation.
+Frequency-guessing scoring, due to \citet{SchlagTremewan2021}, is the known exact-match mechanism: it elicits multinomial modes, gives closed-form bounds, and is robust to risk aversion under a fixed-prize implementation.
 Manhattan-distance scoring has an exact identified set and sharp, semi-analytical coordinate bounds.
 
 The contribution is not a new exact-match mechanism and not a general theory of scoring rules; Schlag and Tremewan already derive belief bounds for the frequency-guessing rule.
-It is, first, the characterizations themselves: a closed-form identified set and coordinate bounds for squared-distance scoring, the centerpiece result, and sharp semi-analytical bounds for Manhattan distance, alongside the known frequency-guessing bounds.
+It is, first, the characterizations themselves: a closed-form identified set and coordinate bounds for squared-distance scoring, the centrepiece result, and sharp semi-analytical bounds for Manhattan distance, alongside the known frequency-guessing bounds.
 These three characterizations are not separate facts: a single structural observation---that an optimal report solves a separable resource-allocation problem---organizes them, and a classical convexity criterion then says which rules admit closed-form bounds and which only semi-analytical ones.
 It is, second, the contingent decision rule those characterizations make rigorous.
 No rule is uniformly best: squared-distance scoring is most informative when the subject's beliefs are concentrated on a few categories and frequency-guessing scoring when beliefs are balanced, with a crossover as concentration varies---first established analytically, where the two closed-form rules' average coordinate widths cross, then quantified and extended to Manhattan distance by the design comparison.
 Manhattan is rarely the most informative rule, but its bounds vary little with the regime, making it the robust choice when belief concentration cannot be anticipated.
 Partial identification is the lens that holds these together---each scoring rule maps an observed report to an identified set of latent beliefs---and is what lets the comparison be posed as a sharp, finite-sample question rather than an informal one.
-Two further count-loss rules, Hamming and Chebyshev distance, mark the boundary of the approach; Section~5 discusses them as rules whose identified sets are exact but resist tractable sharp bounds.
+Two further count-loss rules, Hamming and Chebyshev distance, mark the boundary of the approach; Section~\ref{sec:other-rules} discusses them as rules whose identified sets are exact but resist tractable sharp bounds.
 
 \paragraph{Related literature.}
 The paper connects to, and should be read against, four literatures.
 
 The closest is the work on \emph{frequency guessing}.
-The frequency-guessing rule studied here is due to \citet{SchlagTremewanSimple}: the subject reports a count vector and wins a fixed prize if it matches the realized counts.
+The frequency-guessing rule studied here is due to \citet{SchlagTremewan2021}: the subject reports a count vector and wins a fixed prize if it matches the realized counts.
 Schlag and Tremewan already establish, for this rule, the three steps the present paper relies on---the optimal report is a multinomial mode, the beliefs consistent with a report form a region of the simplex, and that region yields bounds on individual probabilities and on means and variances through linear programs.
 That inferential program, for this one rule, is theirs; the frequency-guessing results in Section~3 restate it so the comparison is self-contained.
 The contribution here is to carry the program beyond the rule for which it is known---to squared-distance scoring, where it delivers a closed-form identified set and closed-form coordinate bounds, and to Manhattan distance---and to turn the collection of rules into a comparison.
@@ -80,4 +80,4 @@ Two of its recurring concerns are robustness to risk attitudes---direct monetary
 \citet{TrautmannVanDeKuilen2015} run a ``horse race'' among elicitation mechanisms on the accuracy of the beliefs they recover, and \citet{Offerman2009} keep a standard scoring rule but correct the elicited report ex post for risk attitudes and probability weighting; both aim to recover a point belief, by mechanism choice or by calibration.
 The exercise here differs in object: it holds optimal reporting fixed and compares count-loss rules by the sharpness of the belief \emph{set} each report identifies, with no calibration step.
 That comparison is conditional on optimal reporting, an assumption that can fail behaviourally---\citet{DanzVesterlundWilson2022} find that the binarized scoring rule, a leading risk-robust mechanism, produces systematically centre-biased reports.
-The informativeness ranking obtained here is thus an upper bound on what a rule delivers, not a behavioural prediction; Section~5 returns to this as a scope condition.
+The informativeness ranking obtained here is thus an upper bound on what a rule delivers, not a behavioural prediction; Section~\ref{sec:other-rules} returns to this as a scope condition.

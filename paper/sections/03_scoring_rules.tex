@@ -4,7 +4,7 @@ This section applies the setup to three frequency-report scoring rules.
 They span a spectrum of analytical tractability.
 Squared-distance and frequency-guessing scoring have closed-form identified sets and closed-form coordinate bounds.
 Manhattan-distance scoring has an exact identified set and sharp coordinate bounds in semi-analytical form.
-A single structural observation, developed first, accounts for that spectrum---and for the two further rules, in Section~5, that fall outside it.
+A single structural observation, developed first, accounts for that spectrum---and for the two further rules, in Section~\ref{sec:other-rules}, that fall outside it.
 
 \subsection{Optimal Reports as a Resource-Allocation Problem}
 
@@ -40,7 +40,7 @@ When those inequalities are linear in \(p\)---squared-distance and frequency-gue
 The lemma's reach is not confined to these three: other separable count losses are governed by it in the same way---for instance asymmetric-absolute losses, which elicit quantiles other than the median, and the ranked probability score, a squared distance on cumulative counts---so the headline rules are representatives of a wider tractable family rather than a closed list.
 
 The lemma also marks the limits of the approach.
-Its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~5 takes up the two rules that do: Hamming distance is separable but its per-coordinate cost is not discrete-convex, and Chebyshev distance is not separable.
+Its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~\ref{sec:other-rules} takes up the two rules that do: Hamming distance is separable but its per-coordinate cost is not discrete-convex, and Chebyshev distance is not separable.
 The optimization content of the lemma is classical; what this paper adds is the observation that incentivized frequency-report elicitation \emph{is} a resource-allocation problem of this kind, and the inversion of the resulting optimal-report correspondence into an identified set of latent beliefs.
 
 \subsection{Squared-Distance Scoring}
@@ -124,7 +124,7 @@ The main implementation cost is that direct monetary squared-distance payments g
 
 \subsection{Frequency-Guessing Scoring}
 
-The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewanSimple}.
+The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewan2021}.
 Its count-error index is the count-vector discrete metric,
 \[
 D_0(r,\omega)=\1\{r\ne\omega\},
@@ -180,7 +180,7 @@ P_{0,i}(r)
 The inequalities say that no single-count transfer from a reported category \(j\) to another category \(i\) can increase the multinomial probability of the report.
 Weak inequalities include ties.
 The formula also handles boundaries: if \(r_i=0\), the lower bound is \(0\); if \(r_i=n\), the upper bound is \(1\).
-These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewanSimple}; they are restated here to make the informativeness comparison self-contained.
+These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewan2021}; they are restated here to make the informativeness comparison self-contained.
 The proof is in Appendix \ref{app:exact-match-proof}.
 
 \paragraph{Probability and mean bounds.}
@@ -272,11 +272,11 @@ This binary case is clean.
 
 For \(k>2\) the threshold representation of Proposition~\ref{prop:manhattan} drives the bounds.
 At a fixed threshold \(c\) the inequalities \(F_i(r_i-1;n,p_i)\le c\le F_i(r_i;n,p_i)\) invert, coordinate by coordinate, to a box of beliefs through inverse binomial CDFs; intersecting that box with the simplex gives the feasible beliefs at that threshold.
-Each sharp coordinate bound is then the optimum, over \(c\in[0,1]\), of a function that is unimodal in \(c\), so it is the solution of a single monotone scalar equation.
-The coordinate bounds are therefore sharp and semi-analytical: not closed form, because the inverse binomial CDF is not elementary, but exact and one-dimensional rather than grid-limited.
-The sharp mean bounds are obtained by the same one-dimensional search over the threshold.
+Each sharp coordinate bound is then the optimum, over \(c\in[0,1]\), of a function that is unimodal in \(c\), so it is the solution of a single monotone scalar equation; see Lemma~\ref{lem:manhattan-unimodal} in Appendix~\ref{app:manhattan-proof}.
+The coordinate bounds are therefore sharp and semi-analytical: not closed form, because the inverse binomial CDF is not elementary, but exact and one-dimensional rather than grid-limited---each coordinate bound is the unique root of the monotone scalar equation of Lemma~\ref{lem:manhattan-unimodal} and is located by bisection.
+The sharp \emph{mean} bounds traverse the same threshold parameterization: the identified mean is a linear functional of \(p\) optimized over the same threshold-indexed box-simplex slice, computed on a fine grid of \(c\)-values (with reported tolerance) rather than by a one-dimensional root-find.
 
 \paragraph{Practical interpretation.}
 Manhattan distance is useful when a median-type count prediction is substantively appropriate.
 It is also useful as a contrast: changing the distance criterion changes the inferred identified set.
-The multi-category Manhattan bounds are sharp and reduce to a one-dimensional threshold computation; they are less transparent than the closed-form squared-distance bounds but are exact, not approximations.
+The multi-category Manhattan coordinate bounds are sharp and reduce to a one-dimensional root-find; the mean bounds are sharp on the same threshold parameterization but are implemented as a grid optimization over the threshold. They are less transparent than the closed-form squared-distance bounds but are exact (coordinate bounds) or controlled to a stated tolerance (mean bounds), not approximations.

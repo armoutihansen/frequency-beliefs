@@ -116,6 +116,62 @@ def check_numbers() -> None:
                       f"{cells['Manhattan distance']:.2f}")
 
 
+def check_robustness() -> None:
+    """Check 3: asymmetric-Dirichlet robustness table (Appendix tab:regime-wins-asymmetric).
+
+    Verifies the win-share triples in the appendix subsection 'Robustness to
+    asymmetric beliefs' against outputs/design_exercise/robustness/. Silently
+    skips if the robustness output is missing (the main paper tables are
+    independent of this check).
+    """
+    print()
+    print("=== Check 3: asymmetric-Dirichlet robustness vs outputs/design_exercise/robustness/ ===")
+    rc_path = ROOT / "outputs" / "design_exercise" / "robustness" / "rule_comparison.csv"
+    if not rc_path.exists():
+        print(f"  SKIP -- {rc_path.relative_to(ROOT)} not found "
+              f"(run: uv run python scripts/design_efficiency.py --robustness-only --draws 5000)")
+        return
+    with rc_path.open() as f:
+        rc = list(csv.DictReader(f))
+
+    # Paper appendix table (Table tab:regime-wins-asymmetric) values, to 2 d.p.:
+    expected = {
+        "one-dominant": {
+            "coord_avg":   (0.06, 0.60, 0.33),
+            "mean_linear": (0.04, 0.72, 0.24),
+        },
+        "two-modes": {
+            "coord_avg":   (0.03, 0.76, 0.21),
+            "mean_linear": (0.04, 0.82, 0.14),
+        },
+        "graded": {
+            "coord_avg":   (0.07, 0.67, 0.26),
+            "mean_linear": (0.03, 0.86, 0.11),
+        },
+    }
+    fails = 0
+    for label, metrics in expected.items():
+        for metric, (e_d, e_q, e_m) in metrics.items():
+            d = next(float(r["win_share"]) for r in rc
+                     if r["alpha_label"] == label and r["metric"] == metric
+                     and r["rule"] == "Discrete metric")
+            q = next(float(r["win_share"]) for r in rc
+                     if r["alpha_label"] == label and r["metric"] == metric
+                     and r["rule"] == "Quadratic distance")
+            m = next(float(r["win_share"]) for r in rc
+                     if r["alpha_label"] == label and r["metric"] == metric
+                     and r["rule"] == "Manhattan distance")
+            ok = all(abs(a - b) < 0.01 for a, b in ((d, e_d), (q, e_q), (m, e_m)))
+            mark = "OK" if ok else "FAIL"
+            if not ok:
+                fails += 1
+            print(f"  {mark} {label:<13} {metric:<11}: "
+                  f"D {d:.2f}(={e_d:.2f}) Q {q:.2f}(={e_q:.2f}) M {m:.2f}(={e_m:.2f})")
+    print(f"  {'PASS' if fails == 0 else f'FAIL ({fails})'} -- "
+          f"appendix table tab:regime-wins-asymmetric vs CSV.")
+
+
 if __name__ == "__main__":
     check_corollary()
     check_numbers()
+    check_robustness()

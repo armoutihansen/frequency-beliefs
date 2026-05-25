@@ -8,6 +8,23 @@ It compares three headline rules:
 2. quadratic distance,
 3. Manhattan distance.
 
+Internal rule labels vs. paper terminology
+------------------------------------------
+The script's internal `RULES` keys and CSV column headers use the pre-2026-05-22
+labels. The paper now uses the renamed terms. The mapping is:
+
+    Internal label   Paper terminology
+    --------------   ----------------------------------------------
+    "discrete"       frequency-guessing (the Schlag-Tremewan rule)
+    "quadratic"      squared-distance (the analytical centrepiece)
+    "manhattan"      Manhattan / Manhattan-distance
+
+Both CSV outputs in `outputs/design_exercise/` and the values reported by
+`scripts/consistency_check.py` use the internal labels. The paper uses the
+renamed terms. Do NOT rename the internal labels without also re-running the
+simulation and updating the consistency check; the committed CSV column headers
+depend on these names.
+
 The simulation draws latent beliefs, computes each rule's optimal report, then
 computes the identification bounds induced by that report.
 
@@ -608,6 +625,100 @@ def run_latent_simulation(
     return aggregate_rows, win_rows
 
 
+ROBUSTNESS_CELLS: tuple[tuple[str, int, int, tuple[float, ...]], ...] = (
+    ("one-dominant", 20, 5, (5.0, 0.5, 0.5, 0.5, 0.5)),
+    ("two-modes",    20, 5, (3.0, 3.0, 0.3, 0.3, 0.3)),
+    ("graded",       20, 5, (5.0, 2.0, 1.0, 0.5, 0.2)),
+)
+
+
+def run_robustness_simulation(
+    cells: Iterable[tuple[str, int, int, tuple[float, ...]]],
+    draws: int,
+    seed: int,
+    tolerance: float,
+) -> tuple[list[dict], list[dict]]:
+    """Asymmetric-Dirichlet robustness companion to `run_latent_simulation`.
+
+    Mirrors the main run but uses vector concentrations and labels each cell
+    by a string. Output schema replaces `alpha` with `alpha_label` and adds
+    `alpha_vec` so the symmetric-grid consistency check is unaffected.
+    """
+    rng = np.random.default_rng(seed)
+    bounds = BoundComputer(tolerance=tolerance)
+    aggregate: dict[tuple[str, int, int, str], dict[str, list[float]]] = defaultdict(
+        lambda: defaultdict(list)
+    )
+    wins: dict[tuple[str, int, int, str, str], float] = defaultdict(float)
+    regret_sum: dict[tuple[str, int, int, str, str], float] = defaultdict(float)
+    metrics = ("coord_avg", "coord_max", "mean_linear", "mean_skewed")
+
+    cells = list(cells)
+    for label, n, k, alpha_vec in cells:
+        alpha_arr = np.array(alpha_vec, dtype=float)
+        if alpha_arr.shape != (k,):
+            raise ValueError(f"robustness cell '{label}': alpha_vec length {len(alpha_vec)} != k={k}")
+        for _ in range(draws):
+            p = rng.dirichlet(alpha_arr)
+            per_rule = {rule: metric_for_rule(rule, p, n, bounds) for rule in RULES}
+            for rule, metric in per_rule.items():
+                update_aggregate(aggregate, (label, n, k, rule), metric)
+            values = {
+                "coord_avg":    {rule: m.coord_avg          for rule, m in per_rule.items()},
+                "coord_max":    {rule: m.coord_max          for rule, m in per_rule.items()},
+                "mean_linear":  {rule: m.mean_linear_width  for rule, m in per_rule.items()},
+                "mean_skewed":  {rule: m.mean_skewed_width  for rule, m in per_rule.items()},
+            }
+            for metric_name in metrics:
+                cell_values = values[metric_name]
+                for rule, credit in split_winner_credit(cell_values).items():
+                    wins[(label, n, k, metric_name, rule)] += credit
+                cell_best = min(cell_values.values())
+                for rule, val in cell_values.items():
+                    regret_sum[(label, n, k, metric_name, rule)] += val - cell_best
+
+    alpha_vec_lookup = {label: alpha_vec for label, _, _, alpha_vec in cells}
+
+    aggregate_rows = []
+    for (label, n, k, rule), vals in sorted(aggregate.items()):
+        aggregate_rows.append({
+            "alpha_label": label,
+            "alpha_vec": ",".join(f"{v:g}" for v in alpha_vec_lookup[label]),
+            "n": n,
+            "k": k,
+            "rule": RULE_LABELS[rule],
+            "draws": len(vals["coord_avg"]),
+            "avg_coord_width_mean":     float(np.mean(vals["coord_avg"])),
+            "avg_coord_width_median":   float(median(vals["coord_avg"])),
+            "max_coord_width_mean":     float(np.mean(vals["coord_max"])),
+            "max_coord_width_median":   float(median(vals["coord_max"])),
+            "mean_linear_width_mean":   float(np.mean(vals["mean_linear"])),
+            "mean_linear_width_median": float(median(vals["mean_linear"])),
+            "mean_skewed_width_mean":   float(np.mean(vals["mean_skewed"])),
+            "mean_skewed_width_median": float(median(vals["mean_skewed"])),
+            "tie_rate": float(np.mean(vals["tie"])),
+            "payment_probability_mean":   float(np.mean(vals["payment"])) if vals["payment"] else math.nan,
+            "payment_probability_median": float(median(vals["payment"])) if vals["payment"] else math.nan,
+        })
+
+    win_rows = []
+    for label, n, k, alpha_vec in cells:
+        for metric_name in metrics:
+            for rule in RULES:
+                win_rows.append({
+                    "alpha_label": label,
+                    "alpha_vec": ",".join(f"{v:g}" for v in alpha_vec),
+                    "n": n,
+                    "k": k,
+                    "metric": metric_name,
+                    "rule": RULE_LABELS[rule],
+                    "win_share":   wins[(label, n, k, metric_name, rule)] / draws,
+                    "mean_regret": regret_sum[(label, n, k, metric_name, rule)] / draws,
+                })
+
+    return aggregate_rows, win_rows
+
+
 def fixed_report_rows(reports: list[tuple[int, int, tuple[int, ...]]], tolerance: float) -> list[dict]:
     bounds = BoundComputer(tolerance=tolerance)
     rows = []
@@ -836,6 +947,16 @@ def main() -> None:
     parser.add_argument("--summary-path", type=Path, default=Path("_context/simulation_results_summary.md"))
     parser.add_argument("--save-draws", action="store_true", help="Save draw-level rows.")
     parser.add_argument("--validate", action="store_true", help="Run small brute-force validation checks first.")
+    parser.add_argument(
+        "--robustness",
+        action="store_true",
+        help="Also run the asymmetric-Dirichlet robustness cells (written to <output-dir>/robustness/).",
+    )
+    parser.add_argument(
+        "--robustness-only",
+        action="store_true",
+        help="Run only the robustness cells; skip the main grid.",
+    )
     args = parser.parse_args()
 
     if args.validate:
@@ -870,43 +991,63 @@ def main() -> None:
         )
         draw_writer.writeheader()
 
-    try:
-        aggregate_rows, win_rows = run_latent_simulation(
-            n_values=n_values,
-            k_values=k_values,
-            alpha_values=alpha_values,
-            draws=draws,
+    run_main = not args.robustness_only
+    run_robustness = args.robustness or args.robustness_only
+
+    if run_main:
+        try:
+            aggregate_rows, win_rows = run_latent_simulation(
+                n_values=n_values,
+                k_values=k_values,
+                alpha_values=alpha_values,
+                draws=draws,
+                seed=args.seed,
+                tolerance=args.manhattan_tolerance,
+                draw_writer=draw_writer,
+            )
+        finally:
+            if draw_file is not None:
+                draw_file.close()
+
+        fixed_rows = fixed_report_rows(default_fixed_reports(), tolerance=args.manhattan_tolerance)
+
+        write_csv(args.output_dir / "latent_aggregate.csv", aggregate_rows)
+        write_csv(args.output_dir / "rule_comparison.csv", win_rows)
+        write_csv(args.output_dir / "fixed_reports.csv", fixed_rows)
+        args.summary_path.parent.mkdir(parents=True, exist_ok=True)
+        args.summary_path.write_text(
+            make_summary_md(
+                mode=mode,
+                aggregate_rows=aggregate_rows,
+                win_rows=win_rows,
+                fixed_rows=fixed_rows,
+                draws=draws,
+                seed=args.seed,
+                tolerance=args.manhattan_tolerance,
+            )
+        )
+
+        print(f"mode={mode}")
+        print(f"wrote {args.output_dir / 'latent_aggregate.csv'}")
+        print(f"wrote {args.output_dir / 'rule_comparison.csv'}")
+        print(f"wrote {args.output_dir / 'fixed_reports.csv'}")
+        print(f"wrote {args.summary_path}")
+
+    if run_robustness:
+        robustness_dir = args.output_dir / "robustness"
+        robustness_dir.mkdir(parents=True, exist_ok=True)
+        r_draws = args.draws or 5000
+        r_aggregate_rows, r_win_rows = run_robustness_simulation(
+            cells=ROBUSTNESS_CELLS,
+            draws=r_draws,
             seed=args.seed,
             tolerance=args.manhattan_tolerance,
-            draw_writer=draw_writer,
         )
-    finally:
-        if draw_file is not None:
-            draw_file.close()
-
-    fixed_rows = fixed_report_rows(default_fixed_reports(), tolerance=args.manhattan_tolerance)
-
-    write_csv(args.output_dir / "latent_aggregate.csv", aggregate_rows)
-    write_csv(args.output_dir / "rule_comparison.csv", win_rows)
-    write_csv(args.output_dir / "fixed_reports.csv", fixed_rows)
-    args.summary_path.parent.mkdir(parents=True, exist_ok=True)
-    args.summary_path.write_text(
-        make_summary_md(
-            mode=mode,
-            aggregate_rows=aggregate_rows,
-            win_rows=win_rows,
-            fixed_rows=fixed_rows,
-            draws=draws,
-            seed=args.seed,
-            tolerance=args.manhattan_tolerance,
-        )
-    )
-
-    print(f"mode={mode}")
-    print(f"wrote {args.output_dir / 'latent_aggregate.csv'}")
-    print(f"wrote {args.output_dir / 'rule_comparison.csv'}")
-    print(f"wrote {args.output_dir / 'fixed_reports.csv'}")
-    print(f"wrote {args.summary_path}")
+        write_csv(robustness_dir / "latent_aggregate.csv", r_aggregate_rows)
+        write_csv(robustness_dir / "rule_comparison.csv", r_win_rows)
+        print(f"robustness draws per cell: {r_draws}")
+        print(f"wrote {robustness_dir / 'latent_aggregate.csv'}")
+        print(f"wrote {robustness_dir / 'rule_comparison.csv'}")
 
 
 if __name__ == "__main__":
