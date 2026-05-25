@@ -320,6 +320,25 @@ For (i), Proposition~\ref{prop:manhattan} gives \(p\in P_M(r)\) iff there is a t
 and \(\bar p_i(r)=\sup_{c\in[0,1]}\phi(c)\). The first argument \(p_i^{(U)}(c)\) is continuous and weakly decreasing in \(c\), while the second argument \(1-\sum_{v\ne i}p_v^{(L)}(c)\) is continuous and weakly increasing in \(c\) (since each \(p_v^{(L)}\) is weakly decreasing); their unique crossing is the \(c^*\) where \(p_i^{(U)}(c^*)+\sum_{v\ne i}p_v^{(L)}(c^*)=1\), and \(\phi\) is unimodal in \(c\) with peak at \(c^*\). For \(c<c^*\), \(\phi(c)=1-\sum_{v\ne i}p_v^{(L)}(c)\le 1-\sum_{v\ne i}p_v^{(L)}(c^*)=p_i^{(U)}(c^*)\) (strict decrease of \(\sum_{v\ne i}p_v^{(L)}\)); for \(c>c^*\), \(\phi(c)=p_i^{(U)}(c)\le p_i^{(U)}(c^*)\) (strict decrease of \(p_i^{(U)}\)). So \(\phi\) attains its maximum at \(c^*\) with value \(p_i^{(U)}(c^*)\), and \(c^*\) is the unique solution of the displayed equation since its left-hand side is continuous and strictly decreasing in \(c\) (from a value \(\ge 1\) at \(c=0\) to \(0\) at \(c=1\)). Part (ii) is symmetric, exchanging the roles of \(p_v^{(L)}\) and \(p_v^{(U)}\).
 \end{proof}
 
+\begin{proof}[Proof of Lemma~\ref{lem:l1-linear}]
+By Proposition~\ref{prop:manhattan}, \(p\in P_M(r)\) iff there is a threshold \(c\in[0,1]\) with \(p_v^{(L)}(c)\le p_v\le p_v^{(U)}(c)\) for all \(v\). Equivalently, \(P_M(r)=\bigcup_{c\in[0,1]}\Sigma(c)\), where \(\Sigma(c)=\{p\in\Delta^k:p_v^{(L)}(c)\le p_v\le p_v^{(U)}(c)\,\forall v\}\). For any \(a\in\R^k\),
+\[
+\sup_{p\in P_M(r)} \textstyle\sum_i a_i p_i
+\;=\;\sup_{c\in[0,1]}\,\sup_{p\in\Sigma(c)}\textstyle\sum_i a_i p_i,
+\]
+since the supremum over a union equals the supremum of suprema. The inner problem at fixed \(c\) is a linear program over the box-simplex slice \(\Sigma(c)\); the analogous identity holds for the infimum. Specialising to \(a_i=\1\{i\le j\}\) gives the cumulative-sum bounds \(\sup_{p\in P_M(r)} S_j(p)\) and \(\inf_{p\in P_M(r)} S_j(p)\) for each \(j\).
+
+For the quantile-index bounds, write \(j^*_\tau(p)=\min\{j:S_j(p)\ge\tau\}\). Since \(S_j(p)\) is nondecreasing in \(j\), \(j^*_\tau(p)\le j\) iff \(S_j(p)\ge\tau\), and \(j^*_\tau(p)\ge j\) iff \(S_{j-1}(p)<\tau\) (with \(S_0\equiv 0\)). Hence
+\[
+\min_{p\in P_M(r)}j^*_\tau(p)=\min\{j:\exists p\in P_M(r)\text{ with }j^*_\tau(p)\le j\}=\min\{j:\sup_{p\in P_M(r)} S_j(p)\ge\tau\},
+\]
+and
+\[
+\max_{p\in P_M(r)}j^*_\tau(p)=\max\{j:\exists p\in P_M(r)\text{ with }S_{j-1}(p)<\tau\}=\max\{j:\inf_{p\in P_M(r)} S_{j-1}(p)<\tau\}.
+\]
+Each cumulative-sum supremum and infimum is computed by the displayed expression with \(a=(\1\{i\le j\})_i\); the resulting one-parameter family of box-simplex linear programs is solved by sweeping \(c\) on a fine grid (with the tolerance reported in Appendix~\ref{app:design-details}).
+\end{proof}
+
 \section{Design Comparison Details}
 \label{app:design-details}
 

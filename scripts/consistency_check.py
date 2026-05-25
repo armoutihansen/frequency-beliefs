@@ -15,9 +15,15 @@ from pathlib import Path
 
 from verify_regions import (
     exact_coordinate_intervals,
+    exact_lp_mean_bounds,
     feasible_reports,
+    l1_median_bound,
+    l1_threshold_bounds,
+    polytope_median_bound,
     squared_closed_form_bounds,
+    squared_lp_bounds,
 )
+import numpy as np
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -175,7 +181,69 @@ def check_robustness() -> None:
           f"appendix table tab:regime-wins-asymmetric vs CSV.")
 
 
+def check_functional_menu() -> None:
+    """Check 4: §3.6 worked-example table for n=10, k=5, r=(2,2,2,2,2), x=(0,1,2,3,4)."""
+    print()
+    print("=== Check 4: §3.6 worked-example functional menu ===")
+    n, k = 10, 5
+    r = (2, 2, 2, 2, 2)
+    x = np.arange(k, dtype=float)
+    expected = {
+        # Each p_i (symmetric report, all coordinates identical)
+        ("coord", "Discrete"):  (0.143, 0.273),
+        ("coord", "Squared"):   (0.120, 0.280),
+        ("coord", "Manhattan"): (0.129, 0.280),
+        # Mean bound
+        ("mean",  "Discrete"):  (1.75, 2.25),
+        ("mean",  "Squared"):   (1.70, 2.30),
+        ("mean",  "Manhattan"): (1.71, 2.29),
+        # Median bound (as (x_lo, x_hi))
+        ("median","Discrete"):  (1.0, 2.0),
+        ("median","Squared"):   (1.0, 3.0),
+        ("median","Manhattan"): (1.0, 3.0),
+        # 0.25 quantile
+        ("q25",   "Discrete"):  (0.0, 1.0),
+        ("q25",   "Squared"):   (0.0, 1.0),
+        ("q25",   "Manhattan"): (0.0, 1.0),
+        # 0.75 quantile
+        ("q75",   "Discrete"):  (3.0, 4.0),
+        ("q75",   "Squared"):   (3.0, 4.0),
+        ("q75",   "Manhattan"): (3.0, 4.0),
+    }
+    actual = {}
+    actual[("coord","Discrete")]  = exact_coordinate_intervals(r, n, k)[0]
+    actual[("coord","Squared")]   = squared_closed_form_bounds(r, n, k)[0]
+    coord_l1, mean_l1, _          = l1_threshold_bounds(r, n, k, c_denom=4000, x=x)
+    actual[("coord","Manhattan")] = coord_l1[0]
+    actual[("mean","Discrete")]   = exact_lp_mean_bounds(r, n, k, x)
+    _, mean_sq                    = squared_lp_bounds(r, n, k, objective=x)
+    actual[("mean","Squared")]    = mean_sq
+    actual[("mean","Manhattan")]  = mean_l1
+    for rule_key, rule_name in [("exact","Discrete"),("squared","Squared")]:
+        b_med, _ = polytope_median_bound(r, n, k, x, rule_key, tau=0.5)
+        b_q25, _ = polytope_median_bound(r, n, k, x, rule_key, tau=0.25)
+        b_q75, _ = polytope_median_bound(r, n, k, x, rule_key, tau=0.75)
+        actual[("median", rule_name)] = b_med
+        actual[("q25",    rule_name)] = b_q25
+        actual[("q75",    rule_name)] = b_q75
+    b_med, _ = l1_median_bound(r, n, k, x, tau=0.5,  c_denom=4000)
+    b_q25, _ = l1_median_bound(r, n, k, x, tau=0.25, c_denom=4000)
+    b_q75, _ = l1_median_bound(r, n, k, x, tau=0.75, c_denom=4000)
+    actual[("median","Manhattan")] = b_med
+    actual[("q25",   "Manhattan")] = b_q25
+    actual[("q75",   "Manhattan")] = b_q75
+    fails = 0
+    for key, exp in expected.items():
+        act = actual[key]
+        ok = abs(exp[0] - act[0]) < 0.01 and abs(exp[1] - act[1]) < 0.01
+        if not ok:
+            fails += 1
+        print(f"  {'OK' if ok else 'FAIL'} {key[0]:<6} {key[1]:<10}: paper={exp}  actual=({act[0]:.3f}, {act[1]:.3f})")
+    print(f"  {'PASS' if fails == 0 else f'FAIL ({fails})'} -- §3.6 worked-example table tab:functional-menu")
+
+
 if __name__ == "__main__":
     check_corollary()
     check_numbers()
     check_robustness()
+    check_functional_menu()

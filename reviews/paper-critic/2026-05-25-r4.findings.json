@@ -1,0 +1,38 @@
+{
+  "method": "paper-critic",
+  "paper_slug": "frequency-beliefs",
+  "anchor_version": 1,
+  "round": 4,
+  "verdict": "APPROVED",
+  "score": 96,
+  "overall_feedback": "Round 4 audits new §3.6 'Bounds on Functionals of the Induced Outcome Distribution' and accompanying Lemma lem:l1-linear proof in the appendix. Integration is clean: terminology matches §3.4, placement after Manhattan subsection is logical, abstract sentence is well-hedged, table values verified by scripts/consistency_check.py. Lemma statement matches what the proof establishes. Two minor presentation issues only. No scope inflation. Submit.",
+  "comments": [
+    {
+      "id": "m1",
+      "tier": "m",
+      "category": "Tables & Figures",
+      "title": "Variance row promised in §3.6 caption but absent from table",
+      "quote": "Variance bounds follow from a quadratic program over the same identified sets and are reported in the supplementary verification output.",
+      "explanation": "The §3.6 paragraph and the abstract foreground variance alongside median/quantile, but the table omits a variance row. Reader expects it after the framing.",
+      "fix": "Either add a Variance Var(Y) row to tab:functional-menu, or rephrase the caption sentence to 'Variance bounds are computable on the same identified sets and are omitted here for brevity; see scripts/consistency_check.py.'",
+      "comment_type": "presentation",
+      "location": "paper/sections/03_scoring_rules.tex:336",
+      "deduction": -2,
+      "paragraph_index": null
+    },
+    {
+      "id": "m2",
+      "tier": "m",
+      "category": "Academic Tone",
+      "title": "Hedge wording in structural-observations paragraph is slightly weak",
+      "quote": "with the ranking on the median possibly differing from the ranking on the mean.",
+      "explanation": "The table actually shows the rankings agreeing at this report (Discrete tightest on both mean and median). 'Possibly differing' is honest but the example does not exhibit it, which a reader will notice.",
+      "fix": "Replace 'with the ranking on the median possibly differing from the ranking on the mean' with 'with the ranking on the median not in general the same as the ranking on the mean (Table~\\ref{tab:functional-menu} shows a report where they agree)'.",
+      "comment_type": "presentation",
+      "location": "paper/sections/03_scoring_rules.tex:340",
+      "deduction": -2,
+      "paragraph_index": null
+    }
+  ],
+  "num_comments": 2
+}

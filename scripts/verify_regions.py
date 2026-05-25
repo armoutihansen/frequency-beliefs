@@ -487,6 +487,148 @@ def exact_grid_bounds(
     return coord, mean, len(pts)
 
 
+def polytope_linear_extremum(
+    r: tuple[int, ...], n: int, k: int, rule: str, c: np.ndarray, maximize: bool = False
+) -> float:
+    """Solve max/min c.p over the identified set P_S(r) for the polytope rules.
+
+    rule = "exact" uses frequency-guessing constraints r_j p_i <= (r_i+1) p_j for r_j>0;
+    rule = "squared" uses 2n(s-r).p <= |s|^2-|r|^2 for all feasible s.
+    """
+    if rule == "exact":
+        a_ub, b_ub = [], []
+        for j, rj in enumerate(r):
+            if rj == 0:
+                continue
+            for i, ri in enumerate(r):
+                row = np.zeros(k)
+                row[i] = rj
+                row[j] -= ri + 1
+                a_ub.append(row)
+                b_ub.append(0.0)
+    elif rule == "squared":
+        reports = feasible_reports(n, k)
+        rr = np.array(r, dtype=float)
+        a_ub, b_ub = [], []
+        for s in reports:
+            ss = np.array(s, dtype=float)
+            a_ub.append(2 * n * (ss - rr))
+            b_ub.append(float(np.dot(ss, ss) - np.dot(rr, rr)))
+    else:
+        raise ValueError(f"unsupported rule: {rule}")
+    a_eq = [np.ones(k)]
+    b_eq = [1.0]
+    bnds = [(0.0, 1.0)] * k
+    obj = -c if maximize else c
+    res = linprog(obj, A_ub=a_ub, b_ub=b_ub, A_eq=a_eq, b_eq=b_eq, bounds=bnds, method="highs")
+    if not res.success:
+        raise RuntimeError(res.message)
+    return -float(res.fun) if maximize else float(res.fun)
+
+
+def polytope_cumsum_bounds(
+    r: tuple[int, ...], n: int, k: int, rule: str
+) -> list[tuple[float, float]]:
+    """For each j=1..k, return (inf S_j, sup S_j) over the rule's identified set."""
+    out = []
+    for j in range(1, k + 1):
+        c = np.zeros(k)
+        c[:j] = 1.0
+        lo = polytope_linear_extremum(r, n, k, rule, c, maximize=False)
+        hi = polytope_linear_extremum(r, n, k, rule, c, maximize=True)
+        out.append((clean(lo), clean(hi)))
+    return out
+
+
+def l1_cumsum_bounds(
+    r: tuple[int, ...], n: int, k: int, c_denom: int = 2000
+) -> list[tuple[float, float]]:
+    """For each j=1..k, return (inf S_j, sup S_j) over the Manhattan identified set,
+    computed via the threshold-indexed slice family (sharp up to grid tolerance in c).
+    """
+    inf_S = [np.inf] * k
+    sup_S = [-np.inf] * k
+    for c in np.linspace(0.0, 1.0, c_denom + 1):
+        lo, hi = l1_threshold_box(r, n, float(c))
+        if lo.sum() > 1.0 + 1e-10 or hi.sum() + 1e-10 < 1.0:
+            continue
+        # On the slice, cumulative sum S_j(p)=sum_{i<=j} p_i has
+        #   inf = max(sum_{i<=j} lo_i,   1 - sum_{i>j} hi_i)
+        #   sup = min(sum_{i<=j} hi_i,   1 - sum_{i>j} lo_i)
+        # (greedy LP solutions for a linear objective over a box with one equality.)
+        for j in range(1, k + 1):
+            head_lo = float(lo[:j].sum())
+            head_hi = float(hi[:j].sum())
+            tail_lo = float(lo[j:].sum())
+            tail_hi = float(hi[j:].sum())
+            slice_inf = max(head_lo, 1.0 - tail_hi)
+            slice_sup = min(head_hi, 1.0 - tail_lo)
+            inf_S[j - 1] = min(inf_S[j - 1], slice_inf)
+            sup_S[j - 1] = max(sup_S[j - 1], slice_sup)
+    return [(clean(inf_S[j]), clean(sup_S[j])) for j in range(k)]
+
+
+def quantile_index_range(
+    s_bounds: list[tuple[float, float]], tau: float = 0.5, eps: float = 1e-10
+) -> tuple[int, int]:
+    """From (inf S_j, sup S_j) for j=1..k, return the (min, max) achievable tau-quantile index.
+
+    j*(p) = min{j : S_j(p) >= tau}; bounds use the equivalences
+      min_p j*(p) = min{j : sup S_j >= tau},
+      max_p j*(p) = max{j : inf S_{j-1} < tau}   (with S_0 = 0).
+    """
+    k = len(s_bounds)
+    min_j = next((j for j in range(1, k + 1) if s_bounds[j - 1][1] >= tau - eps), k)
+    max_j = 1
+    for j in range(1, k + 1):
+        inf_Sjm1 = 0.0 if j == 1 else s_bounds[j - 2][0]
+        if inf_Sjm1 < tau - eps:
+            max_j = j
+    return min_j, max_j
+
+
+def polytope_median_bound(
+    r: tuple[int, ...], n: int, k: int, x: np.ndarray, rule: str, tau: float = 0.5
+) -> tuple[tuple[float, float], tuple[int, int]]:
+    """Median (or tau-quantile) bound on Y = x_J, J~p, p in P_rule(r). x assumed nondecreasing."""
+    s = polytope_cumsum_bounds(r, n, k, rule)
+    lo_j, hi_j = quantile_index_range(s, tau)
+    return (float(x[lo_j - 1]), float(x[hi_j - 1])), (lo_j, hi_j)
+
+
+def l1_median_bound(
+    r: tuple[int, ...], n: int, k: int, x: np.ndarray, tau: float = 0.5, c_denom: int = 2000
+) -> tuple[tuple[float, float], tuple[int, int]]:
+    """Median (or tau-quantile) bound for Manhattan, via threshold-indexed slice family."""
+    s = l1_cumsum_bounds(r, n, k, c_denom)
+    lo_j, hi_j = quantile_index_range(s, tau)
+    return (float(x[lo_j - 1]), float(x[hi_j - 1])), (lo_j, hi_j)
+
+
+def brute_median_index_set(
+    r: tuple[int, ...], n: int, k: int, denom: int, rule: str, tau: float = 0.5
+) -> set[int]:
+    """Enumerate the simplex grid; for each p in the rule's identified region, compute the
+    tau-quantile index of the cumulative distribution and collect achievable indices.
+    """
+    region_test = {
+        "exact":   lambda p: exact_transfer_region(r, p),
+        "squared": lambda p: squared_transfer_region(r, p, n),
+        "l1":      lambda p: l1_exchange_region(r, p, n),
+    }[rule]
+    indices: set[int] = set()
+    for p in simplex_grid(k, denom):
+        if not region_test(p):
+            continue
+        cum = 0.0
+        for j in range(1, k + 1):
+            cum += float(p[j - 1])
+            if cum >= tau - 1e-12:
+                indices.add(j)
+                break
+    return indices
+
+
 def clean(v: float, tol: float = 1e-10) -> float:
     if abs(v) < tol:
         return 0.0
@@ -550,8 +692,9 @@ def run_checks() -> list[CheckResult]:
         CheckResult("direct-monetary risk reversals"),
         CheckResult("Hamming direct optima = marginal exact-coordinate objective"),
         CheckResult("binary Hamming = exact match"),
+        CheckResult("median-index sets (analytic LP/threshold) contain brute-force grid"),
     ]
-    r0, r1, r2, r3, r4, r4b, r5, r6, r7, r8, r9, r10, r11 = results
+    r0, r1, r2, r3, r4, r4b, r5, r6, r7, r8, r9, r10, r11, r12 = results
 
     for n, k, denom in [(2, 2, 8), (2, 3, 8), (3, 3, 8), (4, 3, 8)]:
         reports = feasible_reports(n, k)
@@ -621,6 +764,24 @@ def run_checks() -> list[CheckResult]:
     l1_eu = max(l1_vals, key=lambda rr: l1_vals[rr][1])
     r9.check(sq_es == (0, 2) and sq_eu == (1, 1), f"squared risk reversal failed: {sq_vals}")
     r9.check(l1_es == (0, 2) and l1_eu == (1, 1), f"L1 risk reversal failed: {l1_vals}")
+
+    # Median-index check: the analytic median-index set (from polytope LP for exact/squared,
+    # threshold-grid for L1) must contain every index produced by brute-force enumeration
+    # over the simplex grid. The other direction is grid-tolerance-bound.
+    for n, k, denom in [(2, 3, 120), (3, 3, 120), (4, 3, 80), (3, 4, 80)]:
+        for rep in feasible_reports(n, k):
+            brute = brute_median_index_set(rep, n, k, denom, "exact")
+            _, jr_exact = polytope_median_bound(rep, n, k, np.arange(k, dtype=float), "exact")
+            r12.check(brute.issubset(set(range(jr_exact[0], jr_exact[1] + 1))),
+                      f"exact median miss n={n} k={k} r={rep} brute={brute} analytic={jr_exact}")
+            brute = brute_median_index_set(rep, n, k, denom, "squared")
+            _, jr_sq = polytope_median_bound(rep, n, k, np.arange(k, dtype=float), "squared")
+            r12.check(brute.issubset(set(range(jr_sq[0], jr_sq[1] + 1))),
+                      f"squared median miss n={n} k={k} r={rep} brute={brute} analytic={jr_sq}")
+            brute = brute_median_index_set(rep, n, k, denom, "l1")
+            _, jr_l1 = l1_median_bound(rep, n, k, np.arange(k, dtype=float), c_denom=400)
+            r12.check(brute.issubset(set(range(jr_l1[0], jr_l1[1] + 1))),
+                      f"L1 median miss n={n} k={k} r={rep} brute={brute} analytic={jr_l1}")
 
     return results
 
