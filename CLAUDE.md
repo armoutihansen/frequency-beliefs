@@ -88,7 +88,7 @@ Generated LaTeX files such as `.aux`, `.bbl`, `.blg`, `.fdb_latexmk`, `.fls`, `.
 
 ## Current research framing
 
-The current paper is a methodological note on the informational efficiency of frequency-report scoring rules.
+The current paper is a methodological research paper on the informativeness of frequency-report scoring rules, framed as a partial-identification problem. The "note" label that appeared in earlier project docs is retired: at 31 pages with three propositions, two lemmas, a corollary, a full design comparison, and an asymmetric-Dirichlet robustness check, the manuscript is a research paper, not a note.
 
 The current conceptual pipeline is:
 
