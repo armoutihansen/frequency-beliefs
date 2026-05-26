@@ -35,9 +35,14 @@ from __future__ import annotations
 import argparse
 import math
 import random
+import sys
 import time
 from fractions import Fraction
 from pathlib import Path
+
+# Allow `from config import ...` when run as `python scripts/exploration/<name>.py`.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config import SEED_HAMMING
 
 
 def feasible_reports(n: int, k: int) -> list[tuple[int, ...]]:
@@ -153,7 +158,7 @@ def self_check() -> list[str]:
 
 
 def run_search(quick: bool) -> str:
-    rng = random.Random(20260521)
+    rng = random.Random(SEED_HAMMING)
     weight_choices = [5, 12, 30, 80, 250]
 
     if quick:
@@ -182,7 +187,7 @@ def run_search(quick: bool) -> str:
     lines.append("")
     lines.append(f"- Mode: `{'quick' if quick else 'full'}`.")
     lines.append("- Arithmetic: exact `fractions.Fraction`; no floating point.")
-    lines.append("- Random-belief seed: `20260521`.")
+    lines.append(f"- Random-belief seed: `{SEED_HAMMING}`.")
     lines.append("")
 
     print("Running self-checks...", flush=True)

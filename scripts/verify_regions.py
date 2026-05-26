@@ -21,8 +21,8 @@ import numpy as np
 from scipy.optimize import brentq, linprog
 from scipy.stats import binom
 
-
-TOL = 1e-9
+from config import FLOAT_EQUALITY_TOL as TOL
+from utils import clean, fmt_interval, interval_width
 
 
 def feasible_reports(n: int, k: int) -> list[tuple[int, ...]]:
@@ -629,20 +629,6 @@ def brute_median_index_set(
     return indices
 
 
-def clean(v: float, tol: float = 1e-10) -> float:
-    if abs(v) < tol:
-        return 0.0
-    if abs(v - 1.0) < tol:
-        return 1.0
-    return v
-
-
-def fmt_interval(iv: tuple[float, float] | None, digits: int = 4) -> str:
-    if iv is None:
-        return "NA"
-    return f"[{iv[0]:.{digits}f}, {iv[1]:.{digits}f}]"
-
-
 def direct_expected_values_binary(rule: str, p1: float, a: float = 9.0) -> dict[tuple[int, int], tuple[float, float]]:
     p = np.array([p1, 1 - p1])
     reports = feasible_reports(2, 2)
@@ -963,12 +949,6 @@ def linf_example(n: int, k: int, r: tuple[int, ...], denom: int) -> dict:
         "x": tuple(int(v) for v in x),
         "representative": reps,
     }
-
-
-def interval_width(iv: tuple[float, float] | None) -> float:
-    if iv is None:
-        return float("nan")
-    return clean(iv[1] - iv[0])
 
 
 def average_coordinate_width(coord: list[tuple[float, float]] | None) -> float:

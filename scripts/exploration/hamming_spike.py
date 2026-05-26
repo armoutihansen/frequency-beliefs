@@ -40,13 +40,18 @@ Run from the repository root:
 from __future__ import annotations
 
 import argparse
+import sys
 import time
 from pathlib import Path
+
+# Allow `from verify_regions import ...` when run as `python scripts/exploration/hamming_spike.py`.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
 
 import numpy as np
 from scipy.optimize import minimize
 from scipy.stats import binom, dirichlet
 
+from config import SEED_HAMMING
 from verify_regions import feasible_reports, hamming_grid_bounds
 
 
@@ -398,7 +403,7 @@ def main() -> None:
     )
     args = parser.parse_args()
 
-    rng = np.random.default_rng(20260521)
+    rng = np.random.default_rng(SEED_HAMMING)
     lines = ["# Hamming Bound-Computation Spike (Step 0b)", "",
              "Feasibility spike for computing Hamming identification bounds in "
              "the design comparison. See `_context/next_steps.md`, Hamming-first "

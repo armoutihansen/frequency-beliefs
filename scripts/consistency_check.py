@@ -13,6 +13,7 @@ import csv
 from collections import defaultdict
 from pathlib import Path
 
+from config import CONSISTENCY_ROUND_TOL, FLOAT_EQUALITY_TOL
 from verify_regions import (
     exact_coordinate_intervals,
     exact_lp_mean_bounds,
@@ -49,18 +50,18 @@ def check_corollary() -> None:
             for r in feasible_reports(n, k):
                 # Part (1): discrete average width is the constant W0.
                 d_avg = avg_width(exact_coordinate_intervals(r, n, k))
-                if abs(d_avg - w0(n, k)) > 1e-9:
+                if abs(d_avg - w0(n, k)) > FLOAT_EQUALITY_TOL:
                     fails += 1
                     print(f"  FAIL discrete n={n} k={k} r={r}: {d_avg} vs W0={w0(n,k)}")
                 if const is None:
                     const = d_avg
-                elif abs(d_avg - const) > 1e-12:
+                elif abs(d_avg - const) > 1e-12:  # tighter: same value across reports
                     fails += 1
                     print(f"  FAIL discrete not constant n={n} k={k} r={r}")
                 # Part (2): quadratic average width depends only on m and = WQ.
                 m = sum(1 for x in r if x > 0)
                 q_avg = avg_width(squared_closed_form_bounds(r, n, k))
-                if abs(q_avg - wq(m, n, k)) > 1e-9:
+                if abs(q_avg - wq(m, n, k)) > FLOAT_EQUALITY_TOL:
                     fails += 1
                     print(f"  FAIL quadratic n={n} k={k} r={r} m={m}: {q_avg} vs WQ={wq(m,n,k)}")
             # Part (3): WQ(1) < W0 < WQ(k).
@@ -92,10 +93,10 @@ def check_numbers() -> None:
             for rule in ("Discrete metric", "Quadratic distance", "Manhattan distance"):
                 ws = [float(x["win_share"]) for x in rc
                       if x["metric"] == metric and x["rule"] == rule
-                      and abs(float(x["alpha"]) - float(alpha)) < 1e-9]
+                      and abs(float(x["alpha"]) - float(alpha)) < FLOAT_EQUALITY_TOL]
                 rg = [float(x["mean_regret"]) for x in rc
                       if x["metric"] == metric and x["rule"] == rule
-                      and abs(float(x["alpha"]) - float(alpha)) < 1e-9]
+                      and abs(float(x["alpha"]) - float(alpha)) < FLOAT_EQUALITY_TOL]
                 row[rule] = (sum(ws) / len(ws), sum(rg) / len(rg))
             d, q, m = row["Discrete metric"], row["Quadratic distance"], row["Manhattan distance"]
             print(f"    a={alpha:>4}: win {d[0]:.2f} {q[0]:.2f} {m[0]:.2f}   "
@@ -191,7 +192,7 @@ def check_robustness() -> None:
             m = next(float(r["win_share"]) for r in rc
                      if r["alpha_label"] == label and r["metric"] == metric
                      and r["rule"] == "Manhattan distance")
-            ok = all(abs(a - b) < 0.01 for a, b in ((d, e_d), (q, e_q), (m, e_m)))
+            ok = all(abs(a - b) < CONSISTENCY_ROUND_TOL for a, b in ((d, e_d), (q, e_q), (m, e_m)))
             mark = "OK" if ok else "FAIL"
             if not ok:
                 fails += 1
@@ -255,7 +256,7 @@ def check_functional_menu() -> None:
     fails = 0
     for key, exp in expected.items():
         act = actual[key]
-        ok = abs(exp[0] - act[0]) < 0.01 and abs(exp[1] - act[1]) < 0.01
+        ok = abs(exp[0] - act[0]) < CONSISTENCY_ROUND_TOL and abs(exp[1] - act[1]) < CONSISTENCY_ROUND_TOL
         if not ok:
             fails += 1
         print(f"  {'OK' if ok else 'FAIL'} {key[0]:<6} {key[1]:<10}: paper={exp}  actual=({act[0]:.3f}, {act[1]:.3f})")

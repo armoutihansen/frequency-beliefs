@@ -18,8 +18,14 @@ from __future__ import annotations
 import itertools
 import math
 import random
+import sys
+from pathlib import Path
 
-random.seed(20260522)
+# Allow `from config import ...` when run as `python scripts/exploration/<name>.py`.
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
+from config import SEED_CANDIDATE_RULES
+
+random.seed(SEED_CANDIDATE_RULES)
 
 
 # ---------------------------------------------------------------- combinatorics

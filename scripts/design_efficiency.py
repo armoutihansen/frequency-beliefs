@@ -51,6 +51,16 @@ from scipy.optimize import brentq, linprog
 from scipy.special import betaincinv, gammaln
 from scipy.stats import binom
 
+from config import SEED_LATENT
+from utils import (
+    average_width,
+    clean,
+    fmt_float,
+    fmt_interval,
+    interval_width,
+    max_width,
+    report_to_string,
+)
 from verify_regions import (
     exact_coordinate_intervals,
     exact_lp_mean_bounds,
@@ -71,36 +81,6 @@ RULE_LABELS = {
 }
 
 
-def clean(v: float, tol: float = 1e-10) -> float:
-    if abs(v) < tol:
-        return 0.0
-    if abs(v - 1.0) < tol:
-        return 1.0
-    return float(v)
-
-
-def fmt_float(v: float, digits: int = 6) -> str:
-    if math.isnan(v):
-        return ""
-    return f"{v:.{digits}f}"
-
-
-def fmt_interval(iv: tuple[float, float], digits: int = 4) -> str:
-    return f"[{iv[0]:.{digits}f}, {iv[1]:.{digits}f}]"
-
-
-def interval_width(iv: tuple[float, float]) -> float:
-    return clean(iv[1] - iv[0])
-
-
-def average_width(coord: list[tuple[float, float]]) -> float:
-    return clean(float(np.mean([interval_width(iv) for iv in coord])))
-
-
-def max_width(coord: list[tuple[float, float]]) -> float:
-    return clean(max(interval_width(iv) for iv in coord))
-
-
 def linear_outcome(k: int) -> np.ndarray:
     if k == 1:
         return np.zeros(1)
@@ -111,15 +91,6 @@ def skewed_outcome(k: int) -> np.ndarray:
     x = np.zeros(k, dtype=float)
     x[-1] = 1.0
     return x
-
-
-def report_to_string(r: tuple[int, ...]) -> str:
-    return "(" + ",".join(str(v) for v in r) + ")"
-
-
-def parse_report(text: str) -> tuple[int, ...]:
-    stripped = text.strip().strip("()")
-    return tuple(int(part.strip()) for part in stripped.split(",") if part.strip())
 
 
 def log_multinomial_pmf(w: tuple[int, ...], p: np.ndarray) -> float:
@@ -948,7 +919,7 @@ def main() -> None:
     parser.add_argument("--pilot", action="store_true", help="Run the pilot grid (default).")
     parser.add_argument("--final", action="store_true", help="Run the final grid.")
     parser.add_argument("--draws", type=int, default=None, help="Override draws per cell.")
-    parser.add_argument("--seed", type=int, default=20260508)
+    parser.add_argument("--seed", type=int, default=SEED_LATENT)
     parser.add_argument("--manhattan-tolerance", type=float, default=1e-4)
     # New output location. The prior committed run lives in
     # outputs/simulation_design/ and is not overwritten by this revised script.

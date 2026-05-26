@@ -1,10 +1,20 @@
 [project]
 name = "frequency-beliefs"
-version = "0.1.0"
-description = "Add your description here"
+version = "1.0.0"
+description = "Replication code for 'The Informativeness of Frequency-Report Scoring Rules' (Armouti-Hansen)."
 readme = "README.md"
 requires-python = ">=3.14"
 dependencies = [
     "numpy>=2.4.4",
     "scipy>=1.17.1",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+
+[dependency-groups]
+dev = [
+    "jupyter>=1.1.1",
+    "pandas>=3.0.3",
+    "pytest>=9.0.3",
 ]
