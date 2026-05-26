@@ -1,6 +1,6 @@
 \section{Discussion}
 
-The paper studies frequency-report scoring rules as inferential devices.
+We study frequency-report scoring rules as inferential devices.
 The report \(r\) is not the belief vector.
 It is evidence about \(p\), and the scoring rule determines how informative that evidence is.
 The relevant chain is therefore
@@ -23,7 +23,8 @@ It is the most informative rule in that regime---for the average-coordinate, wor
 
 Third, use Manhattan distance when it cannot be anticipated in advance whether the subject's beliefs will be concentrated on a few outcomes or spread across many.
 Its identified set is exact and its coordinate bounds are sharp---semi-analytical, reducing to a one-dimensional threshold computation rather than a closed form.
-Manhattan rarely gives the single narrowest interval, but the design comparison shows its regret is nearly constant across belief concentrations: it is never far from the best rule, and so minimizes worst-case regret for a researcher who does not know the regime.
+Manhattan rarely gives the single narrowest interval, but the design comparison shows its regret is nearly constant across belief concentrations.
+In other words, it is never far from the best rule, and so minimizes worst-case regret for a researcher who does not know the regime.
 Its inferential interpretation is also median-oriented, which suits settings where a median-type count prediction is substantively appropriate.
 
 \subsection{Risk Aversion and Implementation}
@@ -62,12 +63,12 @@ This is the binary-lottery, or binarized-scoring-rule, technique \citep{RothMalo
 
 The algebra above establishes only \emph{theoretical} robustness, and two qualifications bound what it buys in practice.
 First, the robustness is to risk aversion \emph{within} expected utility.
-Subjects who depart from expected utility---for instance through probability weighting---can report non-truthfully even under the binary-lottery implementation, and the paper does not address such departures.
+Subjects who depart from expected utility---for instance through probability weighting---can report non-truthfully even under the binary-lottery implementation, and we do not address such departures.
 Second, the implementation asks subjects to reason about a compound lottery layered on top of the count report, which partially offsets the cognitive simplicity that motivates frequency reports in the first place.
 The empirical record reflects this tension.
 \citet{Harrison2014} find that a binary-lottery procedure does induce approximately risk-neutral reporting in a subjective-probability elicitation task, evidence that the technique can deliver its theoretical promise.
-But \citet{DanzVesterlundWilson2022}, testing the binarized scoring rule directly, find that informing subjects of the quantitative incentives induces systematic centre-biased misreporting---a failure they trace not to risk attitudes, which the binary lottery already neutralizes, but to the incentive information itself.
-The binary-lottery implementation should therefore be read as resolving the risk-attitude problem the body sets aside while leaving a separate, behavioural one open.
+But \citet{DanzVesterlundWilson2022}, testing the binarized scoring rule directly, find that informing subjects of the quantitative incentives induces systematic center-biased misreporting---a failure they trace not to risk attitudes, which the binary lottery already neutralizes, but to the incentive information itself.
+The binary-lottery implementation should therefore be read as resolving the risk-attitude problem the body sets aside while leaving a separate, behavioral one open.\footnote{The body's risk-neutrality assumption is not a substantive constraint on the distance-rule comparison---under the binary-lottery implementation any strictly increasing utility leaves the ranking of reports unchanged, so the risk-neutral analysis transfers verbatim. The frequency-guessing rule does not need the lottery: a fixed-prize event is already robust under direct payment. What the binary-lottery technique buys for the distance rules is the same robustness, at the cost of a compound-lottery implementation whose behavioral implications we take up below. The deviation \citet{DanzVesterlundWilson2022} document is not a problem of risk attitudes---it survives the binary-lottery correction---but of incentive comprehension, a separate channel orthogonal to the analysis here.}
 
 The implementation choice also interacts with a cost noted in the design comparison.
 The frequency-guessing prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
@@ -106,15 +107,16 @@ These two rules are not pathological---their identified sets are well defined an
 
 \subsection{An Open Empirical Question}
 
-The case for frequency reports rests partly on a behavioural premise this paper does not test: that subjects reason more readily in counts than in abstract probabilities, and find a distance-based payment more transparent than a probability score.
+The case for frequency reports rests partly on a behavioral premise we do not test: that subjects reason more readily in counts than in abstract probabilities, and find a distance-based payment more transparent than a probability score.
 That premise is taken here on the strength of the cited literature.
 A second, more basic premise maintained throughout the body is that subjects report optimally given the rule---a premise that, as the risk-aversion discussion above noted, the evidence on incentive-compatible mechanisms does not uniformly support \citep{DanzVesterlundWilson2022}.
-The informativeness comparison is therefore best read as a statement about the mechanism conditional on optimal reporting, not as a behavioural prediction.
+The informativeness comparison is therefore best read as a statement about the mechanism conditional on optimal reporting, not as a behavioral prediction.
 
 The conditional matters differently for different rules, and the partial-identification framework sharpens the prediction.
-Consider centre-biased reporting, the deviation \citet{DanzVesterlundWilson2022} document under the binarized scoring rule: subjects pull reports toward the interior of the simplex.
+Consider center-biased reporting---the deviation \citet{DanzVesterlundWilson2022} document under the binarized scoring rule.
+Subjects pull reports toward the interior of the simplex.
 This moves the squared-distance identified set by a single facet-translation when one count transfers between categories, because that set is the projection polytope of the reported count vector; the frequency-guessing identified set, by contrast, jumps between mode cells with the same single-count change, so different reports can correspond to the same mode region.
-Hedging-style behaviour aimed at balancing payoffs across realizations is structurally similar.
+Hedging-style behavior aimed at balancing payoffs across realizations is structurally similar.
 Lottery confusion under the binary-lottery implementation \citep{HossainOkui2013,Harrison2014} is orthogonal: it affects the distance rules, whose risk-aversion robustness relies on the lottery, but not frequency-guessing, which retains its risk-aversion robustness under direct payment.
 These are testable predictions in the induced-beliefs design below, not assertions.
 
@@ -122,4 +124,4 @@ The partial-identification framework itself, however, suggests how both premises
 If beliefs are induced by the experimenter---through draws from an urn of known composition, or a signal structure with a computable posterior---the true belief \(p\) is known, so an elicited report \(r\) can be checked against the identified set \(P_S(r)\) it generates: under optimal reporting \(P_S(r)\) contains \(p\), and the empirical coverage rate, with the direction of any systematic miss, measures how far subjects depart from optimal reporting.
 Eliciting the same induced beliefs under a frequency-report rule and under a standard probability scoring rule isolates the effect of the report format; crossing that with direct versus binary-lottery payment isolates the effect of the implementation, which the risk-aversion analysis above predicts to matter only for subjects who are not risk neutral.
 Response times, incentivized comprehension questions, and the rate of weakly dominated reports would complement the coverage measure.
-Such a design would test, rather than presume, the behavioural premise on which the case for frequency reports partly rests---a premise separate from the present contribution, which is that different frequency-report scoring rules induce different identified sets, and those sets determine the informativeness of the mechanism.
+Such a design would test, rather than presume, the behavioral premise on which the case for frequency reports partly rests---a premise separate from the present contribution, which is that different frequency-report scoring rules induce different identified sets, and those sets determine the informativeness of the mechanism.
