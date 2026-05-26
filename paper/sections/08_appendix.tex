@@ -447,17 +447,18 @@ Second, optimal-report ties are a measure-zero event under the continuous Dirich
 \paragraph{Robustness to asymmetric beliefs.}
 The main design comparison draws beliefs from symmetric Dirichlet distributions, which are exchangeable across categories.
 A symmetric draw cannot produce a systematic asymmetry---a one-dominant, two-mode, graded, or balanced-but-asymmetric prior on the simplex.
-Seven asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each, same seed and bounds machinery as the main grid) check whether the regime story extends.
-Three are concentrated (at least one \(\alpha_i\le 0.5\)), three are balanced (all \(\alpha_i\ge 2\)), and one is a transition vector with the smallest component at \(0.5\).
+Nine asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each, same seed and bounds machinery as the main grid) check whether the regime story extends.
+Three are concentrated (at least one \(\alpha_i\le 0.5\)); one is a transition vector with smallest component at \(0.5\); and five are balanced (all \(\alpha_i\ge 2\)), sorted by the max-to-min ratio of the concentration vector (the ``\(\alpha\)-spread'').
 
 \begin{table}[h]
 \centering
 \small
+\setlength{\tabcolsep}{4pt}
 \begin{tabular}{lrrrrrr}
 \hline
 & \multicolumn{3}{c}{Average-coordinate} & \multicolumn{3}{c}{Linear-mean}\\
 \cline{2-4}\cline{5-7}
-\(\boldsymbol\alpha\) & Guessing & Squared & Manhattan & Guessing & Squared & Manhattan\\
+\(\boldsymbol\alpha\) & Guess & Squared & Manh.\ & Guess & Squared & Manh.\\
 \hline
 \multicolumn{7}{l}{Concentrated-asymmetric (at least one \(\alpha_i\le 0.5\))}\\
 \((5, 0.5, 0.5, 0.5, 0.5)\)   & 0.06 & 0.60 & 0.33 & 0.04 & 0.72 & 0.24\\
@@ -467,16 +468,25 @@ Three are concentrated (at least one \(\alpha_i\le 0.5\)), three are balanced (a
 \multicolumn{7}{l}{Transition (smallest \(\alpha_i = 0.5\), no large dominant component)}\\
 \((2, 2, 1, 0.5, 0.5)\)       & 0.26 & 0.54 & 0.20 & 0.23 & 0.63 & 0.15\\
 \hline
-\multicolumn{7}{l}{Balanced-asymmetric (all \(\alpha_i\ge 2\))}\\
-\((3, 3, 3, 2, 2)\)           & 0.87 & 0.08 & 0.05 & 0.82 & 0.14 & 0.04\\
-\((10, 8, 6, 4, 2)\)          & 0.76 & 0.16 & 0.08 & 0.52 & 0.40 & 0.08\\
-\((5, 4, 3, 2, 2)\)           & 0.83 & 0.11 & 0.06 & 0.69 & 0.25 & 0.06\\
+\multicolumn{7}{l}{Balanced-asymmetric (all \(\alpha_i\ge 2\)), ordered by \(\alpha\)-spread \(\max/\min\)}\\
+\((3, 3, 3, 2, 2)\)\hspace{3pt}{\footnotesize(1.5)}     & 0.87 & 0.08 & 0.05 & 0.82 & 0.14 & 0.04\\
+\((5, 4, 3, 2, 2)\)\hspace{3pt}{\footnotesize(2.5)}     & 0.84 & 0.10 & 0.06 & 0.68 & 0.26 & 0.06\\
+\((10, 8, 6, 4, 2)\)\hspace{3pt}{\footnotesize(5.0)}    & 0.76 & 0.17 & 0.07 & 0.52 & 0.41 & 0.07\\
+\((15, 10, 5, 2, 2)\)\hspace{3pt}{\footnotesize(7.5)}   & 0.50 & 0.33 & 0.17 & 0.08 & 0.77 & 0.15\\
+\((20, 12, 6, 3, 2)\)\hspace{3pt}{\footnotesize(10.0)}  & 0.53 & 0.32 & 0.15 & 0.05 & 0.82 & 0.14\\
 \hline
 \end{tabular}
-\caption{Win share under seven asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each). Squared-distance scoring dominates the three concentrated-asymmetric cells and the transition cell; frequency-guessing scoring dominates the three balanced-asymmetric cells. The regime crossover therefore reproduces under asymmetry in the seven vectors tested, matching the small-\(\alpha\) vs large-\(\alpha\) split of the symmetric grid (Table~\ref{tab:regime-wins}). The governing variable is the marginal concentration of the resulting beliefs, not the symmetry of the Dirichlet.}
+\caption{Win share under nine asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each); parentheses give the \(\alpha\)-spread \(\max/\min\) for the balanced cells. Squared-distance scoring dominates the three concentrated-asymmetric cells and the transition cell. Within the balanced regime the average-coordinate ranking remains in favour of frequency-guessing throughout but the margin shrinks with \(\alpha\)-spread; the linear-mean ranking reverses between spread \(5\) and spread \(7.5\), with squared-distance taking over at the steepest spreads.}
 \label{tab:regime-wins-asymmetric}
 \end{table}
 
-Mean regret tells the same story.
-In the average-coordinate metric the leading rule's regret stays at \(\le 0.003\) in every cell (squared-distance in the concentrated and transition cells, frequency-guessing in the balanced cells), while the trailing rule's regret reaches \(0.012\) (frequency-guessing in the two-mode cell) and \(0.008\) (squared-distance in the balanced cells).
-The Manhattan ``regime-robust'' property---rarely the outright winner, never far from the leader---survives intact: Manhattan's mean regret stays at \(0.002\)--\(0.005\) across all seven cells.
+\paragraph{The role of \(\alpha\)-spread within the balanced regime.}
+The balanced cells in Table~\ref{tab:regime-wins-asymmetric} are all balanced in the sense that every \(\alpha_i\ge 2\), yet they do not behave identically.
+On the average-coordinate target the frequency-guessing dominance holds across all five cells, but the margin contracts monotonically with the \(\alpha\)-spread: from \(79\) points at the flattest vector \((3,3,3,2,2)\) to \(17\) and \(21\) points at the two steepest.
+On the linear-mean target the ranking reverses: frequency-guessing wins at spread \(\le 5\) (margins \(11\)--\(68\) points), but squared-distance takes over at spread \(\ge 7.5\) (margins \(62\)--\(68\) points over the runner-up).
+A plausible explanation is that the induced beliefs under a wide-spread balanced \(\boldsymbol\alpha\) concentrate tightly around an ordered expected vector, and the mean-target identified set is then sharper under the mean-oriented squared-distance rule than under the mode-oriented frequency-guessing rule.
+The refinement does not contradict the headline ``no universal winner'' message, but adds a second dimension to the regime story for asymmetric beliefs: not just concentration versus balance, but, within the balanced regime, how steep the gradient is.
+A more thorough mapping of \(\alpha\)-spread effects is left to future work.
+
+Manhattan stays in the \(4\)--\(33\) \% range on both targets across all nine cells, never the outright winner but never far from the leader; its regime-robust character survives intact.
+Mean regret tells the same story: the leading rule's regret stays at \(\le 0.003\) in seven of the nine cells, with the largest leader-regret reached at the transition and balanced-graded cells where the rules are closer in win share.

@@ -627,15 +627,17 @@ def run_latent_simulation(
 
 ROBUSTNESS_CELLS: tuple[tuple[str, int, int, tuple[float, ...]], ...] = (
     # Concentrated-asymmetric: at least one component <= 0.5
-    ("one-dominant",    20, 5, (5.0, 0.5, 0.5, 0.5, 0.5)),
-    ("two-modes",       20, 5, (3.0, 3.0, 0.3, 0.3, 0.3)),
-    ("graded",          20, 5, (5.0, 2.0, 1.0, 0.5, 0.2)),
+    ("one-dominant",     20, 5, (5.0, 0.5, 0.5, 0.5, 0.5)),
+    ("two-modes",        20, 5, (3.0, 3.0, 0.3, 0.3, 0.3)),
+    ("graded",           20, 5, (5.0, 2.0, 1.0, 0.5, 0.2)),
     # Transition: smallest component is 0.5 (one foot in concentrated)
-    ("transition",      20, 5, (2.0, 2.0, 1.0, 0.5, 0.5)),
-    # Balanced-asymmetric: all components >= 2
-    ("balanced-mild",   20, 5, (3.0, 3.0, 3.0, 2.0, 2.0)),
-    ("balanced-graded", 20, 5, (10.0, 8.0, 6.0, 4.0, 2.0)),
-    ("balanced-skewed", 20, 5, (5.0, 4.0, 3.0, 2.0, 2.0)),
+    ("transition",       20, 5, (2.0, 2.0, 1.0, 0.5, 0.5)),
+    # Balanced-asymmetric: all components >= 2, ordered by max:min spread ratio
+    ("balanced-mild",    20, 5, (3.0, 3.0, 3.0, 2.0, 2.0)),    # spread 1.5
+    ("balanced-skewed",  20, 5, (5.0, 4.0, 3.0, 2.0, 2.0)),    # spread 2.5
+    ("balanced-graded",  20, 5, (10.0, 8.0, 6.0, 4.0, 2.0)),   # spread 5.0
+    ("balanced-steep",   20, 5, (15.0, 10.0, 5.0, 2.0, 2.0)),  # spread 7.5
+    ("balanced-extreme", 20, 5, (20.0, 12.0, 6.0, 3.0, 2.0)),  # spread 10.0
 )
 
 
