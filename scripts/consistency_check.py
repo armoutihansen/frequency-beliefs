@@ -154,9 +154,21 @@ def check_robustness() -> None:
             "coord_avg":   (0.07, 0.67, 0.26),
             "mean_linear": (0.03, 0.86, 0.11),
         },
-        "no-small": {
-            "coord_avg":   (0.84, 0.11, 0.05),
-            "mean_linear": (0.68, 0.27, 0.05),
+        "transition": {
+            "coord_avg":   (0.26, 0.54, 0.20),
+            "mean_linear": (0.23, 0.63, 0.15),
+        },
+        "balanced-mild": {
+            "coord_avg":   (0.87, 0.08, 0.05),
+            "mean_linear": (0.82, 0.14, 0.04),
+        },
+        "balanced-graded": {
+            "coord_avg":   (0.76, 0.16, 0.08),
+            "mean_linear": (0.52, 0.40, 0.08),
+        },
+        "balanced-skewed": {
+            "coord_avg":   (0.83, 0.11, 0.06),
+            "mean_linear": (0.69, 0.25, 0.06),
         },
     }
     fails = 0

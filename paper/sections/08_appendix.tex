@@ -446,9 +446,9 @@ Second, optimal-report ties are a measure-zero event under the continuous Dirich
 
 \paragraph{Robustness to asymmetric beliefs.}
 The main design comparison draws beliefs from symmetric Dirichlet distributions, which are exchangeable across categories.
-A symmetric draw cannot produce a systematic asymmetry across categories---a one-dominant, two-mode, graded, or balanced-but-asymmetric prior on the simplex.
-Four asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each, same seed and bounds machinery as the main grid) check whether the regime story extends.
-The first three have at least one component \(\alpha_i\le 0.5\) (concentrated-asymmetric); the fourth has all components \(\ge 2\) (balanced-asymmetric).
+A symmetric draw cannot produce a systematic asymmetry---a one-dominant, two-mode, graded, or balanced-but-asymmetric prior on the simplex.
+Seven asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each, same seed and bounds machinery as the main grid) check whether the regime story extends.
+Three are concentrated (at least one \(\alpha_i\le 0.5\)), three are balanced (all \(\alpha_i\ge 2\)), and one is a transition vector with the smallest component at \(0.5\).
 
 \begin{table}[h]
 \centering
@@ -464,14 +464,19 @@ The first three have at least one component \(\alpha_i\le 0.5\) (concentrated-as
 \((3, 3, 0.3, 0.3, 0.3)\)     & 0.03 & 0.76 & 0.21 & 0.04 & 0.82 & 0.14\\
 \((5, 2, 1, 0.5, 0.2)\)       & 0.07 & 0.67 & 0.26 & 0.03 & 0.86 & 0.11\\
 \hline
+\multicolumn{7}{l}{Transition (smallest \(\alpha_i = 0.5\), no large dominant component)}\\
+\((2, 2, 1, 0.5, 0.5)\)       & 0.26 & 0.54 & 0.20 & 0.23 & 0.63 & 0.15\\
+\hline
 \multicolumn{7}{l}{Balanced-asymmetric (all \(\alpha_i\ge 2\))}\\
-\((5, 4, 3, 2, 2)\)           & 0.84 & 0.11 & 0.05 & 0.68 & 0.27 & 0.05\\
+\((3, 3, 3, 2, 2)\)           & 0.87 & 0.08 & 0.05 & 0.82 & 0.14 & 0.04\\
+\((10, 8, 6, 4, 2)\)          & 0.76 & 0.16 & 0.08 & 0.52 & 0.40 & 0.08\\
+\((5, 4, 3, 2, 2)\)           & 0.83 & 0.11 & 0.06 & 0.69 & 0.25 & 0.06\\
 \hline
 \end{tabular}
-\caption{Win share under four asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each). Squared-distance scoring dominates the three concentrated-asymmetric cells; frequency-guessing scoring dominates the balanced-asymmetric cell. The regime crossover therefore reproduces under asymmetry exactly as in the symmetric grid (Table~\ref{tab:regime-wins}): when the resulting beliefs are marginally concentrated, squared-distance wins; when they are balanced, frequency-guessing wins. The governing variable is the marginal concentration of the draws, not the symmetry of the Dirichlet.}
+\caption{Win share under seven asymmetric concentration vectors at \(n=20\), \(k=5\) (\(5{,}000\) draws each). Squared-distance scoring dominates the three concentrated-asymmetric cells and the transition cell; frequency-guessing scoring dominates the three balanced-asymmetric cells. The regime crossover therefore reproduces under asymmetry in the seven vectors tested, matching the small-\(\alpha\) vs large-\(\alpha\) split of the symmetric grid (Table~\ref{tab:regime-wins}). The governing variable is the marginal concentration of the resulting beliefs, not the symmetry of the Dirichlet.}
 \label{tab:regime-wins-asymmetric}
 \end{table}
 
 Mean regret tells the same story.
-In the average-coordinate metric the leading rule's regret is \(\le 0.002\) in every cell (squared-distance under concentration, frequency-guessing under balance), while the trailing rule's regret reaches \(0.012\) (frequency-guessing in the two-mode cell) and \(0.008\) (squared-distance in the balanced-asymmetric cell).
-The Manhattan ``regime-robust'' property---rarely the outright winner, never far from the leader---survives intact: Manhattan's mean regret stays at \(0.002\)--\(0.005\) across all four cells.
+In the average-coordinate metric the leading rule's regret stays at \(\le 0.003\) in every cell (squared-distance in the concentrated and transition cells, frequency-guessing in the balanced cells), while the trailing rule's regret reaches \(0.012\) (frequency-guessing in the two-mode cell) and \(0.008\) (squared-distance in the balanced cells).
+The Manhattan ``regime-robust'' property---rarely the outright winner, never far from the leader---survives intact: Manhattan's mean regret stays at \(0.002\)--\(0.005\) across all seven cells.

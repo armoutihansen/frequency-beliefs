@@ -626,10 +626,16 @@ def run_latent_simulation(
 
 
 ROBUSTNESS_CELLS: tuple[tuple[str, int, int, tuple[float, ...]], ...] = (
-    ("one-dominant", 20, 5, (5.0, 0.5, 0.5, 0.5, 0.5)),
-    ("two-modes",    20, 5, (3.0, 3.0, 0.3, 0.3, 0.3)),
-    ("graded",       20, 5, (5.0, 2.0, 1.0, 0.5, 0.2)),
-    ("no-small",     20, 5, (5.0, 4.0, 3.0, 2.0, 2.0)),
+    # Concentrated-asymmetric: at least one component <= 0.5
+    ("one-dominant",    20, 5, (5.0, 0.5, 0.5, 0.5, 0.5)),
+    ("two-modes",       20, 5, (3.0, 3.0, 0.3, 0.3, 0.3)),
+    ("graded",          20, 5, (5.0, 2.0, 1.0, 0.5, 0.2)),
+    # Transition: smallest component is 0.5 (one foot in concentrated)
+    ("transition",      20, 5, (2.0, 2.0, 1.0, 0.5, 0.5)),
+    # Balanced-asymmetric: all components >= 2
+    ("balanced-mild",   20, 5, (3.0, 3.0, 3.0, 2.0, 2.0)),
+    ("balanced-graded", 20, 5, (10.0, 8.0, 6.0, 4.0, 2.0)),
+    ("balanced-skewed", 20, 5, (5.0, 4.0, 3.0, 2.0, 2.0)),
 )
 
 
