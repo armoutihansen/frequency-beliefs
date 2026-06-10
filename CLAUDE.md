@@ -13,6 +13,14 @@ P_S(r)=\{p:r\in R_S(p)\}.
 
 The repository combines academic paper writing, mathematical proof checking, literature review, research strategy, and reproducible simulation code.
 
+## ACTIVE AUTHOR-IMPOSED CONSTRAINTS (2026-06-10, amended same day after the direction-C decision)
+
+These override anything else in this file or in `_context/` until the author explicitly lifts them:
+
+1. The adopted direction is **(C): two papers** (decision memo in `_context/exploration/direction_memos.md`). The approved scope for **paper 1** (the current manuscript) is: the executed Light integration, the executed Remark-1 removal, the misreporting robustness exercise, and final figures — nothing else. The master-threshold machinery must NOT enter paper 1; it is reserved for the future **paper 2** (methods companion), which must not be drafted without a new, explicit author instruction.
+2. All approved work is **strictly offline**: no literature search, no web search, no web fetching, no downloading of any material, and no dispatching of `literature-reviewer` or any web-capable agent, except on explicit author instruction. Inputs are repository files and the `_context/` memos.
+3. The deferred inverse-optimization literature check (precondition for paper 2) runs ONLY on explicit author instruction, under author-approved access terms (conservative mode; no paywall circumvention; no local PDF saving).
+
 ## Core distinction: exploration vs manuscript claims
 
 Claude is allowed and encouraged to explore alternative directions for the project.

@@ -1,6 +1,75 @@
 # Current Status
 
-Date: 2026-05-22
+Date: 2026-06-10
+
+## Update — 2026-06-10 (latest) Direction (C) adopted: two papers; Remark 1 removed
+
+A direction-search session resolved the venue/identity question (memo:
+`_context/exploration/direction_memos.md`, adopted): **(C) two papers** —
+paper 1 is the current manuscript, finished for a field venue
+(Experimental Economics / JEBO / GEB tier; the earlier "general-interest"
+tier is retired as optimistic), and paper 2 is a future methods companion
+built from the audited master-threshold/frontier memos, gated on explicit
+author authorization of the inverse-optimization literature check.
+For paper 1 the author selected: Remark 1 REMOVED (executed; the
+extended-real sentence now stands alone; 33 pp, clean compile), plus two
+approved strengtheners not yet executed — the misreporting robustness
+exercise and final figures (task list P0–P3 in `_context/next_steps.md`;
+P0 is the pre-existing scripts-renaming debt, a prerequisite). The
+small-cell Hamming/Chebyshev simulation was considered and declined.
+CLAUDE.md's binding constraints were amended to the new scope: paper-1
+tasks only, strictly offline, paper 2 and any literature work only on
+explicit author instruction.
+
+## Update — 2026-06-10 (later) LIGHT integration EXECUTED
+
+On explicit author instruction the Light plan L1–L5 was executed the same
+day: Remark `rem:threshold` (threshold form of the single-transfer
+inequalities, with the three rules' band inversions) added after Lemma 1 in
+`03_scoring_rules.tex`; the RPS sentence corrected (cumulative vs
+per-category counts); the extended-real boundary-belief sentence added; the
+order-preserving Hamming exclusion added to `07_discussion.tex`. A targeted
+theory-audit (evidence-rules protocol, all materials pasted) returned
+"publishable after listed fixes"; all fixes were applied — notably the
+expected-LOSS orientation in the Hamming passage and the explicit
+CDF-units reparameterization in the remark — and the paper compiles clean
+(34 pp, 0 errors, 0 undefined references). Execution was fully offline; no
+citations added. The CLAUDE.md author-imposed constraints (Light only;
+no literature search without explicit instruction) remain in force.
+
+## Update — 2026-06-10 Master threshold theorem developed; LIGHT integration approved (not yet executed)
+
+A theorem-development session generalized Lemma 1's bound machinery: under
+separability, discrete convexity, and monotone marginal costs, the
+identified set is a one-parameter union of box–simplex slices, coordinate
+projections are intervals, sharp coordinate bounds solve single monotone
+scalar equations, and Propositions 1–2's closed forms drop out of the
+crossing equation with explicit thresholds (the Schlag–Tremewan constants
+n+1 and n+k−1 are crossing thresholds). Full development, status labels,
+converse analysis (order-preserving Hamming exclusion proven; argmin-level
+open), and two audits in
+`_context/exploration/master_threshold_theorem.md`; companion checks in
+`scripts/explore_master_threshold.py`. Two corrections to prior exploration
+docs are recorded there (frontier memo's Prop 3′ is wrong as stated; its
+Corollary 5 tier-(b) "rule-specific bonus" caveat is removed).
+
+Decisions (2026-06-10): the inverse-optimization novelty check was WAIVED
+(novelty assumed provisionally); placement decision settled on the **LIGHT
+integration** — threshold-representation remark after Lemma 1, RPS-sentence
+fix, extended-real convention line, order-preserving Hamming exclusion in
+the discussion — with the Full restructure held in reserve for the revision
+stage (gated on the waived literature check). Execution plan L1–L5 in
+`_context/next_steps.md`; the MANUSCRIPT IS STILL UNTOUCHED.
+
+BINDING CONSTRAINTS (author-imposed, 2026-06-10): implement the LIGHT
+option only — the Full restructure and the inverse-optimization literature
+check each require new, explicit author instruction and must not be
+initiated by any agent session. The Light execution is strictly offline:
+no literature search, no web search/fetching, no downloading, no
+web-capable subagents (full statement in `_context/next_steps.md`).
+Audit-protocol note: theory-auditor subagents cannot see the working
+tree — paste all materials into the audit prompt (see the memo's audit
+log).
 
 ## Update — 2026-05-22 Related-work expansion and scoring-rule renaming
 

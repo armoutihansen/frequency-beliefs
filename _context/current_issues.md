@@ -36,6 +36,21 @@ focused external read by a human reader.
   semi-analytical.
 - Mean bounds must continue to be stated as optimizations over the full identified
   set, not as combinations of coordinate intervals.
+- Two small flags from the master-threshold theorem development (2026-06-10;
+  see `_context/exploration/master_threshold_theorem.md`, twice-audited):
+  (a) §3's sentence calling the ranked probability score one of the "other
+  separable count losses ... governed by [the lemma] in the same way" is
+  imprecise — RPS is separable in *cumulative* counts, not the per-category
+  counts Lemma 1 quantifies over (the rule screen had this right); (b) the
+  framing that each headline rule "is an instance of Lemma 1" silently
+  assumes finite coordinate costs — frequency-guessing's log representation
+  is +infinity at boundary beliefs, so the lemma needs a one-line
+  extended-real convention (Proposition 2's own product-form proof is
+  unaffected). RESOLVED 2026-06-10: both fixed by the executed Light
+  integration (steps L2/L3), together with the new Remark `rem:threshold`
+  and the order-preserving Hamming exclusion (steps L1/L4); the targeted
+  theory-audit passed with all fixes applied, and the paper compiles clean
+  (34 pp, 0 errors, 0 undefined references).
 - Hamming: bounds are computational for k>2. Single-unit-transfer optimality is
   necessary but NOT sufficient (failure at boundary beliefs); the identified set
   is a non-convex semialgebraic set. k=2 coincides with discrete-metric (closed
@@ -63,6 +78,24 @@ focused external read by a human reader.
 - Do not describe grid or simulation evidence as mathematical proof.
 
 ## Literature Issues
+
+- OPEN (author-waived check, 2026-06-10; urgency REDUCED by the Light
+  decision): the master threshold theorem
+  (`_context/exploration/master_threshold_theorem.md`, twice-audited) is
+  carried under the ASSUMPTION that its threshold-inversion
+  characterization is new; the planned inverse-optimization literature
+  check (Ahuja–Orlin-style rationalizing-parameter sets for separable
+  resource allocation) was waived by author decision. Under the LIGHT
+  integration chosen 2026-06-10 the inversion machinery does NOT enter
+  the manuscript (only the elementary threshold representation, as a
+  remark), so the check no longer gates submission; it gates only the
+  reserve Full upgrade at the revision stage. Both the Full upgrade and
+  the literature check itself run ONLY on explicit author instruction —
+  no agent session may initiate either, and the Light execution is
+  strictly offline (no literature search, web access, or downloading; see
+  the binding constraints in `_context/next_steps.md`). The belief-elicitation-specific novelty surface was already
+  checked 2026-05-22 (no prior work inverting scoring-rule reports into
+  belief identified sets).
 
 The bibliography needs final verification against the local PDFs in `_context/related_literature/`.
 Important sources include:

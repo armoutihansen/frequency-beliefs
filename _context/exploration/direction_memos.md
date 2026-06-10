@@ -80,6 +80,90 @@ Adopted. Venue tier: general-interest economics journal with a methods section.
 Scope: pure methodological paper, no empirical illustration (a stipulated worked
 example in the discussion substitutes). Proceed per `_context/next_steps.md`.
 
+## Direction memo (2026-06-10): venue/identity fork after the master threshold theorem
+
+Status: **ADOPTED same day — direction (C), two papers.** Author also
+selected for paper 1: Remark 1 removal (executed; paper recompiles clean at
+33 pp), the misreporting robustness exercise, and final figures; the
+small-cell Hamming/Chebyshev option was declined. Paper 2 remains gated on
+explicit authorization of the inverse-optimization literature check.
+Original analysis follows. Offline (no literature access,
+per the 2026-06-10 binding constraints). Theory inventory: the twice-audited
+`master_threshold_theorem.md` and the audited `feasibility_frontier.md`.
+
+### 1. Current implicit paper
+
+A partial-identification methods paper for experimentalists: three rules
+characterized (two closed-form, one semi-analytical), organized by a
+classical-cored lemma, compared in a design exercise, with contextual
+recommendations and an implementation/risk-aversion discussion. 34 pp,
+compiles clean, submission-ready modulo an external read. Honest tier
+assessment: a good FIELD-journal paper (Experimental Economics, JEBO, GEB);
+the ADR's "general-interest journal" tier was optimistic.
+
+### 2. Candidate directions
+
+(A) Field paper as-is, optional strengtheners: final figures; a
+misreporting-coverage robustness exercise (perturb optimal reports, e.g.
+center-bias, measure identified-set coverage of true p — quantifies the
+paper's own biggest conditional, reuses existing bound code); small-cell
+Hamming/Chebyshev simulation REJECTED for this paper (documented
+intractability at grid scale per ADR-0001 spike; near-zero decision value
+for the field audience since neither rule offers the researcher tractable
+bounds).
+
+(B) Single methods paper: general count-loss family (already in §2),
+master theorem, three-tier closed-form/semi-analytical/intractable
+classification, rule-level boundary theorems, quantile family. Most theory
+exists at memo grade. Genuinely missing: appendix-grade write-up (memo
+Gaps 1, 8); Chebyshev ordinal hardening (non-separability currently proven
+only for the raw expected loss — a finite coordinate-independence
+computation, offline-doable); the MANDATORY inverse-optimization novelty
+check (author authorization required); venue re-aim (GEB/ET/QE/JoE).
+Risks: "core is classical" referee attack; novelty gate unresolved; months
+of delay; the polished applied half shrinks to an illustration.
+
+(C) Two related papers: paper 1 = (A) now; paper 2 = the methods paper
+from the memo inventory, literature-gate first, own pace. Synergies:
+simulation framework reuses for quantile rules; paper 1 self-contained
+(no general claims — Remark 1 removal advised to avoid both the loose end
+and overlap); paper 2 cites paper 1 as the worked application.
+Salami risk mitigated: paper 2's content strictly exceeds paper 1's needs
+(inversion machinery, interval projections, new rule family, boundary
+theorems). Fallback if the novelty gate kills paper 2: fold back as a
+revision-stage Full for paper 1; paper 1 unharmed either way.
+
+### 3. Ranking
+
+C > A > B. C contains A and adds a decoupled option; B couples a
+submission-ready paper's fate to an unchecked novelty claim and a venue
+shift.
+
+### 4. Recommendation
+
+(C). Paper-1 decisions: remove Remark 1; keep the L2/L3 repairs and the
+Hamming order-preserving exclusion (corrections/sharpenings, not theory
+claims); strengtheners ranked: figures (low effort) > misreporting
+robustness exercise (moderate effort, highest audience value) >> NOT
+Hamming/Chebyshev. Paper-2 sequence: literature gate (explicit author
+authorization, conservative mode) -> Chebyshev ordinal hardening ->
+appendix-grade write-up -> standalone draft.
+
+### 5. What must be true / what would change it
+
+Holds if: author accepts field-journal tier for paper 1; has appetite for
+a second project; machinery novelty plausibly intact. Changes if: author
+wants one flagship and accepts the delay (-> B); the literature gate kills
+the machinery's novelty (-> A only; reserve Full dead); the external read
+finds paper 1 too thin even for field venues (-> reconsider B as a merge).
+
+### 6. Next three tasks (under C)
+
+1. Author decisions: direction; Remark 1 removal; which strengtheners.
+2. Execute paper-1 decisions; external-read submission package.
+3. On explicit authorization: paper-2 literature gate, then Chebyshev
+   ordinal check.
+
 ## Rejected alternatives
 
 See `_context/exploration/rejected_directions.md`.

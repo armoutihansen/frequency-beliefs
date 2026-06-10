@@ -303,6 +303,200 @@ Remaining before manuscript insertion (all gated):
 - Decide placement (organizing lemma in §3; §5 Hamming/Chebyshev reframed as the
   two failure modes) — a manuscript-revision decision, not taken yet.
 
+### Master threshold theorem — theorem-development memo (2026-06-10)
+
+New exploration memo: `_context/exploration/master_threshold_theorem.md`
+(companion checks: `scripts/explore_master_threshold.py`). It develops the
+generalization the user proposed (sharp bounds from Lemma 1's hypotheses):
+under (S) separability + (C) discrete convexity + (M) monotone marginal
+costs, the threshold/box-slice representation, interval coordinate
+projections, and single-monotone-scalar-equation sharp coordinate bounds
+hold for the WHOLE family — removing `feasibility_frontier.md` Corollary 5's
+tier-(b) "rule-specific bonus" caveat; Propositions 1–2's closed forms drop
+out of the crossing equation with explicit thresholds. Converse status:
+order-preserving Hamming exclusion proven; argmin-level open; Prop 3′ of the
+frontier memo found INCORRECT as stated (Hamming k=2 is the realized
+exception; condition should be folded quasi-convexity). Manuscript flags:
+the §3 RPS "separable count loss" sentence is imprecise (cumulative
+coordinates). Gates before any manuscript edit: (1) a SECOND theory audit of
+the corrected memo (the first audit mixed verified findings with fabricated
+citations — see the memo's audit log); (2) a literature check on inverse
+optimization for separable resource allocation (novelty gate for the
+threshold inversion).
+
+UPDATE 2026-06-10 (later the same day): gate (1) is PASSED. The second
+audit ran under an evidence-rules protocol (all materials pasted inline;
+findings must quote exact text) and returned "promote after fixes — no
+structural rework". All fixes are applied to the memo: the Prop 3′
+correction restricted to the open simplex (the audit found a real
+degenerate-belief counterexample to the original quantifier), an
+extended-real Lemma 1 paragraph added as Gap 8, C_0 qualifiers in A(ii)/(iv),
+the unbounded-C endpoint restatement, and four wording repairs. Both
+manuscript flags are now recorded in `_context/current_issues.md`.
+Remaining gates: (2) the inverse-optimization literature check, then the
+author's Light-vs-Full placement decision.
+
+UPDATE 2026-06-10 (later still): gate (2) WAIVED by author decision —
+novelty assumed provisionally; manuscript use must hedge "to our
+knowledge"; the check should still run before submission (recorded in
+`_context/current_issues.md`, Literature Issues).
+
+DECISION 2026-06-10 (REVISED later the same day): the author initially
+chose the Full restructure, then — after a value comparison — settled on
+the **LIGHT integration**, with Full held in reserve for the revision
+stage. Rationale: Light is consistent with the recorded venue strategy
+(ADR 2026-05-21: general-interest journal, "the body stays light on
+machinery"); the Light → Full upgrade path is cheap (the theorem is
+developed and twice-audited in the memo) while Full → Light would waste
+polished work; and Light keeps the unchecked inverse-optimization novelty
+claim out of the manuscript entirely.
+
+**DIRECTION DECISION 2026-06-10 (latest): direction (C) — TWO PAPERS
+(adopted; memo in `_context/exploration/direction_memos.md`).** Remark 1
+was subsequently REMOVED from `03_scoring_rules.tex` by author decision
+(the extended-real sentence was rephrased to stand alone; paper recompiles
+clean at 33 pp, 0 errors, 0 undefined refs). The L2/L3 repairs and the
+order-preserving Hamming exclusion remain in the manuscript.
+
+**ACTIVE TASK LIST — Paper 1 finishing pipeline (approved):**
+P0. Reconcile `scripts/` display labels/keys with the manuscript's renamed
+    rules (pre-existing debt, recorded 2026-05-22; prerequisite for any
+    new simulation work — outputs and CSVs are coupled).
+P1. Misreporting robustness exercise (approved 2026-06-10): perturb
+    optimal reports (center-bias per the §5.3 predictions, plus a
+    one-count uniform-error variant), measure identified-set coverage of
+    the true belief by rule across the design grid. Run the
+    `simulation-plan` skill first; do not overwrite committed outputs;
+    write results into the design-comparison or discussion section after
+    a simulation-methodologist review.
+P2. Final figures for the design comparison (approved 2026-06-10):
+    regret heat-maps by (n,k,alpha) + win-share summary, from existing
+    outputs.
+P3. The focused external human read; then submission package. Venue tier
+    recalibrated to field journals (Experimental Economics / JEBO / GEB).
+
+**Paper 2 (methods companion) — GATED, not started:** sequence on
+explicit author authorization only: (i) inverse-optimization literature
+check (conservative mode, per CLAUDE.md constraint 3); (ii) Chebyshev
+ordinal hardening (finite coordinate-independence computation, offline);
+(iii) appendix-grade write-up of the master theorem (memo Gaps 1, 8);
+(iv) standalone draft. Inventory: `master_threshold_theorem.md`
+(twice-audited), `feasibility_frontier.md` (audited, Prop 3' needs the
+recorded amendment), `rule_candidate_screen.md`.
+
+**STATUS UPDATE — Light integration EXECUTED 2026-06-10 (same day,
+after explicit author go-ahead).** L1–L4 implemented in
+`03_scoring_rules.tex` (Remark `rem:threshold`; RPS sentence fixed;
+extended-real sentence added) and `07_discussion.tex` (order-preserving
+Hamming exclusion). L5 done: paper compiles clean (34 pp, 0 errors, 0
+undefined refs) and a targeted theory-audit (evidence-rules protocol)
+returned "publishable after listed fixes" — all fixes applied and
+re-compiled: the Hamming passage's orientation corrected to "strictly
+increasing transformation of the expected LOSS" (the audit's one real
+error catch), the remark's threshold/CDF-units reparameterization made
+explicit (c vs Proposition 3's c in [0,1]), the Manhattan
+CDF-monotonicity clause added for the box claim, the boundary-belief
+sentence given the finite-competitor parenthetical and
+restrict-to-support clause, and "plays the role of a Lagrange
+multiplier". No web access of any kind was used; no citations were added.
+The offline/no-Full constraints in CLAUDE.md remain in force. Remaining
+before submission: the focused external human read (unchanged from the
+pre-existing plan).
+
+The original task description follows for the record.
+
+**ACTIVE TASK — Light integration (NOT yet executed; manuscript still
+untouched).** All math content must come verbatim from the twice-audited
+memo `_context/exploration/master_threshold_theorem.md`; guardrail mode.
+Scope — only `03_scoring_rules.tex` and `07_discussion.tex` change; no
+proposition statements or proofs, no intro/abstract/setup changes.
+
+**BINDING EXECUTION CONSTRAINTS (author-imposed, 2026-06-10):**
+(a) Implement L1–L5 ONLY. Do NOT implement any part of the reserve Full
+    plan below, in whole or in part, under any reading of this file.
+(b) The Light execution is strictly OFFLINE: no literature search, no web
+    search, no web fetching, and no downloading of any material. Do not
+    dispatch `literature-reviewer` or any web-capable agent. The only
+    inputs are repository files and the audited memo. (The L5 audit uses
+    `theory-auditor`, which has no web tools — read/grep/glob only.)
+(c) No new citations are added to `references.bib` (none are needed; the
+    remark and the Hamming sentence use only already-cited sources).
+
+L1. `03_scoring_rules.tex` §3.1: add a Remark after Lemma 1 stating the
+    threshold representation ONLY (memo Theorem A(i): the single-transfer
+    inequalities hold iff a common threshold c separates all sender
+    marginals from all receiver marginals — a two-line max–min argument
+    given discrete convexity), noting Prop 3's Manhattan threshold
+    representation is its instance and that for squared-distance and
+    frequency-guessing the threshold inequalities invert to additive and
+    multiplicative boxes. Do NOT state parts (ii)–(v) (box-slice union,
+    interval projections, scalar-equation bounds, functional sweep) —
+    those stay in the memo for the reserve Full option.
+L2. Same file: fix the RPS sentence (memo manuscript flag (a)) —
+    asymmetric-absolute losses are governed by the lemma in the same way;
+    RPS is separable in *cumulative*, not per-category, counts and falls
+    outside the lemma as stated.
+L3. Same file: add the extended-real convention line (memo flag (b) /
+    Gap 8) — frequency-guessing's log costs are +infinity at boundary
+    beliefs; marginals are defined by continuous extension from (0,1).
+L4. `07_discussion.tex` (sec:other-rules): strengthen the Hamming
+    paragraph with the order-preserving exclusion (memo R2): the existing
+    n=3, k=5 instance certifies that no strictly increasing transform of
+    the Hamming expected score is separable with discrete-convex
+    coordinates. Do not state the argmin-level version (open).
+L5. Compile clean (latexmk); targeted theory-audit of the new remark and
+    the Hamming sentence using the evidence-rules protocol (paste all
+    materials inline — the theory-auditor cannot see the working tree).
+
+**RESERVE PLAN — Full restructure (revision-stage option, NOT
+authorized).** Nothing in this file authorizes starting this plan. It may
+be deployed ONLY on a new, explicit author instruction in a future session
+(plausible triggers: a referee asks for the general theorem, or the venue
+target shifts to a methods outlet — but the triggers themselves authorize
+nothing). Its precondition — the waived inverse-optimization literature
+check — likewise runs ONLY on explicit author instruction, under
+author-approved access terms (conservative mode: abstracts plus
+arXiv/SSRN/RePEc/official open-access full texts only; no paywall
+circumvention; no browser-session tools; no files saved locally). Under
+Light, that check gates nothing about submission. Original Full steps,
+retained solely for that contingency:
+
+1. `03_scoring_rules.tex` §3.1: KEEP Lemma 1 as-is (its core is classical
+   — do not fold it into a claimed theorem); after it, define monotone
+   marginals (M) and state a new Theorem (threshold inversion and sharp
+   bounds; memo Theorem A(i)–(v)) with "to our knowledge" hedging; add the
+   extended-real convention line (memo Gap 8); fix the RPS sentence
+   (separable in cumulative, not per-category, counts — present as
+   adjacent, not covered); cite the convex location-loss family with the
+   origin condition and the pinball/quantile example (memo C4) as the
+   wider-family payoff.
+2. Rule subsections: one connecting sentence each — squared: additive
+   boxes of width 1/n, closed forms = crossing solutions (c* = 2/m−1 etc.,
+   memo C1); frequency-guessing: multiplicative boxes, n+1 and n+k−1 as
+   crossing thresholds (memo C2); Manhattan: Prop 3's threshold
+   representation = the theorem's part (i) instance (memo C3). Keep all
+   existing proposition statements and proofs unchanged.
+3. `08_appendix.tex`: new subsection after `app:lemma-proof` with the
+   appendix-grade theorem proof — honest range C_0, extended-real
+   paragraph, box-slice/interval-C argument, interval projections,
+   crossing-or-no-crossing dichotomy with witness/compactness attainment,
+   slice-LP part, location-family corollary (convexity preservation +
+   Abel summation + strictness); optional short remark showing the
+   two-line crossing recoveries of Props 1–2.
+4. `07_discussion.tex` (sec:other-rules): add the order-preserving Hamming
+   exclusion (memo R2) using the existing n=3, k=5 example — "no strictly
+   increasing transform of the Hamming expected score is separable with
+   discrete-convex coordinates"; argmin-level version stays unstated
+   (open).
+5. `02_setup.tex` closing sentence, `01_introduction.tex` contribution
+   paragraph + the long footnote, and the abstract in `main.tex`: modest
+   updates so the headline includes the general theorem (hedged).
+6. Compile clean (latexmk); then a proof-audit pass on the NEW appendix
+   subsection using the evidence-rules protocol (paste all materials
+   inline — the theory-auditor cannot see the working tree; see the memo's
+   audit log); before submission, run the waived inverse-optimization
+   literature check.
+
 ### Feasibility-frontier lemma — inserted into the manuscript (2026-05-22)
 
 Done. `paper/sections/03_scoring_rules.tex` now opens with a new subsection
