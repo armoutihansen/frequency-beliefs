@@ -366,14 +366,17 @@ P0. DONE 2026-06-10: canonical rule naming centralized in
     PASSES against the committed legacy CSVs; `verify_regions.py` clean;
     committed outputs untouched. CLAUDE.md's stale outputs-directory line
     fixed (live dir is `outputs/design_exercise/`).
-P1. PLANNED 2026-06-10, implementation next session: misreporting
-    robustness exercise per the approved design in
-    `_context/misreporting_robustness_plan.md` (simulation-methodologist
-    verdict GO-WITH-CHANGES; all changes incorporated — CB oscillation
-    fix with t_eff, survival statistic T as headline, Pareto
-    coverage-vs-width framing, paired SEs, extended gates). New script
-    `scripts/misreporting_robustness.py`, new dir `outputs/misreporting/`;
-    committed outputs untouched.
+P1. IMPLEMENTED AND RUN 2026-06-10 (`scripts/misreporting_robustness.py`;
+    smoke gates PASS; full-grid probe PASS; final 5,000-draw run PASS on
+    the t=0 gate across all 400,000 draw-rule pairs; outputs in
+    `outputs/misreporting/`). POST-RUN FINDING: sharp-set coverage is
+    degenerate under effective perturbations (identified sets tile the
+    simplex — see the ADDENDUM in `_context/misreporting_robustness_plan.md`);
+    the §5.3 contrast shows up in outer-box coverage (confirmed
+    directionally in the run) and in violation magnitudes (not yet
+    stored). PENDING AUTHOR DECISION: revise metrics (box coverage +
+    violation magnitudes as headline, survival dropped, tiling fact
+    stated) and re-run (~1.5h), then paper integration.
 P2. Final figures for the design comparison (approved 2026-06-10):
     regret heat-maps by (n,k,alpha) + win-share summary, from existing
     outputs.

@@ -48,6 +48,12 @@ SEED_HAMMING = 20260521
 #: `scripts/exploration/candidate_rule_checks.py`.
 SEED_CANDIDATE_RULES = 20260522
 
+#: Default seed for the misreporting robustness exercise in
+#: `scripts/misreporting_robustness.py` (plan:
+#: `_context/misreporting_robustness_plan.md`). Per-cell streams and the
+#: perturbation tie-break streams are spawned from it deterministically.
+SEED_MISREPORTING = 20260610
+
 
 # --------------------------------------------------------------------- tolerances
 

@@ -1,8 +1,43 @@
 # Misreporting Robustness Exercise — Implementation Plan (P1)
 
-Date: 2026-06-10. Status: APPROVED design (simulation-methodologist review:
-GO-WITH-CHANGES; all changes incorporated below). Implementation: next
-session. Strictly offline; committed outputs untouched.
+Date: 2026-06-10. Status: IMPLEMENTED AND RUN same day (final: 5,000
+draws/cell, full grid, all gates PASS; `scripts/misreporting_robustness.py`,
+`outputs/misreporting/coverage_aggregate.csv`). **RESULT-DRIVEN REVISION
+PENDING — read the addendum below before using the outputs.**
+
+## ADDENDUM (post-run): sharp-set coverage is DEGENERATE by construction
+
+The final run shows: conditional on one effective transfer, sharp-set
+coverage is exactly 0 for all three rules in every cell (unconditional
+nonzero values are no-ops and uniform-error random-walk returns only).
+Explanation, knowable a priori and missed by both the design and the
+methodologist review: the identified sets {P_S(r)} of distinct reports
+TILE the simplex — they intersect only on tie boundaries of measure zero —
+so the true belief is a.s. outside the sharp set of ANY effectively
+perturbed report, for every rule. Sharp coverage is a one-bit optimal-
+reporting diagnostic (consistent with §5.3's empirical-design use), not a
+graded robustness metric; the survival statistic is degenerate
+(share_T1 = 1 − no-op share for all rules).
+
+The graded robustness contrast lives in: (i) **outer-box coverage** (boxes
+of adjacent reports overlap with positive measure) — non-degenerate in the
+run's data and directionally confirming §5.3 (center-bias, box-covered
+share among misses at t=1 rises with alpha: squared 0.02→0.26 > Manhattan
+0.01→0.26 ≥ guessing 0.01→0.23, squared ahead at every interior alpha);
+and (ii) **violation magnitude** — how far p lies outside the claimed
+bounds when coverage fails — which the facet-translation-vs-mode-jump
+mechanism speaks to directly, and which the current script does NOT store
+(only the zero/nonzero split).
+
+REVISION (pending author go-ahead): drop survival as headline (degenerate;
+keep the tiling fact as a stated result — it is itself a sharp,
+publishable clarification: sharp identified-set inference has zero
+tolerance for effective misreporting; robustness is a question of error
+magnitude, not correctness); promote (a) unconditional box coverage at
+t ∈ {1,2} and (b) violation-magnitude statistics (mean and 90th percentile
+of the max-coordinate violation; linear-mean-bound violation analogously)
+on the bounds subsample. Requires a small script change and a ~1.5h re-run
+(same seed, same gates). Original plan follows.
 
 ## Question
 
