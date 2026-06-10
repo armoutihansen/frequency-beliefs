@@ -21,3 +21,6 @@ outputs/tmp/
 # Literature PDFs — kept locally for reference, never tracked (copyright)
 _context/related_literature/*.pdf
 _context/related_literature/*.PDF
+
+# Prior papers — local-only reference material, never tracked
+_context/prior_papers/
