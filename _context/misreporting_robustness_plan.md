@@ -29,15 +29,18 @@ bounds when coverage fails — which the facet-translation-vs-mode-jump
 mechanism speaks to directly, and which the current script does NOT store
 (only the zero/nonzero split).
 
-REVISION (pending author go-ahead): drop survival as headline (degenerate;
-keep the tiling fact as a stated result — it is itself a sharp,
-publishable clarification: sharp identified-set inference has zero
-tolerance for effective misreporting; robustness is a question of error
-magnitude, not correctness); promote (a) unconditional box coverage at
-t ∈ {1,2} and (b) violation-magnitude statistics (mean and 90th percentile
-of the max-coordinate violation; linear-mean-bound violation analogously)
-on the bounds subsample. Requires a small script change and a ~1.5h re-run
-(same seed, same gates). Original plan follows.
+FINAL DISPOSITION (author decision, 2026-06-10): the simulation is
+DROPPED FROM THE PAPER; no revised re-run. Rationale: the quantified
+error-magnitude/box-coverage story is conditional on stipulated
+perturbation models with no behavioral calibration, adds referee surface,
+and is not decision-relevant for the field audience. The TILING
+OBSERVATION (the valuable residue) was added to §5.3 in guardrail mode as
+a provable remark — sharp identified-set inference has zero tolerance for
+effective misreporting; robustness is a question of error magnitude, not
+correctness; the proposed empirical coverage check gains power from
+exactly this. This exercise, its outputs, and this plan remain committed
+research artifacts; the revised-metrics design above is retained in case
+a referee requests quantification. Original plan follows.
 
 ## Question
 

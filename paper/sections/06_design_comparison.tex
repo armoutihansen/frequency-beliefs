@@ -50,7 +50,14 @@ Table~\ref{tab:regime-wins} reports the win shares---the share of belief draws o
 \label{tab:regime-wins}
 \end{table}
 
-Squared-distance scoring is the most informative rule when beliefs are sparse and frequency-guessing scoring when they are balanced, with a crossover near \(\alpha=1\).
+\begin{figure}[h]
+\centering
+\input{figures/fig_winshare}
+\caption{Win share by belief concentration \(\alpha\) (log scale), averaged over all \(n\) and \(k\): the share of belief draws on which a rule gives the narrowest interval, for the average-coordinate target (left) and the linear-mean target (right). Same data as Table~\ref{tab:regime-wins}.}
+\label{fig:regime-wins}
+\end{figure}
+
+Squared-distance scoring is the most informative rule when beliefs are sparse and frequency-guessing scoring when they are balanced, with a crossover near \(\alpha=1\); Figure~\ref{fig:regime-wins} traces the two win-share crossings.
 At \(\alpha=0.1\) squared-distance gives the narrowest average-coordinate interval on \(0.84\) of draws; by \(\alpha\ge3\) frequency-guessing does so on essentially every draw.
 The linear-mean target shows the same crossover.
 The number of categories \(k\) and the number of trials \(n\) are second-order, as Table~\ref{tab:design-nk} in Appendix~\ref{app:design-details} documents: for the coordinate target the ranking is nearly flat in both, while for the mean target larger \(n\) mildly favors squared-distance and the binary case \(k=2\) favors frequency-guessing.
@@ -87,7 +94,14 @@ Table~\ref{tab:regime-regret} reports regret by \(\alpha\).
 \label{tab:regime-regret}
 \end{table}
 
-Frequency-guessing and squared-distance scoring each have a regime of near-zero regret and a regime in which regret is substantial.
+\begin{figure}[h]
+\centering
+\input{figures/fig_regret}
+\caption{Mean cell-best regret by belief concentration \(\alpha\) (log scale), averaged over all \(n\) and \(k\): a rule's interval width minus the smallest width among the three rules, for the average-coordinate target (left) and the linear-mean target (right). Same data as Table~\ref{tab:regime-regret}; lower is better. Manhattan's nearly flat profile is the regime-robustness property discussed in the text.}
+\label{fig:regime-regret}
+\end{figure}
+
+Frequency-guessing and squared-distance scoring each have a regime of near-zero regret and a regime in which regret is substantial; Figure~\ref{fig:regime-regret} shows the two swinging profiles against Manhattan's flat one.
 Frequency-guessing's average-coordinate regret runs from \(0.000\) at \(\alpha=10\) to \(0.032\) at \(\alpha=0.1\); squared-distance's runs the other way, reaching \(0.024\) on the mean target at \(\alpha=10\).
 Against typical interval widths near \(0.10\) to \(0.15\), the worst-regime values are a quarter or more of an interval width---a real loss of precision from choosing the rule that does not match the belief regime.
 Manhattan distance behaves differently.

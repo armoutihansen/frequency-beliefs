@@ -366,17 +366,33 @@ P0. DONE 2026-06-10: canonical rule naming centralized in
     PASSES against the committed legacy CSVs; `verify_regions.py` clean;
     committed outputs untouched. CLAUDE.md's stale outputs-directory line
     fixed (live dir is `outputs/design_exercise/`).
-P1. IMPLEMENTED AND RUN 2026-06-10 (`scripts/misreporting_robustness.py`;
-    smoke gates PASS; full-grid probe PASS; final 5,000-draw run PASS on
-    the t=0 gate across all 400,000 draw-rule pairs; outputs in
-    `outputs/misreporting/`). POST-RUN FINDING: sharp-set coverage is
-    degenerate under effective perturbations (identified sets tile the
-    simplex — see the ADDENDUM in `_context/misreporting_robustness_plan.md`);
-    the §5.3 contrast shows up in outer-box coverage (confirmed
-    directionally in the run) and in violation magnitudes (not yet
-    stored). PENDING AUTHOR DECISION: revise metrics (box coverage +
-    violation magnitudes as headline, survival dropped, tiling fact
-    stated) and re-run (~1.5h), then paper integration.
+P1. RESOLVED 2026-06-10 — simulation DROPPED FROM THE PAPER by author
+    decision; the insight kept. After the final run (all gates PASS)
+    revealed the sharp-coverage degeneracy (identified sets tile the
+    simplex; see the ADDENDUM in `_context/misreporting_robustness_plan.md`),
+    the author decided against the revised re-run: the quantified
+    error-magnitude story is stipulated-model-bound and not
+    decision-relevant for the field audience. Instead, the TILING
+    OBSERVATION was added to §5.3 (07_discussion.tex) in guardrail mode:
+    identified sets of distinct reports cover the simplex and overlap only
+    at ties, so any effective reporting error places the truth outside the
+    sharp set — robustness is about error magnitude, not correctness — and
+    the empirical coverage check gains power from exactly this (one
+    incorrect adjacent clause, "different reports can correspond to the
+    same mode region", was also fixed). The run remains a committed
+    research artifact (`outputs/misreporting/`, script, plan + addendum).
+P2. DONE 2026-06-10: figures added to the design comparison.
+    `scripts/make_figures.py` generates pgfplots fragments
+    (`paper/figures/fig_winshare.tex`, `fig_regret.tex`) from the
+    committed `outputs/design_exercise/rule_comparison.csv` (legacy labels
+    normalized via config); `06_design_comparison.tex` gains
+    Figure~fig:regime-wins (win-share crossover) and
+    Figure~fig:regime-regret (regret profiles; Manhattan flat) next to
+    their tables; pgfplots added to the preamble (TeX Live built-in — no
+    new dependencies downloaded). Paper compiles clean (34 pp, 0 errors,
+    0 undefined refs). NOTE: three pre-existing ~2pt overfull hboxes
+    (abstract; 03 ~L243; appendix ~L442) recorded for the final polish
+    pass.
 P2. Final figures for the design comparison (approved 2026-06-10):
     regret heat-maps by (n,k,alpha) + win-share summary, from existing
     outputs.
