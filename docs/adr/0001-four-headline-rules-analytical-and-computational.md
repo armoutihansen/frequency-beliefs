@@ -52,3 +52,21 @@ Rationale: after Steps 0a/0b, Hamming's analytical content is an obstruction plu
 - Manhattan's simulation code should be upgraded from a `c`-grid scan to a bracketed root-find at the threshold crossing, so reported Manhattan bounds are genuinely sharp, not grid-limited.
 - Hamming requires the same simulation infrastructure as the other three; this is current work, not a future task. The closed-form modal-box inner bound should be reported alongside the computed Hamming bounds as a rigorous inner sandwich.
 - If the simulation shows Manhattan and Hamming behaving near-identically across design cells, this ADR should be revisited — the case for headlining both rests on them offering distinguishable inferential profiles.
+
+## Amendment (2026-06-10, fifth) — the limits subsection relocates into Section 3
+
+During the Section-3 restructure (rules first, structural lemma after, on
+author instruction), the author approved moving the Hamming/Chebyshev
+subsection from the discussion into Section 3 as its closing subsection,
+"Two Rules Outside the Structure: Hamming and Chebyshev Distance"
+(label `sec:other-rules` unchanged, so all cross-references follow). This
+reverses the fourth amendment's *placement* only: with the single-transfer
+lemma now anchoring Section 3 and motivating the taxonomy (linear
+inequalities = closed form; monotone transcendental = semi-analytical;
+hypotheses fail = no tractable sharp bounds), the two failure modes
+complete the structural story where it is told. The substance of the
+fourth amendment stands unchanged: Hamming and Chebyshev remain demoted
+from the headline analysis, excluded from the design comparison, and
+characterized rather than compared. The discussion section now contains
+only practical material (recommendations, risk aversion and
+implementation, the open empirical question).

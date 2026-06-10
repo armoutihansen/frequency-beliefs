@@ -1,55 +1,14 @@
 \section{Frequency-Report Scoring Rules}
 
-This section applies the setup to three frequency-report scoring rules.
-They span a spectrum of analytical tractability.
-Squared-distance and frequency-guessing scoring have closed-form identified sets and closed-form coordinate bounds.
-Manhattan-distance scoring has an exact identified set and sharp coordinate bounds in semi-analytical form.
-A single structural observation, developed first, accounts for that spectrum---and for the two further rules, in Section~\ref{sec:other-rules}, that fall outside it.
+This section characterizes the three headline rules---squared-distance, frequency-guessing, and Manhattan-distance scoring---and then locates the boundary of the approach.
+The rules differ in inferential orientation---squared-distance scoring is mean-oriented, frequency-guessing elicits multinomial modes, and Manhattan distance is median-oriented---and they span a spectrum of analytical tractability.
+The two rules with closed-form identified sets and closed-form coordinate bounds come first, followed by an analytical comparison of their bounds.
+A structural subsection then explains why the two characterizations take the same form---each optimal report solves a separable resource-allocation problem---and supplies the tool that carries the analysis to Manhattan-distance scoring, whose bounds are sharp but semi-analytical: exact, yet located by a one-dimensional numerical step rather than a formula.
+The closing subsection characterizes Hamming and Chebyshev distance, the two rules whose count losses fail the structural requirements and which mark where tractable sharp bounds stop.
 
-\subsection{Optimal Reports as a Resource-Allocation Problem}
+\subsection{Squared-Distance Scoring: Mean Projection and Closed-Form Bounds}
 
-The three rules share a structure that determines what a report reveals.
-For each, an optimal report minimizes a \emph{separable} objective over the feasible count vectors,
-\[
-R_S(p)=\argmin_{r\in\OmegaN}\sum_{i=1}^k\ell(r_i;p_i),
-\]
-for a per-coordinate cost \(\ell\).
-For squared-distance and Manhattan scoring the expected loss is itself additively separable, and \(\ell\) is the expected per-coordinate loss.
-Frequency-guessing scoring is not an additively separable loss---the multinomial probability is a product---but maximizing \(\Pr_p(\omega=r)\) is equivalent to minimizing \(\sum_i\{\log(r_i!)-r_i\log p_i\}\), so it has the same form, with \(\ell(t;p_i)=\log(t!)-t\log p_i\).
-
-This is the integer \emph{separable resource-allocation problem}: distribute \(n\) units across \(k\) categories under separable costs.
-Its solution structure is classical \citep{Fox1966,FedergruenGroenevelt1986,IbarakiKatoh1988}.
-The intuition for what follows is that, under discrete convexity, no local single-count transfer being profitable rules out any larger transfer too: each successive count moved along a path to a competing report is at least as costly as the first.
-In other words, the local no-improvement condition is also the global one.
-
-\begin{lemma}[Single-transfer characterization]\label{lem:transfer}
-Suppose an optimal report minimizes a separable objective \(\sum_i\ell(r_i;p_i)\) over \(\OmegaN\), and each \(\ell(\cdot;p_i)\) is \emph{discrete-convex}: its successive differences \(\ell(t+1;p_i)-\ell(t;p_i)\) are nondecreasing in \(t\).
-Then \(r\) is optimal if and only if no single-count transfer lowers the objective,
-\[
-\ell(r_i+1;p_i)-\ell(r_i;p_i)\;\ge\;\ell(r_j;p_j)-\ell(r_j-1;p_j)
-\qquad\forall\,i,j\text{ with }r_j>0,
-\]
-and the identified set \(P_S(r)\) is exactly the set of beliefs satisfying these \(O(k^2)\) inequalities.
-\end{lemma}
-
-Necessity of the no-transfer condition is immediate: a transfer produces a feasible competing report.
-Sufficiency is a monotone-path exchange argument---any competing report is reached by single-count transfers along which discrete convexity makes each step at least as costly as the corresponding transfer evaluated at \(r\); it is proved in Appendix~\ref{app:lemma-proof}.
-That the equivalence holds precisely when the per-coordinate costs are discrete-convex is the classical greedy-optimality characterization for separable resource allocation \citep{Fox1966,FedergruenGroenevelt1986}, with discrete convexity the standard diminishing-differences condition \citep{Murota2003}.
-
-The three headline rules satisfy the hypothesis: the squared-distance cost is quadratic in \(r_i\), the Manhattan cost \(\E_p|r_i-\omega_i|\) inherits discrete convexity from the absolute value, and the frequency-guessing cost \(\log(r_i!)-r_i\log p_i\) is discrete-convex because \(\log(t!)\) has nondecreasing differences.
-At boundary beliefs the frequency-guessing cost is read in the extended reals---it equals \(+\infty\) when \(p_i=0\) and \(r_i>0\), so optimal reports place no count outside the support of \(p\) (any report concentrated on the support has finite loss); restricted to such reports the lemma applies verbatim, its successive-difference comparisons remaining well defined with the differences extended by continuity from \(p_i\in(0,1)\).
-Each rule's characterization below is therefore an instance of Lemma~\ref{lem:transfer}; the rules differ only in the shape of the single-transfer inequalities.
-When those inequalities are linear in \(p\)---squared-distance and frequency-guessing---the identified set is a polytope and the coordinate bounds are closed form; when they are monotone but transcendental in \(p\)---Manhattan---the identified set is still exact and the bounds are sharp, but only semi-analytically.
-The lemma's reach is not confined to these three: any count loss of the location form \(\sum_i\psi_i(r_i-\omega_i)\) with convex \(\psi_i\) is governed by it in the same way, because taking expectations preserves discrete convexity coordinate by coordinate---asymmetric-absolute losses, for instance, which elicit quantiles other than the median---so the headline rules are representatives of a wider tractable family rather than a closed list.
-The ranked probability score, a squared distance on \emph{cumulative} counts, lies outside this family as stated: its expected loss is separable in the cumulative rather than the per-category counts, and the lemma's transfer argument does not carry over without modification.
-
-The lemma also marks the limits of the approach.
-Its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~\ref{sec:other-rules} takes up the two rules that do: Hamming distance is separable but its per-coordinate cost is not discrete-convex, and Chebyshev distance is not separable.
-The optimization content of the lemma is classical; what we add is the observation that incentivized frequency-report elicitation \emph{is} a resource-allocation problem of this kind, and the inversion of the resulting optimal-report correspondence into an identified set of latent beliefs.
-
-\subsection{Squared-Distance Scoring}
-
-The main analytical rule is squared-distance frequency scoring.
+The analytical centerpiece is squared-distance frequency scoring.
 It pays less when the reported count vector is far from the realized count vector in squared Euclidean distance:
 \[
 S_Q(r,\omega)=a-b\|r-\omega\|_2^2,
@@ -57,7 +16,7 @@ S_Q(r,\omega)=a-b\|r-\omega\|_2^2,
 \]
 This rule is connected in spirit to quadratic scoring rules, but it is not a standard probability score.
 It is a frequency-report count-loss rule: subjects report counts, and the penalty is the squared difference between reported and realized counts.
-Write \(P_Q\) for the identified set induced by this rule.
+Write \(R_Q\) and \(P_Q\) for the report correspondence and identified set induced by this rule.
 
 Given beliefs \(p\), the expected count vector is \(np\).
 The key forward fact is that squared-distance scoring asks the subject to report the feasible integer count vector closest to \(np\).
@@ -66,7 +25,7 @@ The inverse question is therefore geometric: for which beliefs is the observed r
 \begin{proposition}[Squared distance: reports, regions, and bounds]\label{prop:quadratic}
 For every \(p\in\DeltaK\),
 \[
-R_{S_Q}(p)
+R_Q(p)
 =
 \argmin_{s\in\OmegaN}\|s-np\|_2^2.
 \]
@@ -106,27 +65,14 @@ Projection ties are included.
 
 The inequalities compare the observed report \(r\) with reports obtained by moving one count from a positive reported category \(j\) to another category \(i\).
 If all such single-count moves weakly increase squared distance from \(np\), then \(r\) is a closest feasible report.
-Thus \(P_Q(r)\) is a polytope in the belief simplex---a region cut out by finitely many linear inequalities.
+Thus \(P_Q(r)\) is a polytope in the belief simplex---a region cut out by finitely many linear inequalities---so sharp bounds on means and other linear functionals \(\sum_i p_ix_i\) are linear programs over the same region that yields the closed-form coordinate intervals.
 The proof is in Appendix \ref{app:squared-proof}.
-
-\paragraph{Probability and mean bounds.}
-The coordinate bounds are closed form.
-For numerical outcomes \(x_1,\ldots,x_k\), sharp mean bounds are obtained by optimizing over the same polytope:
-\[
-\min_{p\in P_Q(r)}\sum_{i=1}^k p_i x_i
-\quad\text{and}\quad
-\max_{p\in P_Q(r)}\sum_{i=1}^k p_i x_i.
-\]
-These are linear programs.
-For coordinate probabilities, the displayed intervals give the corresponding linear-program solutions explicitly.
-This is the main practical advantage of squared-distance frequency scoring: the same transparent region gives both probability bounds and bounds on expected values.
 
 \paragraph{Practical interpretation.}
 Squared distance is mean-oriented: it links a report \(r\) to beliefs for which \(r\) is the integer projection of \(np\)---the count-report counterpart of squared-error loss eliciting the mean \citep{Gneiting2011}.
-Compared with exact matching, the payment varies smoothly with distance rather than only with exact equality.
-The main implementation cost is that direct monetary squared-distance payments generally require risk neutrality unless the score is implemented probabilistically, as discussed below.
+Its main implementation cost is that direct monetary squared-distance payments generally require risk neutrality; the binary-lottery implementation discussed below removes the requirement.
 
-\subsection{Frequency-Guessing Scoring}
+\subsection{Frequency-Guessing Scoring: Multinomial Modes and Closed-Form Bounds}
 
 The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewan2021}.
 Its count-error index is the count-vector discrete metric,
@@ -185,22 +131,12 @@ The inequalities say that no single-count transfer from a reported category \(j\
 Weak inequalities include ties.
 The formula also handles boundaries: if \(r_i=0\), the lower bound is \(0\); if \(r_i=n\), the upper bound is \(1\).
 These are the frequency-guessing bounds in \citet[Proposition~1]{SchlagTremewan2021}; they are restated here to make the informativeness comparison self-contained.
+\(P_0(r)\) is likewise a polytope, so sharp mean and linear-functional bounds are again linear programs over the joint region rather than combinations of the coordinate intervals.
 The proof is in Appendix \ref{app:exact-match-proof}.
 
-\paragraph{Probability and mean bounds.}
-The frequency-guessing rule gives closed-form coordinate intervals.
-For linear functionals such as means, sharp bounds use the full joint region, not just the coordinate intervals:
-\[
-\min_{p\in P_0(r)}\sum_{i=1}^k p_i x_i
-\quad\text{and}\quad
-\max_{p\in P_0(r)}\sum_{i=1}^k p_i x_i.
-\]
-These are linear programs because \(P_0(r)\) is defined by linear inequalities.
-Thus frequency-guessing scoring is analytically convenient for individual probability bounds, while mean inference still requires using the joint mode region.
-
 \paragraph{Practical interpretation.}
-Frequency-guessing scoring is transparent and robust to risk aversion because it is a fixed-prize event.
-Its implementation cost is that the probability of an exact match can be small when \(n\) is large or the outcome space is rich.
+Frequency-guessing scoring is robust to risk aversion under direct payment because winning is a fixed-prize event, as the discussion of risk aversion below makes precise.
+Its implementation cost is that the probability of an exact match can be small when \(n\) is large or the outcome space is rich; the design comparison quantifies this.
 It is a prominent known rule in the comparison, not a new mechanism introduced here.
 
 \subsection{Comparing the Two Closed-Form Rules}
@@ -230,7 +166,51 @@ Parts (1) and (2) together say something clean: the frequency-guessing average w
 Part (3) shows that comparison is not one-sided---the squared-distance average width falls below the frequency-guessing constant at the most concentrated report and rises above it at \(m=k\)---so which rule gives the narrower average coordinate bound genuinely turns on how concentrated the report is.
 The design comparison of the next section ties this report-level contrast to belief concentration, quantifies it, and extends it to Manhattan distance.
 
-\subsection{Manhattan-Distance Scoring}
+\subsection{The Common Structure: Optimal Reports as Resource Allocation}
+
+The characterizations of Propositions~\ref{prop:quadratic} and~\ref{prop:discrete} run in parallel: each identified set is cut out by one linear inequality per single-count transfer.
+The parallel is structural.
+For each headline rule, an optimal report minimizes a \emph{separable} objective over the feasible count vectors,
+\[
+R_S(p)=\argmin_{r\in\OmegaN}\sum_{i=1}^k\ell(r_i;p_i),
+\]
+for a per-coordinate cost \(\ell\).
+For squared-distance scoring the expected loss is itself additively separable, and \(\ell\) is the expected per-coordinate loss; the same holds for the Manhattan-distance rule \(S_M(r,\omega)=a-b\sum_i|r_i-\omega_i|\), taken up in the next subsection.
+Frequency-guessing scoring is not an additively separable loss---the multinomial probability is a product---but maximizing \(\Pr_p(\omega=r)\) is equivalent to minimizing \(\sum_i\{\log(r_i!)-r_i\log p_i\}\), so it has the same form, with \(\ell(t;p_i)=\log(t!)-t\log p_i\).
+
+This is the integer \emph{separable resource-allocation problem}: distribute \(n\) units across \(k\) categories under separable costs.
+Its solution structure is classical \citep{Fox1966,FedergruenGroenevelt1986,IbarakiKatoh1988}.
+The intuition for what follows is that, under discrete convexity, no local single-count transfer being profitable rules out any larger transfer too: each successive count moved along a path to a competing report is at least as costly as the first.
+In other words, the local no-improvement condition is also the global one.
+
+\begin{lemma}[Single-transfer characterization]\label{lem:transfer}
+Suppose an optimal report minimizes a separable objective \(\sum_i\ell(r_i;p_i)\) over \(\OmegaN\), and each \(\ell(\cdot;p_i)\) is \emph{discrete-convex}: its successive differences \(\ell(t+1;p_i)-\ell(t;p_i)\) are nondecreasing in \(t\).
+Then \(r\) is optimal if and only if no single-count transfer lowers the objective,
+\[
+\ell(r_i+1;p_i)-\ell(r_i;p_i)\;\ge\;\ell(r_j;p_j)-\ell(r_j-1;p_j)
+\qquad\forall\,i,j\text{ with }r_j>0,
+\]
+and the identified set \(P_S(r)\) is exactly the set of beliefs satisfying these \(O(k^2)\) inequalities.
+\end{lemma}
+
+Necessity of the no-transfer condition is immediate: a transfer produces a feasible competing report.
+Sufficiency is a monotone-path exchange argument---any competing report is reached by single-count transfers along which discrete convexity makes each step at least as costly as the corresponding transfer evaluated at \(r\); it is proved in Appendix~\ref{app:lemma-proof}.
+That the equivalence holds precisely when the per-coordinate costs are discrete-convex is the classical greedy-optimality characterization for separable resource allocation \citep{Fox1966,FedergruenGroenevelt1986}, with discrete convexity the standard diminishing-differences condition \citep{Murota2003}.
+
+The three headline rules satisfy the hypothesis: the squared-distance cost is quadratic in \(r_i\), the Manhattan cost \(\E_p|r_i-\omega_i|\) inherits discrete convexity from the absolute value, and the frequency-guessing cost \(\log(r_i!)-r_i\log p_i\) is discrete-convex because \(\log(t!)\) has nondecreasing differences.
+At boundary beliefs the frequency-guessing cost is read in the extended reals---it equals \(+\infty\) when \(p_i=0\) and \(r_i>0\), so optimal reports place no count outside the support of \(p\) (any report concentrated on the support has finite loss); restricted to such reports the lemma applies verbatim, its successive-difference comparisons remaining well defined with the differences extended by continuity from \(p_i\in(0,1)\).
+
+Propositions~\ref{prop:quadratic} and~\ref{prop:discrete} are therefore instances of Lemma~\ref{lem:transfer}, and their single-transfer inequalities are linear in \(p\)---which is why the identified sets are polytopes and the coordinate bounds closed form.
+For Manhattan scoring the inequalities are monotone but transcendental in \(p\)---binomial distribution functions rather than linear forms---so no closed form is available; the next subsection shows that the identified set is nonetheless exact and the sharp coordinate bounds reduce to one-dimensional computations.
+The lemma thus plays two different roles: for the closed-form rules it organizes what their self-contained proofs already establish, while for Manhattan distance it does real work---sufficiency of the single-transfer condition is exactly what makes the identified set of the next subsection exact rather than an outer approximation.
+
+The lemma's reach is not confined to these three: any count loss of the location form \(\sum_i\psi_i(r_i-\omega_i)\) with convex \(\psi_i\) is governed by it in the same way, because taking expectations preserves discrete convexity coordinate by coordinate---asymmetric-absolute losses, for instance, which elicit quantiles other than the median---so the headline rules are representatives of a wider tractable family rather than a closed list.
+The ranked probability score, a squared distance on \emph{cumulative} counts, lies outside this family as stated: its expected loss is separable in the cumulative rather than the per-category counts, and the lemma's transfer argument does not carry over without modification.
+
+The lemma also marks the limits of the approach: its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~\ref{sec:other-rules} characterizes the two rules that do.
+The optimization content of the lemma is classical; what we add is the observation that incentivized frequency-report elicitation \emph{is} a resource-allocation problem of this kind, and the inversion of the resulting optimal-report correspondence into an identified set of latent beliefs.
+
+\subsection{Manhattan-Distance Scoring: Binomial Medians and Semi-Analytical Bounds}
 
 Unlike the two closed-form rules, Manhattan-distance scoring has no closed-form coordinate bounds; its optimal-report correspondence and identified set are nonetheless characterized exactly, and its sharp bounds reduce to a one-dimensional computation.
 The Manhattan-distance rule is
@@ -281,9 +261,42 @@ The coordinate bounds are therefore sharp and semi-analytical: not closed form, 
 The sharp \emph{mean} bounds traverse the same threshold parameterization: the identified mean is a linear functional of \(p\) optimized over the same threshold-indexed box-simplex slice, computed on a fine grid of \(c\)-values (with reported tolerance) rather than by a one-dimensional root-find.
 
 \paragraph{Practical interpretation.}
-Manhattan distance is useful when a median-type count prediction is substantively appropriate.
-It is also useful as a contrast: changing the distance criterion changes the inferred identified set.
-The multi-category Manhattan coordinate bounds are sharp and reduce to a one-dimensional root-find; the mean bounds are sharp on the same threshold parameterization but are implemented as a grid optimization over the threshold. They are less transparent than the closed-form squared-distance bounds but are exact (coordinate bounds) or controlled to a stated tolerance (mean bounds), not approximations.
+Manhattan distance is median-oriented, as the binomial-median interval above makes concrete.
+Its multi-category coordinate bounds are sharp and reduce to a one-dimensional root-find, and its mean bounds are computed on the threshold parameterization to a stated tolerance---exact or tolerance-controlled, not approximations, though not closed form.
+The design comparison of the next section gives the rule its practical role: rarely the most informative, but nearly invariant to the belief regime.
 
 \paragraph{Other functionals of the induced outcome distribution.}
-The same identified sets yield bounds on a broader inferential menu---variance, median, other quantiles---when a numerical or ordinal outcome vector is specified. The available functionals depend on what the outcome vector represents (no \(x\): coordinate bounds only; ordinal \(x\): median and quantiles; numerical \(x\): mean, variance, and higher moments). For squared-distance and frequency-guessing the polytope identified sets reduce each functional to a linear program (mean, quantile), a convex quadratic program (variance upper bound), or a vertex search (variance lower bound). For Manhattan-distance the threshold-indexed slice family supports the same operations on each slice; the supremum or infimum is then taken over the threshold parameter, as established in Lemma~\ref{lem:l1-linear} of Appendix~\ref{app:functional-menu}, which also reports a worked example. \citet{SchlagTremewan2021} derive the corresponding bounds for frequency-guessing in their setting; the appendix carries that program to all three rules.
+The identified sets of all three rules yield bounds on a broader inferential menu---variance, median, other quantiles---when a numerical or ordinal outcome vector is specified. The available functionals depend on what the outcome vector represents (no \(x\): coordinate bounds only; ordinal \(x\): median and quantiles; numerical \(x\): mean, variance, and higher moments). For squared-distance and frequency-guessing the polytope identified sets reduce each functional to a linear program (mean, quantile), a convex quadratic program (variance upper bound), or a vertex search (variance lower bound). For Manhattan-distance the threshold-indexed slice family supports the same operations on each slice; the supremum or infimum is then taken over the threshold parameter, as established in Lemma~\ref{lem:l1-linear} of Appendix~\ref{app:functional-menu}, which also reports a worked example. \citet{SchlagTremewan2021} derive the corresponding bounds for frequency-guessing in their setting; the appendix carries that program to all three rules.
+
+\subsection{Two Rules Outside the Structure: Hamming and Chebyshev Distance}\label{sec:other-rules}
+
+The three rules characterized above do not exhaust the family of count losses, and the partial-identification approach is not a general theory of discrete scoring rules.
+Two further rules---Hamming and Chebyshev distance---are worth stating precisely, because they mark where the approach stops yielding tractable sharp bounds.
+They are, in fact, the two ways the hypotheses of Lemma~\ref{lem:transfer} can fail: Hamming distance meets its separability hypothesis but not its discrete-convexity hypothesis, and Chebyshev distance fails separability itself.
+
+\paragraph{Hamming distance.}
+The Hamming rule \(S_H(r,\omega)=a-b\sum_i\1\{r_i\ne\omega_i\}\) penalizes the number of categories whose reported count differs from the realized count.
+By linearity of expectation its expected loss is \(\sum_i\{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}\), so an optimal report maximizes the separable objective \(\sum_i\Pr(\mathrm{Bin}(n,p_i)=r_i)\) subject to \(\sum_i r_i=n\), and \(P_H(r)\) is the set of beliefs at which \(r\) attains that maximum---cut out by one expected-loss inequality per alternative report.
+For \(k=2\) the two coordinate indicators \(\1\{r_i\ne\omega_i\}\) are equal, so the Hamming count-error index \(\sum_i\1\{r_i\ne\omega_i\}\) is exactly twice the discrete metric \(\1\{r\ne\omega\}\); the rule coincides with frequency-guessing scoring and inherits its closed-form bounds.
+For \(k>2\) it does not.
+Each term \(\Pr(\mathrm{Bin}(n,p_i)=r_i)\) is unimodal but not discrete-concave in the reported count, so the exchange argument that makes single-count-transfer optimality sufficient for Manhattan distance fails here: the condition remains necessary but is no longer sufficient, because a transfer of two or more counts can raise the separable objective where no single-count transfer does.
+This failure is not confined to the boundary of the simplex.
+At \(n=3\), \(k=5\), and uniform beliefs \(p=(1/5,\ldots,1/5)\), for instance, the report \((3,0,0,0,0)\) admits no improving single-count transfer, yet \((0,0,1,1,1)\) yields a strictly higher expected score.
+The instance also certifies that the failure is not an artifact of the particular separable representation: a strictly increasing transformation of the expected \emph{loss} preserves both rankings---\((3,0,0,0,0)\) attains weakly lower transformed loss than each of its single-transfer neighbours while \((0,0,1,1,1)\) attains strictly lower transformed loss---so if any such transformation admitted a separable representation with discrete-convex per-coordinate costs, Lemma~\ref{lem:transfer} would force \((3,0,0,0,0)\) to be globally optimal at these beliefs; none therefore exists.
+The logarithmic transformation that separates the frequency-guessing score has no Hamming counterpart.
+The identified set \(P_H(r)\) is therefore a non-convex set defined by polynomial inequalities, not a polytope.
+The modal box \(\prod_i[r_i/(n+1),(r_i+1)/(n+1)]\) collects the beliefs at which every \(r_i\) is a mode of its binomial marginal; there the separable objective is maximized term by term, so \(r\) is optimal, and the modal box is a closed-form inner bound for \(P_H(r)\), while the single-count-transfer inequalities give an outer bound.
+The sharp coordinate bounds lie between these two and require optimizing a coordinate directly over the non-convex set---a global optimization whose feasible region is cut out by one polynomial inequality for each of the \(\binom{n+k-1}{k-1}\) feasible reports, a constraint count that grows combinatorially and exceeds \(10^{10}\) at the largest cell of the design comparison of Section~\ref{sec:design} (\(n=50\), \(k=10\)).
+A direct feasibility check bore out the obstruction: computing the sharp Hamming bounds proved both prohibitively slow and numerically unreliable for \(k=10\), while the closed-form bounds of the other rules are immediate.
+Hamming distance is for this reason characterized here rather than included in the comparison.
+
+\paragraph{Chebyshev distance.}
+The Chebyshev rule \(S_\infty(r,\omega)=a-b\max_i|r_i-\omega_i|\) penalizes the largest single-category count error.
+Unlike the other count losses, its expected loss does not separate across coordinates: the maximum couples the category errors within every realization, so there is no per-coordinate transfer condition to exploit.
+For \(k=2\) the two absolute errors \(|r_i-\omega_i|\) are equal, so the count-error index \(\max_i|r_i-\omega_i|\) is half of \(\sum_i|r_i-\omega_i|\); the rule coincides with Manhattan scoring and inherits the binomial-median interval.
+For \(k>2\) neither half of the pipeline is tractable at scale.
+The non-separable objective admits no transfer or exchange argument, so no characterization of the optimal report beyond search is known: a certified optimal report must be found by comparing all \(\binom{n+k-1}{k-1}\) feasible reports.
+The identified set, in turn, is cut out only by the full system of expected-loss inequalities, one per alternative report, with no transfer-polytope or threshold reduction---the same kind of non-convex semialgebraic set as \(P_H(r)\), whose sharp bounds the Hamming feasibility check above already found intractable at \(k=10\).
+Chebyshev distance is therefore computable by enumeration for small \(n\) and \(k\) but, like Hamming, cannot be carried across the design grid; it is characterized here rather than included in the comparison.
+
+These two rules are not pathological---their identified sets are well defined and finite to check---but they show that the closed-form and semi-analytical tractability of the headline rules is a property of those rules, not a generic feature of count-loss scoring.

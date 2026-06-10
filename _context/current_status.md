@@ -2,6 +2,65 @@
 
 Date: 2026-06-10
 
+## Update — 2026-06-10 (final polish) §3 publication-ready pass
+
+A final expository pass over §3 on author instruction: (1) the section
+introduction rewritten to name the three rules, state their inferential
+orientations (mean/mode/median), and road-map all six subsections
+including the boundary; (2) informative subsection headlines adopted —
+"Squared-Distance Scoring: Mean Projection and Closed-Form Bounds",
+"Frequency-Guessing Scoring: Multinomial Modes and Closed-Form Bounds",
+"The Common Structure: Optimal Reports as Resource Allocation",
+"Manhattan-Distance Scoring: Binomial Medians and Semi-Analytical Bounds"
+(3.3 and 3.6 unchanged) — telegraphing both the elicited functional and
+the tractability tier; (3) notation normalized (the lone R_{S_Q} in
+Proposition 1 → R_Q, parallel to R_0/R_M; R_Q introduced in the prose);
+(4) §3.4's opening anchored to Propositions 1–2 by number, its
+limits paragraph de-duplicated against §3.6, and the post-lemma monolith
+split into three paragraphs; (5) "Other functionals" paragraph's
+three-rule scope made explicit; (6) a lost paragraph break in the
+Manhattan bounds discussion restored. Read-through of the rendered pages
+7–14 confirms flow; compiles clean (34 pp, 0 errors, 0 undefined refs).
+
+## Update — 2026-06-10 (latest) Hamming/Chebyshev subsection moved into §3; role-asymmetry sentence; scope-condition refs fixed
+
+Follow-up to the §3 restructure, on author instruction: (1) a sentence was
+added to the common-structure subsection making the lemma's two roles
+explicit (retrospective organization for the closed-form rules; the proof
+engine for Manhattan's exactness); (2) the Hamming/Chebyshev subsection
+moved from the discussion into §3 as its closing subsection "Two Rules
+Outside the Structure" (label `sec:other-rules` travels; text verbatim up
+to three wording adaptations; ADR-0001 fifth amendment records the
+placement reversal — the demotion substance stands); §5 is now purely
+practical (recommendations, risk aversion/implementation, empirical
+question); (3) a latent cross-reference error fixed: the intro's two
+"scope condition" references pointed at the Hamming subsection instead of
+the (previously unlabeled) empirical-question subsection, now
+`sec:empirical`. Final §3 order verified in the compiled PDF: squared →
+frequency-guessing → comparison → common structure → Manhattan → two rules
+outside. Compiles clean (34 pp, 0 errors, 0 undefined refs).
+
+## Update — 2026-06-10 (late) Section 3 restructured: rules first, lemma after
+
+On author instruction (three concerns: lemma-before-rules ordering hard to
+follow; repetitive "Probability and mean bounds" paragraphs; unverified
+claims in "Practical interpretation" paragraphs), §3 was reordered to:
+squared-distance → frequency-guessing → closed-form comparison → "A Common
+Structure" (Lemma 1, now motivated by the two characterizations just seen;
+defines S_M inline) → Manhattan (presented as the structure's payoff). All
+proposition/lemma/corollary statements, labels, and appendix proofs are
+unchanged; numbering remains sequential (Prop 1, Prop 2, Cor 1, Lemma 1,
+Prop 3). The two padding bounds paragraphs were deleted (their one
+non-redundant sentence — functional bounds are LPs over the joint polytope
+— folded into each proposition's discussion). Practical-interpretation
+paragraphs tightened to verified claims with forward pointers: dropped
+"transparent" (unverified cognitive claim), "useful when substantively
+appropriate" (circular), "useful as a contrast" (vacuous); Manhattan's
+practical role now points to the §4 regret result explicitly. §2's closing
+sentence updated. Compiles clean (34 pp, 0 errors, 0 undefined refs).
+Cosmetic note: the appendix proof order still follows the old body order
+(lemma proof first) — harmless, optional polish item.
+
 ## Update — 2026-06-10 (evening) P1 resolved (insight kept, simulation dropped); P2 figures done
 
 The misreporting exercise was implemented, gated, and run (all gates PASS;

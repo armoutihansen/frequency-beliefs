@@ -74,40 +74,7 @@ The implementation choice also interacts with a cost noted in the design compari
 The frequency-guessing prize is paid only on an exact match, and the exact-match probability falls sharply as \(n\), \(k\), and belief balance increase, so at larger designs the rule becomes a lottery with a vanishing chance of any payment.
 The frequency-guessing rule is thus robust to risk aversion even under direct payment but can become nearly unwinnable; the distance rules avoid that under the binary-lottery implementation, whose payment probability is the expected normalized score, at the cost of relying on expected utility.
 
-\subsection{Other Frequency-Report Scoring Rules and the Limits of the Approach}\label{sec:other-rules}
-
-The three rules compared above do not exhaust the family of count losses, and the partial-identification approach is not a general theory of discrete scoring rules.
-Two further rules---Hamming and Chebyshev distance---are worth stating precisely, because they mark where the approach stops yielding tractable sharp bounds.
-They are, in fact, the two ways the structural lemma of Section~3 (Lemma~\ref{lem:transfer}) can fail: Hamming distance meets its separability hypothesis but not its discrete-convexity hypothesis, and Chebyshev distance fails separability itself.
-
-\paragraph{Hamming distance.}
-The Hamming rule \(S_H(r,\omega)=a-b\sum_i\1\{r_i\ne\omega_i\}\) penalizes the number of categories whose reported count differs from the realized count.
-By linearity of expectation its expected loss is \(\sum_i\{1-\Pr(\mathrm{Bin}(n,p_i)=r_i)\}\), so an optimal report maximizes the separable objective \(\sum_i\Pr(\mathrm{Bin}(n,p_i)=r_i)\) subject to \(\sum_i r_i=n\), and \(P_H(r)\) is the set of beliefs at which \(r\) attains that maximum---cut out by one expected-loss inequality per alternative report.
-For \(k=2\) the two coordinate indicators \(\1\{r_i\ne\omega_i\}\) are equal, so the Hamming count-error index \(\sum_i\1\{r_i\ne\omega_i\}\) is exactly twice the discrete metric \(\1\{r\ne\omega\}\); the rule coincides with frequency-guessing scoring and inherits its closed-form bounds.
-For \(k>2\) it does not.
-Each term \(\Pr(\mathrm{Bin}(n,p_i)=r_i)\) is unimodal but not discrete-concave in the reported count, so the exchange argument that makes single-count-transfer optimality sufficient for Manhattan distance fails here: the condition remains necessary but is no longer sufficient, because a transfer of two or more counts can raise the separable objective where no single-count transfer does.
-This failure is not confined to the boundary of the simplex.
-At \(n=3\), \(k=5\), and uniform beliefs \(p=(1/5,\ldots,1/5)\), for instance, the report \((3,0,0,0,0)\) admits no improving single-count transfer, yet \((0,0,1,1,1)\) yields a strictly higher expected score.
-The instance also certifies that the failure is not an artifact of the particular separable representation: a strictly increasing transformation of the expected \emph{loss} preserves both rankings---\((3,0,0,0,0)\) attains weakly lower transformed loss than each of its single-transfer neighbours while \((0,0,1,1,1)\) attains strictly lower transformed loss---so if any such transformation admitted a separable representation with discrete-convex per-coordinate costs, Lemma~\ref{lem:transfer} would force \((3,0,0,0,0)\) to be globally optimal at these beliefs; none therefore exists.
-The logarithmic transformation that separates the frequency-guessing score has no Hamming counterpart.
-The identified set \(P_H(r)\) is therefore a non-convex set defined by polynomial inequalities, not a polytope.
-The modal box \(\prod_i[r_i/(n+1),(r_i+1)/(n+1)]\) collects the beliefs at which every \(r_i\) is a mode of its binomial marginal; there the separable objective is maximized term by term, so \(r\) is optimal, and the modal box is a closed-form inner bound for \(P_H(r)\), while the single-count-transfer inequalities give an outer bound.
-The sharp coordinate bounds lie between these two and require optimizing a coordinate directly over the non-convex set---a global optimization whose feasible region is cut out by one polynomial inequality for each of the \(\binom{n+k-1}{k-1}\) feasible reports, a constraint count that grows combinatorially and exceeds \(10^{10}\) at the largest cell of the design comparison (\(n=50\), \(k=10\)).
-A direct feasibility check bore out the obstruction: computing the sharp Hamming bounds proved both prohibitively slow and numerically unreliable for \(k=10\), while the closed-form bounds of the other rules are immediate.
-Hamming distance is for this reason characterized here rather than included in the comparison.
-
-\paragraph{Chebyshev distance.}
-The Chebyshev rule \(S_\infty(r,\omega)=a-b\max_i|r_i-\omega_i|\) penalizes the largest single-category count error.
-Unlike the other count losses, its expected loss does not separate across coordinates: the maximum couples the category errors within every realization, so there is no per-coordinate transfer condition to exploit.
-For \(k=2\) the two absolute errors \(|r_i-\omega_i|\) are equal, so the count-error index \(\max_i|r_i-\omega_i|\) is half of \(\sum_i|r_i-\omega_i|\); the rule coincides with Manhattan scoring and inherits the binomial-median interval.
-For \(k>2\) neither half of the pipeline is tractable at scale.
-The non-separable objective admits no transfer or exchange argument, so no characterization of the optimal report beyond search is known: a certified optimal report must be found by comparing all \(\binom{n+k-1}{k-1}\) feasible reports.
-The identified set, in turn, is cut out only by the full system of expected-loss inequalities, one per alternative report, with no transfer-polytope or threshold reduction---the same kind of non-convex semialgebraic set as \(P_H(r)\), whose sharp bounds the Hamming feasibility check above already found intractable at \(k=10\).
-Chebyshev distance is therefore computable by enumeration for small \(n\) and \(k\) but, like Hamming, cannot be carried across the design grid; it is characterized here rather than included in the comparison.
-
-These two rules are not pathological---their identified sets are well defined and finite to check---but they show that the closed-form and semi-analytical tractability of the headline rules is a property of those rules, not a generic feature of count-loss scoring.
-
-\subsection{An Open Empirical Question}
+\subsection{An Open Empirical Question}\label{sec:empirical}
 
 The case for frequency reports rests partly on a behavioral premise we do not test: that subjects reason more readily in counts than in abstract probabilities, and find a distance-based payment more transparent than a probability score.
 That premise is taken here on the strength of the cited literature.
