@@ -359,16 +359,21 @@ clean at 33 pp, 0 errors, 0 undefined refs). The L2/L3 repairs and the
 order-preserving Hamming exclusion remain in the manuscript.
 
 **ACTIVE TASK LIST — Paper 1 finishing pipeline (approved):**
-P0. Reconcile `scripts/` display labels/keys with the manuscript's renamed
-    rules (pre-existing debt, recorded 2026-05-22; prerequisite for any
-    new simulation work — outputs and CSVs are coupled).
-P1. Misreporting robustness exercise (approved 2026-06-10): perturb
-    optimal reports (center-bias per the §5.3 predictions, plus a
-    one-count uniform-error variant), measure identified-set coverage of
-    the true belief by rule across the design grid. Run the
-    `simulation-plan` skill first; do not overwrite committed outputs;
-    write results into the design-comparison or discussion section after
-    a simulation-methodologist review.
+P0. DONE 2026-06-10: canonical rule naming centralized in
+    `scripts/config.py` (RULE_DISPLAY + LEGACY_RULE_DISPLAY +
+    canonical_rule_label); `design_efficiency.py` writes canonical labels
+    going forward; `consistency_check.py` normalizes both vocabularies and
+    PASSES against the committed legacy CSVs; `verify_regions.py` clean;
+    committed outputs untouched. CLAUDE.md's stale outputs-directory line
+    fixed (live dir is `outputs/design_exercise/`).
+P1. PLANNED 2026-06-10, implementation next session: misreporting
+    robustness exercise per the approved design in
+    `_context/misreporting_robustness_plan.md` (simulation-methodologist
+    verdict GO-WITH-CHANGES; all changes incorporated — CB oscillation
+    fix with t_eff, survival statistic T as headline, Pareto
+    coverage-vs-width framing, paired SEs, extended gates). New script
+    `scripts/misreporting_robustness.py`, new dir `outputs/misreporting/`;
+    committed outputs untouched.
 P2. Final figures for the design comparison (approved 2026-06-10):
     regret heat-maps by (n,k,alpha) + win-share summary, from existing
     outputs.

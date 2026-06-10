@@ -85,7 +85,7 @@ Important files and folders:
 - `paper/sections/08_appendix.tex`: appendix.
 - `scripts/verify_regions.py`: computational checks for rule characterizations and examples.
 - `scripts/design_efficiency.py`: simulation/design-efficiency exercise.
-- `outputs/simulation_design/`: final simulation outputs.
+- `outputs/design_exercise/`: final simulation outputs (the run the paper tables and `scripts/consistency_check.py` read); `outputs/simulation_design/` holds the older committed run.
 - `_context/current_status.md`: current project status.
 - `_context/current_issues.md`: known issues and risks.
 - `_context/next_steps.md`: next planned tasks.

@@ -13,7 +13,12 @@ import csv
 from collections import defaultdict
 from pathlib import Path
 
-from config import CONSISTENCY_ROUND_TOL, FLOAT_EQUALITY_TOL
+from config import (
+    CONSISTENCY_ROUND_TOL,
+    FLOAT_EQUALITY_TOL,
+    RULE_DISPLAY,
+    canonical_rule_label,
+)
 from verify_regions import (
     exact_coordinate_intervals,
     exact_lp_mean_bounds,
@@ -73,9 +78,18 @@ def check_corollary() -> None:
           f"discrete=constant=W0, quadratic=WQ(m), WQ(1)<W0<WQ(k), all (n,k) tested.")
 
 
+#: Canonical display-name triple, in the conventional (F, S, M) order.
+RULE_NAMES = tuple(RULE_DISPLAY[key] for key in ("discrete", "quadratic", "manhattan"))
+
+
 def load_csv(name: str) -> list[dict]:
+    """Read a design-exercise CSV, normalizing legacy rule labels to canonical."""
     with (ROOT / "outputs" / "design_exercise" / name).open() as f:
-        return list(csv.DictReader(f))
+        rows = list(csv.DictReader(f))
+    for row in rows:
+        if "rule" in row:
+            row["rule"] = canonical_rule_label(row["rule"])
+    return rows
 
 
 def check_numbers() -> None:
@@ -90,7 +104,7 @@ def check_numbers() -> None:
         print(f"  -- win share / regret by alpha, metric={label} --")
         for alpha in ("0.1", "0.3", "1.0", "3.0", "10.0"):
             row = {}
-            for rule in ("Discrete metric", "Quadratic distance", "Manhattan distance"):
+            for rule in RULE_NAMES:
                 ws = [float(x["win_share"]) for x in rc
                       if x["metric"] == metric and x["rule"] == rule
                       and abs(float(x["alpha"]) - float(alpha)) < FLOAT_EQUALITY_TOL]
@@ -98,13 +112,13 @@ def check_numbers() -> None:
                       if x["metric"] == metric and x["rule"] == rule
                       and abs(float(x["alpha"]) - float(alpha)) < FLOAT_EQUALITY_TOL]
                 row[rule] = (sum(ws) / len(ws), sum(rg) / len(rg))
-            d, q, m = row["Discrete metric"], row["Quadratic distance"], row["Manhattan distance"]
+            d, q, m = (row[name] for name in RULE_NAMES)
             print(f"    a={alpha:>4}: win {d[0]:.2f} {q[0]:.2f} {m[0]:.2f}   "
                   f"regret {d[1]:.3f} {q[1]:.3f} {m[1]:.3f}")
 
     # Overall mean coordinate width per rule (paper prose: 0.103, 0.104, 0.102).
-    print("  -- overall mean avg-coordinate width per rule (paper: D 0.103, Q 0.104, M 0.102) --")
-    for rule in ("Discrete metric", "Quadratic distance", "Manhattan distance"):
+    print("  -- overall mean avg-coordinate width per rule (paper: F 0.103, S 0.104, M 0.102) --")
+    for rule in RULE_NAMES:
         vals = [float(x["avg_coord_width_mean"]) for x in agg if x["rule"] == rule]
         print(f"    {rule:<20}: {sum(vals)/len(vals):.4f}")
 
@@ -114,13 +128,13 @@ def check_numbers() -> None:
         for dim in ("k", "n"):
             for val in sorted({int(x[dim]) for x in rc}):
                 cells = {}
-                for rule in ("Discrete metric", "Quadratic distance", "Manhattan distance"):
+                for rule in RULE_NAMES:
                     ws = [float(x["win_share"]) for x in rc
                           if x["metric"] == metric and x["rule"] == rule and int(x[dim]) == val]
                     cells[rule] = sum(ws) / len(ws)
                 print(f"    {dim}={val:>2}: "
-                      f"{cells['Discrete metric']:.2f} {cells['Quadratic distance']:.2f} "
-                      f"{cells['Manhattan distance']:.2f}")
+                      f"{cells[RULE_NAMES[0]]:.2f} {cells[RULE_NAMES[1]]:.2f} "
+                      f"{cells[RULE_NAMES[2]]:.2f}")
 
 
 def check_robustness() -> None:
@@ -185,13 +199,13 @@ def check_robustness() -> None:
         for metric, (e_d, e_q, e_m) in metrics.items():
             d = next(float(r["win_share"]) for r in rc
                      if r["alpha_label"] == label and r["metric"] == metric
-                     and r["rule"] == "Discrete metric")
+                     and canonical_rule_label(r["rule"]) == RULE_NAMES[0])
             q = next(float(r["win_share"]) for r in rc
                      if r["alpha_label"] == label and r["metric"] == metric
-                     and r["rule"] == "Quadratic distance")
+                     and canonical_rule_label(r["rule"]) == RULE_NAMES[1])
             m = next(float(r["win_share"]) for r in rc
                      if r["alpha_label"] == label and r["metric"] == metric
-                     and r["rule"] == "Manhattan distance")
+                     and canonical_rule_label(r["rule"]) == RULE_NAMES[2])
             ok = all(abs(a - b) < CONSISTENCY_ROUND_TOL for a, b in ((d, e_d), (q, e_q), (m, e_m)))
             mark = "OK" if ok else "FAIL"
             if not ok:

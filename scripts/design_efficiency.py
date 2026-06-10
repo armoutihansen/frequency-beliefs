@@ -4,26 +4,28 @@ This script implements the latent-belief design exercise summarized in
 `_context/current_status.md`.
 It compares three headline rules:
 
-1. discrete metric / exact match,
-2. quadratic distance,
+1. frequency-guessing (exact match; the Schlag-Tremewan rule),
+2. squared-distance (the analytical centrepiece),
 3. Manhattan distance.
 
-Internal rule labels vs. paper terminology
-------------------------------------------
-The script's internal `RULES` keys and CSV column headers use the pre-2026-05-22
-labels. The paper now uses the renamed terms. The mapping is:
+Internal rule keys vs. display names (reconciled 2026-06-10)
+------------------------------------------------------------
+The internal `RULES` keys are stable pre-renaming identifiers; the display
+names written into CSVs come from `config.RULE_DISPLAY` and match the
+manuscript's terminology:
 
-    Internal label   Paper terminology
+    Internal key     Display name (manuscript terminology)
     --------------   ----------------------------------------------
-    "discrete"       frequency-guessing (the Schlag-Tremewan rule)
-    "quadratic"      squared-distance (the analytical centrepiece)
-    "manhattan"      Manhattan / Manhattan-distance
+    "discrete"       Frequency guessing (the Schlag-Tremewan rule)
+    "quadratic"      Squared distance (the analytical centrepiece)
+    "manhattan"      Manhattan distance
 
-Both CSV outputs in `outputs/design_exercise/` and the values reported by
-`scripts/consistency_check.py` use the internal labels. The paper uses the
-renamed terms. Do NOT rename the internal labels without also re-running the
-simulation and updating the consistency check; the committed CSV column headers
-depend on these names.
+The CSV outputs committed in `outputs/design_exercise/` predate the renaming
+and carry the LEGACY display names ("Discrete metric", "Quadratic distance");
+`scripts/consistency_check.py` normalizes both vocabularies on read via
+`config.canonical_rule_label`. Do NOT regenerate the committed outputs just to
+rename labels; any rerun that overwrites final outputs requires explicit
+instruction.
 
 The simulation draws latent beliefs, computes each rule's optimal report, then
 computes the identification bounds induced by that report.
@@ -51,7 +53,7 @@ from scipy.optimize import brentq, linprog
 from scipy.special import betaincinv, gammaln
 from scipy.stats import binom
 
-from config import SEED_LATENT
+from config import RULE_DISPLAY, SEED_LATENT
 from utils import (
     average_width,
     clean,
@@ -74,11 +76,9 @@ from verify_regions import (
 
 
 RULES = ("discrete", "quadratic", "manhattan")
-RULE_LABELS = {
-    "discrete": "Discrete metric",
-    "quadratic": "Quadratic distance",
-    "manhattan": "Manhattan distance",
-}
+# Canonical manuscript-terminology display names (config.RULE_DISPLAY).
+# Committed outputs predate this and carry legacy labels; see module docstring.
+RULE_LABELS = RULE_DISPLAY
 
 
 def linear_outcome(k: int) -> np.ndarray:
