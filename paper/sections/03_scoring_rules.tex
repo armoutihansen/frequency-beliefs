@@ -6,7 +6,7 @@ The two rules with closed-form identified sets and closed-form coordinate bounds
 A structural subsection then explains why the two characterizations take the same form---each optimal report solves a separable resource-allocation problem---and supplies the tool that carries the analysis to Manhattan-distance scoring, whose bounds are sharp but semi-analytical: exact, yet located by a one-dimensional numerical step rather than a formula.
 The closing subsection characterizes Hamming and Chebyshev distance, the two rules whose count losses fail the structural requirements and which mark where tractable sharp bounds stop.
 
-\subsection{Squared-Distance Scoring: Mean Projection and Closed-Form Bounds}
+\subsection{Squared Distance: Mean Projection and Closed-Form Bounds}
 
 The analytical centerpiece is squared-distance frequency scoring.
 It pays less when the reported count vector is far from the realized count vector in squared Euclidean distance:
@@ -72,7 +72,7 @@ The proof is in Appendix \ref{app:squared-proof}.
 Squared distance is mean-oriented: it links a report \(r\) to beliefs for which \(r\) is the integer projection of \(np\)---the count-report counterpart of squared-error loss eliciting the mean \citep{Gneiting2011}.
 Its main implementation cost is that direct monetary squared-distance payments generally require risk neutrality; the binary-lottery implementation discussed below removes the requirement.
 
-\subsection{Frequency-Guessing Scoring: Multinomial Modes and Closed-Form Bounds}
+\subsection{Frequency Guessing: Multinomial Modes and Closed-Form Bounds}
 
 The second closed-form rule is the frequency-guessing mechanism of \citet{SchlagTremewan2021}.
 Its count-error index is the count-vector discrete metric,
@@ -210,7 +210,7 @@ The ranked probability score, a squared distance on \emph{cumulative} counts, li
 The lemma also marks the limits of the approach: its two hypotheses---separability and discrete convexity---are exactly what a count loss can fail, and Section~\ref{sec:other-rules} characterizes the two rules that do.
 The optimization content of the lemma is classical; what we add is the observation that incentivized frequency-report elicitation \emph{is} a resource-allocation problem of this kind, and the inversion of the resulting optimal-report correspondence into an identified set of latent beliefs.
 
-\subsection{Manhattan-Distance Scoring: Binomial Medians and Semi-Analytical Bounds}
+\subsection{Manhattan Distance: Binomial Medians and Semi-Analytical Bounds}
 
 Unlike the two closed-form rules, Manhattan-distance scoring has no closed-form coordinate bounds; its optimal-report correspondence and identified set are nonetheless characterized exactly, and its sharp bounds reduce to a one-dimensional computation.
 The Manhattan-distance rule is
@@ -220,7 +220,7 @@ S_M(r,\omega)=a-b\sum_{i=1}^k |r_i-\omega_i|,
 \]
 It rewards total absolute count accuracy rather than squared count accuracy, and its inferential interpretation is median-oriented rather than mean-oriented---the count-report counterpart of absolute-error loss eliciting the median \citep{Gneiting2011}.
 
-For category \(i\) the realized count has binomial marginal \(W_i\sim\mathrm{Bin}(n,p_i)\); write \(F_i(t;n,p_i)=\Pr(W_i\le t)\) for its distribution function, with the conventions \(F_i(-1;n,p_i)=0\) and \(F_i(n;n,p_i)=1\).
+For category \(i\) the realized count has binomial marginal \(W_i\sim\mathrm{Bin}(n,p_i)\); write \(F_i(t;n,p_i)=\Pr(W_i\le t)\) for its distribution function; by convention \(F_i(-1;n,p_i)=0\) and \(F_i(n;n,p_i)=1\).
 By linearity of expectation the expected Manhattan loss is separable across categories, \(\E_p\sum_i|r_i-\omega_i|=\sum_i\E_p|r_i-W_i|\), while the simplex constraint \(\sum_i r_i=n\) couples the coordinates.
 
 \begin{proposition}[Manhattan distance: optimal reports and identified set]\label{prop:manhattan}

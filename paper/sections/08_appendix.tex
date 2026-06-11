@@ -2,29 +2,6 @@
 
 \section{Proofs}
 
-\subsection{The Single-Transfer Characterization}
-\label{app:lemma-proof}
-
-\begin{proof}[Proof of Lemma~\ref{lem:transfer}]
-Write \(\Delta\ell(t;q)=\ell(t+1;q)-\ell(t;q)\); discrete convexity of \(\ell(\cdot;q)\) means \(\Delta\ell(\cdot;q)\) is nondecreasing.
-
-\emph{Necessity.}
-For any \(i,j\) with \(r_j>0\) the report \(r+e_i-e_j\) is feasible, and it changes the objective by \(\Delta\ell(r_i;p_i)-\Delta\ell(r_j-1;p_j)\).
-If \(r\) is optimal this change is nonnegative, which is the displayed inequality.
-
-\emph{Sufficiency.}
-Suppose \(r\) satisfies every displayed inequality, and let \(s\in\OmegaN\) be any competing report.
-Since \(\sum_i s_i=\sum_i r_i=n\), the surplus units \(\sum_i(s_i-r_i)^+\) and the deficit units \(\sum_j(r_j-s_j)^+\) are equal in number, say \(M\).
-Reach \(s\) from \(r\) by \(M\) single-count transfers, each moving one unit from a coordinate still above its target \(s\) to one still below.
-A receiver coordinate then only rises, from \(r_i\) toward \(s_i\), and a sender only falls, from \(r_j\) toward \(s_j\); so every intermediate report is feasible, and at the step transferring a unit \(j\to i\) the running counts satisfy \(c_i\ge r_i\) and \(c_j\le r_j\).
-That step changes the objective by \(\Delta\ell(c_i;p_i)-\Delta\ell(c_j-1;p_j)\).
-Because \(\Delta\ell(\cdot;p)\) is nondecreasing, \(c_i\ge r_i\) gives \(\Delta\ell(c_i;p_i)\ge\Delta\ell(r_i;p_i)\), and \(c_j-1\le r_j-1\) gives \(\Delta\ell(c_j-1;p_j)\le\Delta\ell(r_j-1;p_j)\); so the step's change is at least \(\Delta\ell(r_i;p_i)-\Delta\ell(r_j-1;p_j)\), nonnegative by the displayed inequality for the pair \((i,j)\).
-Summing over the \(M\) steps gives \(\sum_i\ell(s_i;p_i)\ge\sum_i\ell(r_i;p_i)\).
-As \(s\) was arbitrary, \(r\) minimizes the separable objective.
-
-Necessity and sufficiency together give \(r\in R_S(p)\) if and only if the displayed inequalities hold at \(p\), so \(P_S(r)\) is exactly the set of beliefs satisfying them.
-\end{proof}
-
 \subsection{Squared-Distance Scoring}
 \label{app:squared-proof}
 
@@ -239,6 +216,29 @@ W_Q(1;n,k)<W_0(n,k)
 The right side minus the left equals \(n^2(3k-2)+nk(k-2)-(k+2)(k-1)\), whose coefficients in \(n\) are nonnegative for \(k\ge2\), so it is increasing in \(n\); at \(n=2\) it equals \(k^2+7k-6>0\). Hence \(W_Q(1;n,k)<W_0(n,k)\) for all \(n\ge2\) and \(k\ge2\).
 \end{proof}
 
+\subsection{The Single-Transfer Characterization}
+\label{app:lemma-proof}
+
+\begin{proof}[Proof of Lemma~\ref{lem:transfer}]
+Write \(\Delta\ell(t;q)=\ell(t+1;q)-\ell(t;q)\); discrete convexity of \(\ell(\cdot;q)\) means \(\Delta\ell(\cdot;q)\) is nondecreasing.
+
+\emph{Necessity.}
+For any \(i,j\) with \(r_j>0\) the report \(r+e_i-e_j\) is feasible, and it changes the objective by \(\Delta\ell(r_i;p_i)-\Delta\ell(r_j-1;p_j)\).
+If \(r\) is optimal this change is nonnegative, which is the displayed inequality.
+
+\emph{Sufficiency.}
+Suppose \(r\) satisfies every displayed inequality, and let \(s\in\OmegaN\) be any competing report.
+Since \(\sum_i s_i=\sum_i r_i=n\), the surplus units \(\sum_i(s_i-r_i)^+\) and the deficit units \(\sum_j(r_j-s_j)^+\) are equal in number, say \(M\).
+Reach \(s\) from \(r\) by \(M\) single-count transfers, each moving one unit from a coordinate still above its target \(s\) to one still below.
+A receiver coordinate then only rises, from \(r_i\) toward \(s_i\), and a sender only falls, from \(r_j\) toward \(s_j\); so every intermediate report is feasible, and at the step transferring a unit \(j\to i\) the running counts satisfy \(c_i\ge r_i\) and \(c_j\le r_j\).
+That step changes the objective by \(\Delta\ell(c_i;p_i)-\Delta\ell(c_j-1;p_j)\).
+Because \(\Delta\ell(\cdot;p)\) is nondecreasing, \(c_i\ge r_i\) gives \(\Delta\ell(c_i;p_i)\ge\Delta\ell(r_i;p_i)\), and \(c_j-1\le r_j-1\) gives \(\Delta\ell(c_j-1;p_j)\le\Delta\ell(r_j-1;p_j)\); so the step's change is at least \(\Delta\ell(r_i;p_i)-\Delta\ell(r_j-1;p_j)\), nonnegative by the displayed inequality for the pair \((i,j)\).
+Summing over the \(M\) steps gives \(\sum_i\ell(s_i;p_i)\ge\sum_i\ell(r_i;p_i)\).
+As \(s\) was arbitrary, \(r\) minimizes the separable objective.
+
+Necessity and sufficiency together give \(r\in R_S(p)\) if and only if the displayed inequalities hold at \(p\), so \(P_S(r)\) is exactly the set of beliefs satisfying them.
+\end{proof}
+
 \subsection{Manhattan-Distance Scoring}
 \label{app:manhattan-proof}
 
@@ -439,7 +439,7 @@ Against the variation across belief concentration \(\alpha\) in Table~\ref{tab:r
 \end{table}
 
 \paragraph{Robustness.}
-Two implementation choices were checked and leave the comparison unchanged.
+Two implementation choices were checked; neither changes the comparison.
 First, the linear-functional results are robust to the outcome vector.
 The same run also evaluates the extreme-category outcome vector \(x=(0,\ldots,0,1)\) in place of the evenly spaced \(x_i=(i-1)/(k-1)\); the ranking is unchanged, with win shares \(0.56\), \(0.34\), and \(0.10\) for frequency-guessing, squared-distance, and Manhattan scoring, against \(0.53\), \(0.38\), and \(0.10\) for the evenly spaced vector.
 Second, optimal-report ties are a measure-zero event under the continuous Dirichlet draws: the final run recorded a tie rate of \(0.0000\) for all three rules, so the lexicographic convention used to select a report when \(R_S(p)\) is not a singleton has no effect on the reported numbers.
